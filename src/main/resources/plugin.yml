@@ -1,0 +1,9 @@
+name: SantoryCore
+author: MankaiStep
+version: 1.0
+main: mk.plugin.santory.main.SantoryCore
+depend: [PlayerData]
+commands:
+  santory:
+    descripton: Santory's command
+    aliases: [str]
