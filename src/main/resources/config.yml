@@ -1,0 +1,55 @@
+pvp-worlds:
+- world_pvp
+
+level:
+  vallina-update: false
+  base-exp: 350
+  plus-exp: 150
+
+item:
+  max-durability: 800
+  grade-exp:
+    I: 0
+    II: 150
+    III: 300
+    IV: 450
+    V: 600
+
+ascent:
+  base-chance: 50
+  fee: 10000
+
+upgrade:
+  base-chance: 50
+  fee: 10000
+  exp-per-material: 100
+
+enhance:
+  fee: 10000
+  chance:
+  - '1-10:80'
+  - '11-20:40'
+  - '21-30:20'
+  - '31-40:10'
+  - '41-50:5'
+
+artifact:
+  base-main-stat: 15
+  base-sub-stat: 5
+  stat-range: 0.25
+  tier-up:
+  - 'COMMON:0'
+  - 'UNCOMMON:1'
+  - 'RARE:1.5'
+  - 'EPIC:2'
+  - 'LEGEND:2.5'
+  stat-up:
+  - '2:0.2'
+  - '4:0.5'
+
+mob:
+  mob:
+    level: 10
+    type: minion
+  
+

@@ -1,0 +1,13 @@
+texture:
+  material: WOOD_SWORD
+  data: 0
+type: WEAPON
+tier: COMMON
+name: Kiếm tập gỗ
+desc: Trang bị khởi đầu cho người chơi mới
+stats:
+- DAMAGE 5
+- ATTACK_SPEED 5
+metadata:
+  weapon-type: LIGHT
+  weapon-skill: TAN_XA_TIEN

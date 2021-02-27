@@ -1,0 +1,13 @@
+texture:
+  material: STONE
+  data: 0
+type: ARTIFACT
+tier: COMMON
+name: Cục đá
+desc: Di vật khởi đầu
+stats: []
+metadata:
+  artifact-main-stat: DAMAGE:15;HEALTH:20;DEFENSE:20
+  artifact-sub-stat: DODGE:20;HEAL:20;LIFE_STEAL:20;CRIT_CHANCE:20;ATTACK_SPEED:20;DAMAGE:5;HEALTH:7;DEFENSE:7
+  artifact-set-id: maohiem
+  artifact-set-stat: HEALTH

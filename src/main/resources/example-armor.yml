@@ -1,0 +1,11 @@
+texture:
+  head: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGI4YTdhZmI0MDMzZDBhMWYzMjA4NGU5M2ZiNmQyY2UzZmVmZTNjNzdlYTA2YzI0NDM3MGQ0ZjJhZWEyYTgxZiJ9fX0=
+type: WEAPON
+tier: COMMON
+name: Kiếm tập gỗ
+desc: Trang bị khởi đầu cho người chơi mới
+stats:
+- DAMAGE 5
+- ATTACK_SPEED 5
+metadata:
+  chest-texture: LEATHER 7;47;97
