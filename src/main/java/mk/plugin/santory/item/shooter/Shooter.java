@@ -27,7 +27,7 @@ public enum Shooter {
 		}
 	};
 	
-	private Shooter() {}
+	Shooter() {}
 	
 	public abstract Arrow shoot(Player player, Damage damage, Vector v, Location location);
 	

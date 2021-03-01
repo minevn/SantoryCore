@@ -47,18 +47,18 @@ public class Configs {
 	public static int ART_BASE_SUB_STAT = 5;
 	public static double ART_STAT_RANGE = 0.25;
 	
-	private static Map<Tier, Double> artTierUps = Maps.newHashMap();
-	private static Map<Integer, Double> artStatSetUp = Maps.newLinkedHashMap();
+	private static final Map<Tier, Double> artTierUps = Maps.newHashMap();
+	private static final Map<Integer, Double> artStatSetUp = Maps.newLinkedHashMap();
 	
-	private static Map<Grade, Integer> gradeExps = Maps.newHashMap();
-	private static Map<Integer, Double> enhanceRates = Maps.newHashMap();
+	private static final Map<Grade, Integer> gradeExps = Maps.newHashMap();
+	private static final Map<Integer, Double> enhanceRates = Maps.newHashMap();
 	
-	private static Map<String, ItemModel> models = Maps.newHashMap();
-	private static Map<String, Wish> wishes = Maps.newHashMap();
-	private static List<String> pvpWorlds = Lists.newArrayList();
+	private static final Map<String, ItemModel> models = Maps.newHashMap();
+	private static final Map<String, Wish> wishes = Maps.newHashMap();
+	private static final List<String> pvpWorlds = Lists.newArrayList();
 
-	private static Map<String, Integer> mobLevels = Maps.newHashMap();
-	private static Map<String, MobType> mobTypes = Maps.newHashMap();
+	private static final Map<String, Integer> mobLevels = Maps.newHashMap();
+	private static final Map<String, MobType> mobTypes = Maps.newHashMap();
 	
 		
 	public static void reload(JavaPlugin plugin) {

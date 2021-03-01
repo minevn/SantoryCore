@@ -1,26 +1,6 @@
 package mk.plugin.santory.listener;
 
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.google.common.collect.Lists;
-
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
@@ -37,6 +17,16 @@ import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 public class StatListener implements Listener {
 	
@@ -54,7 +44,7 @@ public class StatListener implements Listener {
 		// Durability
 		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
 		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-			double realDamage = lastHealth - ((LivingEntity) player).getHealth();
+			double realDamage = lastHealth - player.getHealth();
 			if (e.getEntity() instanceof Player) {
 				ItemStack[] armors =  player.getInventory().getArmorContents();
 				for (int i = 0 ; i < armors.length ; i++) {
@@ -128,7 +118,7 @@ public class StatListener implements Listener {
 						d = Damages.getProjectileDamage(a);
 						damage = d.getValue();
 						if (a instanceof Arrow) {
-							((Arrow) a).setBounce(false);
+							a.setBounce(false);
 						}
 						
 						// Check if shooter = entity
@@ -195,7 +185,7 @@ public class StatListener implements Listener {
 						if (mob != null) {
 							defenseValue = Stat.DEFENSE.pointsToValue(mob.getStat(Stat.DEFENSE));
 						}
-						damage = damage * (1 - ((double) defenseValue / 100));
+						damage = damage * (1 - (defenseValue / 100));
 					}
 					
 					// If target is player
@@ -240,13 +230,13 @@ public class StatListener implements Listener {
 						entity.setMaximumNoDamageTicks(dtick);
 						// Hut mau
 						double value = Travelers.getStatValue(player, Stat.LIFE_STEAL);
-						Utils.addHealth(player, (double) lastDamage * value / 100);
+						Utils.addHealth(player, lastDamage * value / 100);
 						
 						// Holograms
 						Holograms.hologram(SantoryCore.get(), holos, 15, player, entity, 1);
 						
 						// Armor damage
-						double realDamage = lastHealth - ((LivingEntity) entity).getHealth();
+						double realDamage = lastHealth - entity.getHealth();
 						
 						// Statistic
 						player.setStatistic(Statistic.DAMAGE_DEALT, player.getStatistic(Statistic.DAMAGE_DEALT) + new Double(realDamage).intValue());

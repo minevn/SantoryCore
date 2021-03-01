@@ -11,8 +11,8 @@ import mk.plugin.santory.utils.Utils;
 
 public class Armor {
 	
-	private Material chestplate;
-	private Color color;
+	private final Material chestplate;
+	private final Color color;
 	
 	public Armor(Material chestplate, Color color) {
 		this.chestplate = chestplate;

@@ -7,7 +7,7 @@ import mk.plugin.santory.config.Configs;
 
 public class Item {
 	
-	private String model;
+	private final String model;
 	private ItemData data;
 	
 	public Item(String model, ItemData data) {

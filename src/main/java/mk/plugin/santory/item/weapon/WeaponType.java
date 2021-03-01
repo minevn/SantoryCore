@@ -9,19 +9,19 @@ public enum WeaponType {
 	SHOOTER("Tầm xa", Shooter.BOW),
 	RANGED("Dài", 3.5);
 	
-	private String name;
-	private double range;
-	private boolean isShooter;
-	private Shooter shooter;
+	private final String name;
+	private final double range;
+	private final boolean isShooter;
+	private final Shooter shooter;
 	
-	private WeaponType(String name, Shooter shooter) {
+	WeaponType(String name, Shooter shooter) {
 		this.name = name;
 		this.isShooter = true;
 		this.shooter = shooter;
 		this.range = 50;
 	}
 	
-	private WeaponType(String name, double range) {
+	WeaponType(String name, double range) {
 		this.name = name;
 		this.range = range;
 		this.isShooter = false;

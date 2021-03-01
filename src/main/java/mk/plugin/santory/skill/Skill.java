@@ -32,11 +32,11 @@ public enum Skill {
 	MUA_TEN("Mưa tên", new WSMuaTen(), 5),
 	DANH_THUONG("Đánh thường", new WSHeavyHit(), 5);
 	
-	private String name;
-	private SkillExecutor executor;
-	private int cooldown;
+	private final String name;
+	private final SkillExecutor executor;
+	private final int cooldown;
 	
-	private Skill(String name, SkillExecutor executor, int cooldown) {
+	Skill(String name, SkillExecutor executor, int cooldown) {
 		this.name = name;
 		this.executor = executor;
 		this.cooldown = cooldown;

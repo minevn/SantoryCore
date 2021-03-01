@@ -12,11 +12,11 @@ public enum Amulet {
 	II("§9§lBùa may II", 50, new ItemTexture(Material.INK_SACK, 11)),
 	III("§c§lBùa may III", 100, new ItemTexture(Material.INK_SACK, 12));
 	
-	private String name;
-	private int bonus;
-	private ItemTexture texture;
+	private final String name;
+	private final int bonus;
+	private final ItemTexture texture;
 	
-	private Amulet(String name, int bonus, ItemTexture texture) {
+	Amulet(String name, int bonus, ItemTexture texture) {
 		this.name = name;
 		this.bonus = bonus;
 		this.texture = texture;

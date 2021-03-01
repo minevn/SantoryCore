@@ -1,7 +1,12 @@
 package mk.plugin.santory.wish;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Sound;
@@ -11,20 +16,13 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.collect.Lists;
-
-import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.tier.Tier;
-import mk.plugin.santory.utils.ItemStackUtils;
-import mk.plugin.santory.utils.Utils;
+import java.util.List;
 
 public class WishRolls {
 	
 	private static final int RESULT_SLOT = 22;
 	
-	private static List<Integer> rollSlots = Lists.newArrayList(2, 3, 4, 5, 6, 15, 24, 33, 42, 41, 40, 39, 38, 29, 20, 11);
+	private static final List<Integer> rollSlots = Lists.newArrayList(2, 3, 4, 5, 6, 15, 24, 33, 42, 41, 40, 39, 38, 29, 20, 11);
 	
 	public static void roll(Wish wish, Player player) {
 		String model = Wishes.finalRate(wish, player);
@@ -44,7 +42,7 @@ public class WishRolls {
 			long mili = Utils.randomInt(4000, 6000);
 			new BukkitRunnable() {
 				
-				long buff = 15;
+				final long buff = 15;
 				long interval = 10;
 				long lastCheck = current;
 				int c = 0;

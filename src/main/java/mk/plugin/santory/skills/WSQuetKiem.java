@@ -1,15 +1,5 @@
 package mk.plugin.santory.skills;
 
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
@@ -18,6 +8,15 @@ import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Map;
 
 public class WSQuetKiem implements SkillExecutor {
 
@@ -63,7 +62,7 @@ public class WSQuetKiem implements SkillExecutor {
 							if (e != player && e instanceof LivingEntity) {
 								LivingEntity le = (LivingEntity) e;
 								if (!Utils.canAttack(e)) return;
-								Damages.damage(player, (LivingEntity) le, new Damage(damage, DamageType.SKILL), 5);
+								Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
 							}
 						});
 					});

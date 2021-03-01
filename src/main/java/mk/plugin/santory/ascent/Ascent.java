@@ -7,13 +7,12 @@ public enum Ascent {
 	III(3),
 	IV(4),
 	V(5);
-	;
-	
+
 	public static final String ICON = "♢";
 	
-	private int value;
+	private final int value;
 	
-	private Ascent(int value) {
+	Ascent(int value) {
 		this.value = value;
 	}
 	

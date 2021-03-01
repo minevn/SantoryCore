@@ -1,7 +1,13 @@
 package mk.plugin.santory.skills;
 
-import java.util.Map;
-
+import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
+import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skill.SkillExecutor;
+import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -11,14 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
-import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.skill.SkillExecutor;
-import mk.plugin.santory.stat.Stat;
-import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.utils.Utils;
+import java.util.Map;
 
 public class WSDienTinh implements SkillExecutor {
 
@@ -37,7 +36,7 @@ public class WSDienTinh implements SkillExecutor {
 			} else effectEntity(le);
 			if (e != player) {
 				if (le.hasMetadata("NPC")) return;
-				Damages.damage(player, (LivingEntity) le, new Damage(damage, DamageType.SKILL), 5);
+				Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
 			}
 		});
 	}

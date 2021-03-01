@@ -4,6 +4,6 @@ import java.util.Map;
 
 public interface SkillExecutor {
 	
-	public void start(Map<String, Object> map);
+	void start(Map<String, Object> map);
 	
 }

@@ -1,26 +1,25 @@
 package mk.plugin.santory.utils;
 
-import java.lang.reflect.Field;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import mk.plugin.santory.ascent.Ascent;
+import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.grade.Grade;
+import mk.plugin.santory.hologram.Holograms;
+import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.ItemData;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.weapon.WeaponType;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.traveler.Traveler;
+import mk.plugin.santory.traveler.Travelers;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -31,26 +30,16 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
-import mk.plugin.santory.ascent.Ascent;
-import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.grade.Grade;
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.ItemData;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.item.weapon.WeaponType;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.stat.Stat;
-import mk.plugin.santory.tier.Tier;
-import mk.plugin.santory.traveler.Traveler;
-import mk.plugin.santory.traveler.Travelers;
-import net.minecraft.server.v1_12_R1.EntityArmorStand;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving;
+import java.lang.reflect.Field;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Utils {
 	
@@ -137,7 +126,6 @@ public class Utils {
 
 			String hashtext;
 			for (hashtext = number.toString(16); hashtext.length() < 32; hashtext = "0" + hashtext) {
-				;
 			}
 
 			return hashtext;
@@ -156,7 +144,7 @@ public class Utils {
 	public static ItemMeta buildSkull(SkullMeta meta, String texture) {
 		GameProfile profile;
 		Field profileField;
-		profile = new GameProfile(getUUIDFromString(texture), (String) null);
+		profile = new GameProfile(getUUIDFromString(texture), null);
 		profile.getProperties().put("textures", new Property("textures", texture));
 		profileField = null;
 
@@ -194,7 +182,6 @@ public class Utils {
 				.filter(e -> e instanceof LivingEntity && e != player).collect(Collectors.toList()).forEach(e -> {
 					list.add((LivingEntity) e);
 				});
-		;
 		return list;
 	}
 	
@@ -275,17 +262,7 @@ public class Utils {
 	}
 	
 	public static void hologram(Location location, String message, int tick, Player player) {
-		EntityArmorStand as = new EntityArmorStand(((CraftWorld) location.getWorld()).getHandle());
-		as.setInvisible(true);
-		as.setCustomName(message);
-		as.setCustomNameVisible(true);
-		as.setPosition(location.getX(), location.getY() - 0.5, location.getZ());
-
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
-
-		Bukkit.getScheduler().runTaskLaterAsynchronously(SantoryCore.get(), () -> {
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(as.getId()));
-		}, tick);
+		Holograms.hologram(SantoryCore.get(), location, message, tick, player);
 	}
 	
 	public static Location ranLoc(Location loc, double max) {
@@ -316,8 +293,7 @@ public class Utils {
 	}
 	
 	public static boolean canAttack(Entity e) {
-		if (e.hasMetadata("NPC"))return false;
-		return true;
+		return !e.hasMetadata("NPC");
 	}
 	
 	public static boolean rate(double chance) {
@@ -325,10 +301,7 @@ public class Utils {
 			return true;
 		double rate = chance * 100;
 		int random = new Random().nextInt(10000);
-		if (random < rate) {
-			return true;
-		} else
-			return false;
+		return random < rate;
 	}
 	
 	public static double getRange(Item item) {

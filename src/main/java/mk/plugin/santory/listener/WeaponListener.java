@@ -1,27 +1,12 @@
 package mk.plugin.santory.listener;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-
 import com.google.common.collect.Maps;
-
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.event.ItemToggleEvent;
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.ItemData;
-import mk.plugin.santory.item.ItemModel;
-import mk.plugin.santory.item.ItemType;
-import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.*;
 import mk.plugin.santory.item.weapon.Weapon;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.stat.Stat;
@@ -29,16 +14,24 @@ import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WeaponListener implements Listener {
 	
-	private static Map<String, Long> cooldownAttack = new HashMap<String, Long> ();	
+	private static final Map<String, Long> cooldownAttack = new HashMap<String, Long> ();
 	
 	public static boolean isCooldownAttack(Player player) {
 		if (!cooldownAttack.containsKey(player.getName())) return false;
-		if (cooldownAttack.get(player.getName()) < System.currentTimeMillis()) return false;
-		return true;
-	}
+        return cooldownAttack.get(player.getName()) >= System.currentTimeMillis();
+    }
 	
 	public static void setCooldownAttack(Player player, long timeMilis, ItemStack item) {
 		if (item != null) player.setCooldown(item.getType(), Long.valueOf(timeMilis / 50).intValue());
@@ -49,7 +42,7 @@ public class WeaponListener implements Listener {
 		cooldownAttack.remove(player.getName());
 	}
 	
-	private static Map<Player, Long> cooldownSkill = Maps.newHashMap();
+	private static final Map<Player, Long> cooldownSkill = Maps.newHashMap();
 	
 	@EventHandler
 	public void onWeaponSkill(ItemToggleEvent e) {

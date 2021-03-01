@@ -1,17 +1,5 @@
 package mk.plugin.santory.skills;
 
-import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
@@ -20,7 +8,16 @@ import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.Map;
 
 public class WSThauXuong implements SkillExecutor {
 
@@ -39,8 +36,8 @@ public class WSThauXuong implements SkillExecutor {
 					this.cancel();
 					return;
 				}
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
-				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+//				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
+//				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 				Location mainLoc = player.getLocation().add(0, 0.9, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.2f, 1.1f);
 				Vector v = random(mainLoc.clone().getDirection(), 2f);

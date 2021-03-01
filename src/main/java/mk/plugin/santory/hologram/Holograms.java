@@ -1,13 +1,7 @@
 package mk.plugin.santory.hologram;
 
-import com.google.common.collect.Lists;
-import net.minecraft.server.v1_12_R1.EntityArmorStand;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityLiving;
-import org.bukkit.Bukkit;
+import mk.plugin.santory.utils.HoloUtils;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -22,30 +16,12 @@ public class Holograms {
 		hologram(plugin, randomLocation(target.getEyeLocation().add(0, 0.5, 0), radius), message, tick, player);
 	}
 	
-	public static EntityArmorStand hologram(Plugin plugin, Location location, String message, int tick, Player player) {
-		EntityArmorStand as = new EntityArmorStand(((CraftWorld) location.getWorld()).getHandle(), location.getX(), location.getY() - 2, location.getZ());
-		as.setInvisible(true);
-		as.setCustomName(message);
-		as.setCustomNameVisible(true);
-		
-		((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityLiving(as));
-		
-		Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
-			((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(as.getId()));
-		}, tick);
-		
-		return as;
+	public static void hologram(Plugin plugin, Location location, String message, int tick, Player player) {
+		HoloUtils.hologram(message, location, tick);
 	}
 	
-	public static List<EntityArmorStand> hologram(Plugin plugin, Location location, List<String> message, int tick, Player player) {
-		List<EntityArmorStand> la = Lists.newArrayList();
-		
-		for (int i = 0 ; i < message.size() ; i++) {
-			Location l = location.clone().add(0, -0.2 * i, 0);
-			la.add(hologram(plugin, l, message.get(i), tick, player));
-		}
-		
-		return la;
+	public static void hologram(Plugin plugin, Location location, List<String> message, int tick, Player player) {
+		HoloUtils.hologram(message, location, tick);
 	}
 	
 	public static Location randomLocation(Location loc, double max) {

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class WishReward {
 	
-	private double chance;
-	private List<String> items;
+	private final double chance;
+	private final List<String> items;
 	
 	public WishReward(double chance, List<String> items) {
 		this.chance = chance;

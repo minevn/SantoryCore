@@ -3,7 +3,7 @@ author: MankaiStep
 version: 1.0
 main: mk.plugin.santory.main.SantoryCore
 depend: [PlayerData]
-soft-depend: [GlowAPI, PlaceholderAPI]
+soft-depend: [PlaceholderAPI]
 commands:
     santory:
         descripton: Santory's command

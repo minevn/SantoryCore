@@ -15,8 +15,8 @@ public class ItemToggleEvent extends PlayerEvent {
 	 * 2. Damage >> Hand animation
 	 */
 	
-	private Item item;
-	private ItemStack itemStack;
+	private final Item item;
+	private final ItemStack itemStack;
 	
 	public ItemToggleEvent(Player who, Item item, ItemStack itemStack) {
 		super(who);

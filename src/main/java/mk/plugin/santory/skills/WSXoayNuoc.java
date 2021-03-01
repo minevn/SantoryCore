@@ -1,10 +1,14 @@
 package mk.plugin.santory.skills;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import com.google.common.collect.Lists;
+import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
+import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skill.SkillExecutor;
+import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -14,16 +18,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import com.google.common.collect.Lists;
-
-import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
-import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.skill.SkillExecutor;
-import mk.plugin.santory.stat.Stat;
-import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class WSXoayNuoc implements SkillExecutor {
 
@@ -61,7 +59,7 @@ public class WSXoayNuoc implements SkillExecutor {
 						}
 					}
 					
-				});;
+				});
 				if (c > 20) this.cancel();
 			}
 		}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);

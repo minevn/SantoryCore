@@ -1,17 +1,17 @@
 package mk.plugin.santory.mob;
 
-import java.util.List;
-import java.util.UUID;
-
 import mk.plugin.santory.item.StatValue;
 import mk.plugin.santory.stat.Stat;
 
+import java.util.List;
+import java.util.UUID;
+
 public class Mob {
 
-	private UUID id;
-	private MobType type;
-	private int level;
-	private List<StatValue> stats;
+	private final UUID id;
+	private final MobType type;
+	private final int level;
+	private final List<StatValue> stats;
 	
 	private float damageMulti;
 

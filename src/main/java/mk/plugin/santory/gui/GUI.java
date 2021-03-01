@@ -11,15 +11,14 @@ public enum GUI {
 	ASCENT(54, "§0§lTINH LUYỆN TRANG BỊ", ItemAscents.getSlots(), ItemAscents.getInputChecker(), ItemAscents.getAmountChecker()),
 	UPGRADE(45, "§0§lNÂNG BẬC TRANG BỊ", ItemUpgrades.getSlots(), ItemUpgrades.getInputChecker(), ItemUpgrades.getAmountChecker()),
 	ENHANCE(45, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker());
-	;
+
+    private final int size;
+	private final String title;
+	private final Map<Integer, GUISlot> slots;
+	private final PlaceChecker placer;
+	private final AmountChecker amounter;
 	
-	private int size;
-	private String title;
-	private Map<Integer, GUISlot> slots;
-	private PlaceChecker placer;
-	private AmountChecker amounter;
-	
-	private GUI(int size, String title, Map<Integer, GUISlot> slots, PlaceChecker placer, AmountChecker amounter) {
+	GUI(int size, String title, Map<Integer, GUISlot> slots, PlaceChecker placer, AmountChecker amounter) {
 		this.size = size;
 		this.title = title;
 		this.slots = slots;

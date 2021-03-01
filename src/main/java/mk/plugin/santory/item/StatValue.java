@@ -4,8 +4,8 @@ import mk.plugin.santory.stat.Stat;
 
 public class StatValue {
 	
-	private Stat stat;
-	private int value;
+	private final Stat stat;
+	private final int value;
 	
 	public StatValue(Stat stat, int value) {
 		this.stat = stat;

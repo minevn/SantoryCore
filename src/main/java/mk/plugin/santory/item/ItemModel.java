@@ -9,13 +9,13 @@ import mk.plugin.santory.tier.Tier;
 
 public class ItemModel {
 	
-	private ItemTexture texture;
-	private ItemType type;
-	private Tier tier;
-	private String name;
-	private String desc;
-	private Map<Stat, Integer> stats;
-	private Map<String, String> metadata;
+	private final ItemTexture texture;
+	private final ItemType type;
+	private final Tier tier;
+	private final String name;
+	private final String desc;
+	private final Map<Stat, Integer> stats;
+	private final Map<String, String> metadata;
 	
 	public ItemModel(ItemTexture texture, ItemType type, 
 			String name, Tier tier, 

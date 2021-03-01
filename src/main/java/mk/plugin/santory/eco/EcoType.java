@@ -38,7 +38,7 @@ public enum EcoType {
 		@Override
 		public boolean take(Player player, int value) {
 			Plugin pl = Bukkit.getPluginManager().getPlugin("PlayerPoints");
-	    	PlayerPoints pp = PlayerPoints.class.cast(pl);
+	    	PlayerPoints pp = (PlayerPoints) pl;
 			if (value > pp.getAPI().look(player.getName())) {
 				return false;
 			} 
@@ -49,19 +49,19 @@ public enum EcoType {
 		@Override
 		public int get(Player player) {
 			Plugin pl = Bukkit.getPluginManager().getPlugin("PlayerPoints");
-	    	PlayerPoints pp = PlayerPoints.class.cast(pl);
+	    	PlayerPoints pp = (PlayerPoints) pl;
 	    	return pp.getAPI().look(player.getUniqueId());
 		}
 
 	};
 	
-	private String name;
-	private String color;
+	private final String name;
+	private final String color;
 	
 	public abstract int get(Player player);
 	public abstract boolean take(Player player, int value);
 	
-	private EcoType(String name, String color) {
+	EcoType(String name, String color) {
 		this.name = name;
 		this.color = color;
 	}

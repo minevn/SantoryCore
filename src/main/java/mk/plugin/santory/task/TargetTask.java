@@ -1,7 +1,11 @@
 package mk.plugin.santory.task;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.ItemType;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.weapon.Weapon;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -9,17 +13,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.inventivetalent.glow.GlowAPI;
 import org.inventivetalent.glow.GlowAPI.Color;
 
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.ItemType;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.item.weapon.Weapon;
-import mk.plugin.santory.utils.Utils;
+import java.util.Map;
 
 public class TargetTask extends BukkitRunnable {
 
-	private Map<LivingEntity, Long> map = Maps.newConcurrentMap();
+	private final Map<LivingEntity, Long> map = Maps.newConcurrentMap();
 	
 	@Override
 	public void run() {

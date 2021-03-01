@@ -8,11 +8,11 @@ public enum Tier {
 	EPIC("Cực phẩm", "§6", 4),
 	LEGEND("Huyền thoại", "§a", 5);
 	
-	private String color;
-	private String name;
-	private int number;
+	private final String color;
+	private final String name;
+	private final int number;
 	
-	private Tier(String name, String color, int number) {
+	Tier(String name, String color, int number) {
 		this.color = color;
 		this.name = name;
 		this.number = number;

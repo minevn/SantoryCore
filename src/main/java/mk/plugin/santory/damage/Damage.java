@@ -2,8 +2,8 @@ package mk.plugin.santory.damage;
 
 public class Damage {
 	
-	private double value;
-	private DamageType type;
+	private final double value;
+	private final DamageType type;
 	
 	public Damage(double value, DamageType type) {
 		this.value = value;

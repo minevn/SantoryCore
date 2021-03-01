@@ -1,16 +1,16 @@
 package mk.plugin.santory.wish;
 
-import java.util.Map;
-
 import mk.plugin.santory.tier.Tier;
+
+import java.util.Map;
 
 public class Wish {
 	
-	private String id;
-	private String name;
-	private String desc;
-	private Map<Tier, WishReward> rewards;
-	private Map<Tier, Integer> insures;
+	private final String id;
+	private final String name;
+	private final String desc;
+	private final Map<Tier, WishReward> rewards;
+	private final Map<Tier, Integer> insures;
 	
 	public Wish(String id, String name, String desc, Map<Tier, WishReward> rewards, Map<Tier, Integer> insures) {
 		this.id = id;

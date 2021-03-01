@@ -1,22 +1,6 @@
 package mk.plugin.santory.skills;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-
 import com.google.common.collect.Lists;
-
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
@@ -25,7 +9,19 @@ import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import net.minecraft.server.v1_12_R1.PacketPlayOutAnimation;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class WSChiaCat implements SkillExecutor {
 
@@ -45,8 +41,8 @@ public class WSChiaCat implements SkillExecutor {
 					this.cancel();
 					return;
 				}
-				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
-				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+//				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
+//				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 				double pitch = Utils.random(20, 170);
 				shoot(player, damage, pitch);
 			}

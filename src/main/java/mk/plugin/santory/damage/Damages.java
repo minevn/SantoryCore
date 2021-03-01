@@ -14,7 +14,7 @@ public class Damages {
 	
 	public static final String DAMAGE_TAG = "satory.damage";
 	
-	private static Map<LivingEntity, Long> damaged = new HashMap<LivingEntity, Long> ();
+	private static final Map<LivingEntity, Long> damaged = new HashMap<LivingEntity, Long> ();
 	
 	public static void damage(Player player, LivingEntity target, Damage damage, int tickDelay) {
 		// Check delay

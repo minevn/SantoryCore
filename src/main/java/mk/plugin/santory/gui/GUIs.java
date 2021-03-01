@@ -21,7 +21,7 @@ import mk.plugin.santory.utils.Utils;
 
 public class GUIs {
 	
-	private static Map<GUI, GUIStatus> statuses = Maps.newHashMap();
+	private static final Map<GUI, GUIStatus> statuses = Maps.newHashMap();
 	
 	public static GUIStatus getStatus(GUI gui) {
 		return statuses.getOrDefault(gui, null);

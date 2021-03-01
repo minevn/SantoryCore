@@ -9,9 +9,9 @@ import mk.plugin.santory.tier.Tier;
 
 public class WishData {
 
-	private String wish;
-	private int times;
-	private Map<Tier, Integer> insures;
+	private final String wish;
+	private final int times;
+	private final Map<Tier, Integer> insures;
 	
 	public WishData(String wish) {
 		this.wish = wish;

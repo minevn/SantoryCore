@@ -1,7 +1,8 @@
 package mk.plugin.santory.listener;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,14 +14,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.traveler.Travelers;
+import java.util.Map;
 
 public class StateListener implements Listener {
 	
-	private Map<String, ItemStack> lastHand = Maps.newHashMap();
+	private final Map<String, ItemStack> lastHand = Maps.newHashMap();
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {

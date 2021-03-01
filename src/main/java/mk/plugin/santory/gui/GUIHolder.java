@@ -5,7 +5,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 public class GUIHolder implements InventoryHolder {
 
-	private GUI gui;
+	private final GUI gui;
 	
 	public GUIHolder(GUI gui) {
 		this.gui = gui;

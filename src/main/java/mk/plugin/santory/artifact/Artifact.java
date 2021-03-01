@@ -10,11 +10,11 @@ import mk.plugin.santory.stat.Stat;
 public class Artifact {
 	
 	//          Stat  Chance
-	private Map<Stat, Double> mainStats;
-	private Map<Stat, Double> subStats;
+	private final Map<Stat, Double> mainStats;
+	private final Map<Stat, Double> subStats;
 	
-	private String setID;
-	private Stat setStat;
+	private final String setID;
+	private final Stat setStat;
 	
 	public Artifact(Map<Stat, Double> mainStats, Map<Stat, Double> subStats, String setID, Stat setStat) {
 		this.mainStats = mainStats;

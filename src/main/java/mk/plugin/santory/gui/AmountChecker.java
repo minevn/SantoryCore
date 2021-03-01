@@ -4,6 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public interface AmountChecker {
 	
-	public boolean allowMulti(ItemStack is);
+	boolean allowMulti(ItemStack is);
 	
 }

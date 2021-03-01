@@ -1,19 +1,17 @@
 package mk.plugin.santory.mob;
 
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.common.collect.Maps;
+import mk.plugin.santory.stat.Stat;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.stat.Stat;
+import java.util.Map;
+import java.util.UUID;
 
 public class Mobs {
 	
-	private static Map<UUID, Mob> mobs = Maps.newHashMap();
+	private static final Map<UUID, Mob> mobs = Maps.newHashMap();
 	
 	public static Mob get(UUID id) {
 		return mobs.getOrDefault(id, null);

@@ -41,7 +41,7 @@ public class ArmorListener implements Listener {
 		if (!Items.is(is)) return;
 		Item item = Items.read(is);
 		if (item.getModel().getType() != ItemType.ARMOR) return;
-		PlayerInventory inv = (PlayerInventory) player.getInventory();
+		PlayerInventory inv = player.getInventory();
 		
 		if (!onEquip(inv, item)) {
 			e.setCancelled(true);
@@ -62,7 +62,7 @@ public class ArmorListener implements Listener {
 		if (!Items.is(is)) return;
 		Item item = Items.read(is);
 		if (item.getModel().getType() != ItemType.ARMOR) return;
-		PlayerInventory inv = (PlayerInventory) e.getWhoClicked().getInventory();
+		PlayerInventory inv = e.getWhoClicked().getInventory();
 		
 		// Take
 		if (e.getSlot() == 39 && e.isCancelled() == false) {
@@ -89,7 +89,7 @@ public class ArmorListener implements Listener {
 		if (!Items.is(is)) return;
 		Item item = Items.read(is);
 		if (item.getModel().getType() != ItemType.ARMOR) return;
-		PlayerInventory inv = (PlayerInventory) e.getWhoClicked().getInventory();
+		PlayerInventory inv = e.getWhoClicked().getInventory();
 		
 		if (!onEquip(inv, item)) {
 			e.setCancelled(true);
@@ -100,7 +100,7 @@ public class ArmorListener implements Listener {
 	@EventHandler
 	public void onTake(InventoryClickEvent e) {
 		if (e.getInventory().getType() != InventoryType.CRAFTING) return;
-		PlayerInventory inv = (PlayerInventory) e.getWhoClicked().getInventory();
+		PlayerInventory inv = e.getWhoClicked().getInventory();
 		if (e.getSlot() != 39) return;
 		
 		ItemStack is = e.getCurrentItem();

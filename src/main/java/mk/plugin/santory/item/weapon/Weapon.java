@@ -5,8 +5,8 @@ import mk.plugin.santory.skill.Skill;
 
 public class Weapon {
 	
-	private WeaponType type;
-	private Skill skill;
+	private final WeaponType type;
+	private final Skill skill;
 	
 	public Weapon(WeaponType type, Skill skill) {
 		this.type = type;

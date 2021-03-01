@@ -1,16 +1,8 @@
 package mk.plugin.santory.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -20,7 +12,14 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class ItemStackUtils {
 	
@@ -115,64 +114,43 @@ public class ItemStackUtils {
     
     public static boolean hasTag(ItemStack item, String key) {
     	if (item == null) return false;
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item.clone());
-    	if (!nmsItemStack.hasTag()) return false;
-    	NBTTagCompound tags = nmsItemStack.getTag();
-    	if (tags.hasKey(key)) return true;
-    	
-    	return false; 	
-    }
+    	NBTItem nbti = new NBTItem(item);
+    	return nbti.hasNBTData() && nbti.hasKey(key);
+	}
     
     public static String getTag(ItemStack item, String key) {
     	if (item == null) return null;
-//    	if (!hasTag(item, key)) return null;
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item.clone());
-    	if (!nmsItemStack.hasTag()) return null;
-    	NBTTagCompound tags = nmsItemStack.getTag();
-    	if (!tags.hasKey(key)) return null;
-    	return tags.getString(key);
+    	NBTItem nbti = new NBTItem(item);
+    	return nbti.getString(key);
     }
     
     public static ItemStack setTag(ItemStack item, String key, String value) {
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item.clone());
-    	NBTTagCompound tags = nmsItemStack.getTag();
-    	tags.setString(key, value);
-    	nmsItemStack.setTag(tags);
-    	return CraftItemStack.asBukkitCopy(nmsItemStack);
+		NBTItem nbti = new NBTItem(item);
+		nbti.setString(key, value);
+		return nbti.getItem();
     }
     
     public static ItemStack setTag(ItemStack item, Map<String, String> map) {
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item.clone());
-    	NBTTagCompound tags = nmsItemStack.getTag();
+		NBTItem nbti = new NBTItem(item);
     	for (String key : map.keySet()) {
-    		tags.setString(key, map.get(key));
+			nbti.setString(key, map.get(key));
     	}
-    	nmsItemStack.setTag(tags);
-    	return CraftItemStack.asBukkitCopy(nmsItemStack);
+    	return nbti.getItem();
     }
     
     public static ItemStack removeTag(ItemStack item, String key) {
-//    	if (!hasTag(item, key)) return item;
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item.clone());
-    	if (!nmsItemStack.hasTag()) return item;
-    	NBTTagCompound tags = nmsItemStack.getTag();
-    	if (!tags.hasKey(key)) return item;
-    	tags.remove(key);
-    	nmsItemStack.setTag(tags);
-    	return CraftItemStack.asBukkitCopy(nmsItemStack);
+		NBTItem nbti = new NBTItem(item);
+		nbti.removeKey(key);
+		return nbti.getItem();
     }
     
-    public static Map<String, String> getTags(ItemStack itemStack) {
-    	Map<String, String> map = new HashMap<String, String> ();
-    	if (itemStack == null) return map;
-    	ItemStack item = itemStack.clone();
-    	net.minecraft.server.v1_12_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(item);
-    	NBTTagCompound tags = nmsItemStack.getTag();
-    	for (String s : tags.c()) {
-    		map.put(s, tags.getString(s));
-    	}
-    	
-    	return map;
+    public static Map<String, String> getTags(ItemStack is) {
+		Map<String, String> m = new HashMap<>();
+		NBTItem nbti = new NBTItem(is);
+		for (String key : nbti.getKeys()) {
+			m.put(key, nbti.getString(key));
+		}
+    	return m;
     }
     
     public static boolean hasLore(ItemStack item) {

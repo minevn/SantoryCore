@@ -137,11 +137,11 @@ public enum Stat{
 	public abstract void set(Player player, int point);
 	public abstract String getSubStat();
 	
-	private String color;
-	private String name;
-	private int minValue;
+	private final String color;
+	private final String name;
+	private final int minValue;
 	
-	private Stat(String name, int minValue, String color) {
+	Stat(String name, int minValue, String color) {
 		this.name = name;
 		this.minValue = minValue;
 		this.color = color;

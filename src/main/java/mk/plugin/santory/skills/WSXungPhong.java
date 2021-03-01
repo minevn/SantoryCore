@@ -1,7 +1,13 @@
 package mk.plugin.santory.skills;
 
-import java.util.Map;
-
+import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
+import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skill.SkillExecutor;
+import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -11,14 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
-import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.skill.SkillExecutor;
-import mk.plugin.santory.stat.Stat;
-import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.utils.Utils;
+import java.util.Map;
 
 public class WSXungPhong  implements SkillExecutor {
 
@@ -73,7 +72,7 @@ public class WSXungPhong  implements SkillExecutor {
 							if (e != player && e instanceof LivingEntity) {
 								LivingEntity le = (LivingEntity) e;
 								if (!Utils.canAttack(e)) return;
-								Damages.damage(player, (LivingEntity) le, new Damage(damage, DamageType.SKILL), 5);
+								Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
 								if (force) {
 									le.setVelocity(le.getLocation().subtract(player.getLocation()).toVector().normalize().multiply(2));
 								}

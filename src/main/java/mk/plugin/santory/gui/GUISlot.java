@@ -4,8 +4,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class GUISlot {
 	
-	private String id;
-	private ItemStack icon;
+	private final String id;
+	private final ItemStack icon;
 	private PlaceExecutor placeExecutor;
 	private ClickExecutor clicker;
 	

@@ -1,24 +1,22 @@
 package mk.plugin.santory.traveler;
 
-import java.util.List;
-import java.util.Map;
-
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+import java.util.Map;
 
 public class Travelers {
 	
-	private static Map<String, Traveler> travelers = Maps.newHashMap();
+	private static final Map<String, Traveler> travelers = Maps.newHashMap();
 	
 	public static Traveler get(String name) {
 		if (!travelers.containsKey(name)) travelers.put(name, new Traveler(TravelerStorage.get(name)));

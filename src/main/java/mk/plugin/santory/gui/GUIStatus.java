@@ -10,10 +10,10 @@ import com.google.common.collect.Maps;
 
 public class GUIStatus {
 	
-	private Inventory inv;
-	private GUI gui;
+	private final Inventory inv;
+	private final GUI gui;
 	private Map<Integer, ItemStack> placedItems;
-	private Map<String, Object> data;
+	private final Map<String, Object> data;
 	
 	public GUIStatus(Inventory inv, GUI gui) {
 		this.inv = inv;
