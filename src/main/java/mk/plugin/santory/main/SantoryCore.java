@@ -1,23 +1,14 @@
 package mk.plugin.santory.main;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import mk.plugin.santory.command.AdminCommand;
 import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.listener.ArmorListener;
-import mk.plugin.santory.listener.GUIListener;
-import mk.plugin.santory.listener.ItemListener;
-import mk.plugin.santory.listener.LevelListener;
-import mk.plugin.santory.listener.MobListener;
-import mk.plugin.santory.listener.PlayerListener;
-import mk.plugin.santory.listener.StatListener;
-import mk.plugin.santory.listener.StateListener;
-import mk.plugin.santory.listener.WeaponListener;
+import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class SantoryCore extends JavaPlugin {
 	

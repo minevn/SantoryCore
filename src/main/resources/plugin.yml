@@ -2,7 +2,7 @@ name: SantoryCore
 author: MankaiStep
 version: 1.0
 main: mk.plugin.santory.main.SantoryCore
-depend: [PlayerData]
+depend: [PlayerData, HolographicDisplays]
 soft-depend: [PlaceholderAPI]
 commands:
     santory:
