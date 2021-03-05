@@ -1,7 +1,12 @@
 package mk.plugin.santory.artifact;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.traveler.Traveler;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,15 +18,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.google.common.collect.Lists;
-
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.traveler.Traveler;
-import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.utils.Utils;
-import net.md_5.bungee.api.ChatColor;
+import java.util.List;
 
 public class ArtifactGUI implements InventoryHolder {
 	
@@ -48,7 +45,7 @@ public class ArtifactGUI implements InventoryHolder {
 		if (e.getInventory().getHolder() instanceof ArtifactGUI == false) return;	
 		int slot = e.getSlot();
 		
-		if (e.getClickedInventory() == e.getWhoClicked().getOpenInventory().getTopInventory()) {
+		if (e.getInventory() == e.getWhoClicked().getOpenInventory().getTopInventory()) {
 			e.setCancelled(true);
 			ItemStack current = e.getCurrentItem();
 			if (SLOTS.contains(slot) || Artifacts.is(current)) {
@@ -105,11 +102,11 @@ public class ArtifactGUI implements InventoryHolder {
 	}
 	
 	private static ItemStack getIcon() {
-		ItemStack item = new ItemStack(Material.WOOD_HOE);
+		ItemStack item = new ItemStack(Material.WOODEN_HOE);
 		ItemMeta meta = item.getItemMeta();
 		item.setDurability((short) 4);
 		meta.setUnbreakable(true);
-		meta.setDisplayName(ChatColor.GREEN.toString() + "§oÔ để Di vật");
+		meta.setDisplayName("§a§oÔ để Di vật");
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		item.setItemMeta(meta);

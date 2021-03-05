@@ -1,5 +1,5 @@
 texture:
-  material: WOOD_SWORD
+  material: WOODEN_SWORD
   data: 0
 type: WEAPON
 tier: COMMON
@@ -10,4 +10,4 @@ stats:
 - ATTACK_SPEED 5
 metadata:
   weapon-type: LIGHT
-  weapon-skill: TAN_XA_TIEN
+  weapon-skill: XA_TIEN

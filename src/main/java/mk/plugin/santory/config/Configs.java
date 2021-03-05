@@ -1,11 +1,21 @@
 package mk.plugin.santory.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import mk.plugin.santory.grade.Grade;
+import mk.plugin.santory.item.ItemModel;
+import mk.plugin.santory.item.ItemTexture;
+import mk.plugin.santory.item.ItemType;
+import mk.plugin.santory.item.weapon.WeaponType;
+import mk.plugin.santory.mob.MobType;
+import mk.plugin.santory.skill.Skill;
+import mk.plugin.santory.slave.SlaveModel;
+import mk.plugin.santory.slave.SlaveState;
+import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.utils.Utils;
+import mk.plugin.santory.wish.Wish;
+import mk.plugin.santory.wish.WishReward;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -14,19 +24,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.grade.Grade;
-import mk.plugin.santory.item.ItemModel;
-import mk.plugin.santory.item.ItemTexture;
-import mk.plugin.santory.item.ItemType;
-import mk.plugin.santory.mob.MobType;
-import mk.plugin.santory.stat.Stat;
-import mk.plugin.santory.tier.Tier;
-import mk.plugin.santory.utils.Utils;
-import mk.plugin.santory.wish.Wish;
-import mk.plugin.santory.wish.WishReward;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 public class Configs {
 	
@@ -59,6 +61,8 @@ public class Configs {
 
 	private static final Map<String, Integer> mobLevels = Maps.newHashMap();
 	private static final Map<String, MobType> mobTypes = Maps.newHashMap();
+
+	private static final Map<String, SlaveModel> slaves = Maps.newHashMap();
 	
 		
 	public static void reload(JavaPlugin plugin) {
@@ -120,7 +124,26 @@ public class Configs {
 			String id = f.getName().replace(".yml", "");
 			wishes.put(id, readWish(id, ic));
 		}
-		
+
+		// Slaves
+		slaves.clear();
+		iF = new File(plugin.getDataFolder() + "//slaves");
+		if (!iF.exists()) {
+			InputStream is = plugin.getResource("example-slave.yml");
+			File file = new File(plugin.getDataFolder() + "//slaves//example-slave.yml");
+			try {
+				FileUtils.copyInputStreamToFile(is, file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		iF.mkdirs();
+		for (File f : iF.listFiles()) {
+			FileConfiguration ic = YamlConfiguration.loadConfiguration(f);
+			String id = f.getName().replace(".yml", "");
+			slaves.put(id, readSlave(ic));
+		}
+
 		// Grade exp
 		gradeExps.clear();
 		config.getConfigurationSection("item.grade-exp").getKeys(false).forEach(gs -> {
@@ -166,7 +189,24 @@ public class Configs {
 	public static MobType getType(String mobID) {
 		return mobTypes.get(mobID);
 	}
-	
+
+	public static SlaveModel getSlaveModel(String slaveID) {return slaves.get(slaveID);}
+
+	private static SlaveModel readSlave(FileConfiguration config) {
+		String name = config.getString("name");
+		Tier tier = Tier.valueOf(config.getString("tier").toUpperCase());
+		String head = config.getString("head");
+		Color color = Color.fromBGR(Integer.valueOf(config.getString("color").split("-")[0]), Integer.valueOf(config.getString("color").split("-")[1]), Integer.valueOf(config.getString("color").split("-")[2]));
+		Skill skill = Skill.valueOf(config.getString("skill").toUpperCase());
+		WeaponType wt = WeaponType.valueOf(config.getString("weapon"));
+		Map<SlaveState, List<String>> sounds = Maps.newHashMap();
+		for (String k : config.getConfigurationSection("sounds").getKeys(false)) {
+			sounds.put(SlaveState.valueOf(k.toUpperCase()), config.getStringList("sounds." + k));
+		}
+
+		return new SlaveModel(name, head, color, tier, skill, wt, sounds);
+	}
+
 	private static ItemModel readModel(FileConfiguration config) {
 		String headTexture = null;
 		Material m = null;

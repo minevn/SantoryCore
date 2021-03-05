@@ -59,7 +59,7 @@ public class WishRolls {
 							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 								inv.setItem(RESULT_SLOT, r);
-								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1, 1);
+								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 								player.getInventory().addItem(r.clone());
 							}, 20);
 							this.cancel();
@@ -86,7 +86,7 @@ public class WishRolls {
 						}
 						
 						lastCheck = System.currentTimeMillis();
-						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_HARP, 1, 1);
+						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
 						if (System.currentTimeMillis() - current < mili) interval += buff;
 					}
 				}

@@ -4,6 +4,7 @@ import mk.plugin.santory.command.AdminCommand;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
+import mk.plugin.santory.slave.SlaveTask;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
@@ -51,11 +52,13 @@ public class SantoryCore extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ArmorListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MobListener(), this);
+		Bukkit.getPluginManager().registerEvents(new SlaveListener(), this);
 	}
 	
 	public void registerTasks() {
 		new TargetTask().runTaskTimer(this, 0, 2);
 		new HealTask().runTaskTimer(this, 0, 20);
+		new SlaveTask().runTaskTimer(this, 0, 10);
 	}
 	
 	public void registerPlaceholders() {

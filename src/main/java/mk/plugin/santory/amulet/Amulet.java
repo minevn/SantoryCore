@@ -8,9 +8,9 @@ import mk.plugin.santory.utils.ItemStackUtils;
 
 public enum Amulet {
 	
-	I("§f§lBùa may I", 25, new ItemTexture(Material.INK_SACK, 10)),
-	II("§9§lBùa may II", 50, new ItemTexture(Material.INK_SACK, 11)),
-	III("§c§lBùa may III", 100, new ItemTexture(Material.INK_SACK, 12));
+	I("§f§lBùa may I", 25, new ItemTexture(Material.LEGACY_INK_SACK, 10)),
+	II("§9§lBùa may II", 50, new ItemTexture(Material.LEGACY_INK_SACK, 11)),
+	III("§c§lBùa may III", 100, new ItemTexture(Material.LEGACY_INK_SACK, 12));
 	
 	private final String name;
 	private final int bonus;

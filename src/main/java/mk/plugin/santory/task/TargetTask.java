@@ -7,11 +7,11 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.weapon.Weapon;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.inventivetalent.glow.GlowAPI;
-import org.inventivetalent.glow.GlowAPI.Color;
 
 import java.util.Map;
 
@@ -21,13 +21,8 @@ public class TargetTask extends BukkitRunnable {
 	
 	@Override
 	public void run() {
-		if (!Bukkit.getPluginManager().isPluginEnabled("GlowAPI")) {
-			this.cancel();
-			return;
-		}
 		map.forEach((le, l) -> {
 			if (l < System.currentTimeMillis()) {
-				GlowAPI.setGlowing(le, false, Bukkit.getOnlinePlayers());
 				map.remove(le);
 			}
 		});
@@ -41,7 +36,7 @@ public class TargetTask extends BukkitRunnable {
 				LivingEntity target = Utils.getTarget(player, range);
 				if (target == null) return;
 				map.put(target, System.currentTimeMillis() + 300);
-				GlowAPI.setGlowing(target, Color.RED, player);
+				Utils.circleParticles(new Particle.DustOptions(Color.RED, 1), target.getEyeLocation().add(0, 0.4, 0), 0.1);
 			}
 		});
 	}

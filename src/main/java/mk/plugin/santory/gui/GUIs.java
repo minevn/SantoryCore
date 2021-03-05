@@ -1,8 +1,9 @@
 package mk.plugin.santory.gui;
 
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -13,11 +14,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.utils.Utils;
+import java.util.List;
+import java.util.Map;
 
 public class GUIs {
 	
@@ -32,7 +30,7 @@ public class GUIs {
 		GUIStatus status = new GUIStatus(inv, gui);
 		statuses.put(gui, status);
 		player.openInventory(inv);
-		player.playSound(player.getLocation(), Sound.BLOCK_ENDERCHEST_OPEN, 1, 1);
+		player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 		
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < gui.getSize() ; i++) inv.setItem(i, GUIs.getItemSlot(DyeColor.BLACK, "§l"));
@@ -99,7 +97,7 @@ public class GUIs {
 	}
 	
 	public static ItemStack getItemSlot(DyeColor color, String desc) {
-		ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE, 1, Utils.getColor(color));
+		ItemStack item = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, Utils.getColor(color));
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(desc);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

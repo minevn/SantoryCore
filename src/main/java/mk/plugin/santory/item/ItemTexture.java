@@ -1,12 +1,12 @@
 package mk.plugin.santory.item;
 
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-
-import mk.plugin.santory.utils.Utils;
 
 public class ItemTexture {
 	
@@ -54,18 +54,19 @@ public class ItemTexture {
 	
 	public void set(ItemStack is) {
 		if (this.headTexture != null) {
-			is.setType(Material.SKULL_ITEM);
-			is.setDurability((short) 3);
+			is.setType(Material.PLAYER_HEAD);
 			is.setItemMeta(Utils.buildSkull((SkullMeta) is.getItemMeta(), this.headTexture));
 		}
 		else {
 			is.setType(material);
-			is.setDurability(new Integer(this.data).shortValue());
+			ItemMeta meta = is.getItemMeta();
+			meta.setCustomModelData(this.getData());
 			if (this.color != null) {
-				LeatherArmorMeta meta = (LeatherArmorMeta) is.getItemMeta();
-				meta.setColor(this.color);
-				is.setItemMeta(meta);
+				LeatherArmorMeta metaa = (LeatherArmorMeta) meta;
+				metaa.setColor(this.color);
+				is.setItemMeta(metaa);
 			}
+			is.setItemMeta(meta);
 		}
 	}
 	

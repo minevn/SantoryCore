@@ -1,8 +1,18 @@
 package mk.plugin.santory.item.modifty;
 
-import java.util.List;
-import java.util.Map;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import mk.plugin.santory.amulet.Amulet;
+import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.eco.EcoType;
+import mk.plugin.santory.grade.Grade;
+import mk.plugin.santory.gui.*;
+import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.ItemData;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -10,27 +20,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import mk.plugin.santory.amulet.Amulet;
-import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.eco.EcoType;
-import mk.plugin.santory.grade.Grade;
-import mk.plugin.santory.gui.AmountChecker;
-import mk.plugin.santory.gui.ClickExecutor;
-import mk.plugin.santory.gui.GUI;
-import mk.plugin.santory.gui.GUISlot;
-import mk.plugin.santory.gui.GUIStatus;
-import mk.plugin.santory.gui.GUIs;
-import mk.plugin.santory.gui.PlaceChecker;
-import mk.plugin.santory.gui.PlaceExecutor;
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.ItemData;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.utils.ItemStackUtils;
-import mk.plugin.santory.utils.Utils;
+import java.util.List;
+import java.util.Map;
 
 public class ItemEnhances {
 	
@@ -198,7 +189,7 @@ public class ItemEnhances {
 				// Success
 				if (Utils.rate(chance)) {
 					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
-					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_LAUNCH, 1, 1);
+					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					player.getInventory().addItem(r.clone());
 				}
 				// Fail
@@ -234,7 +225,7 @@ public class ItemEnhances {
 	
 	public static ItemStack getDefaultButton() {
 		double fee = Configs.ENHANCE_FEE;
-		ItemStack is = new ItemStack(Material.CONCRETE);
+		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
 		is.setDurability(Utils.getColor(DyeColor.RED));
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể cường hóa");
 		List<String> lore = Lists.newArrayList();
@@ -249,7 +240,7 @@ public class ItemEnhances {
 	
 	public static ItemStack getOkButton(int level, int up, Amulet a) {
 		double fee = Configs.ENHANCE_FEE;
-		ItemStack is = new ItemStack(Material.CONCRETE);
+		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
 		is.setDurability(Utils.getColor(DyeColor.GREEN));
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể nâng bậc");
 		List<String> lore = Lists.newArrayList();
@@ -281,7 +272,7 @@ public class ItemEnhances {
 	private static final String NAME = "§c§lĐá cường hóa";
 	
 	public static ItemStack get() {
-		ItemStack item = new ItemStack(Material.INK_SACK, 1, (short) 15);
+		ItemStack item = new ItemStack(Material.LEGACY_INK_SACK, 1, (short) 15);
 		ItemStackUtils.setDisplayName(item, NAME);
 		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng tăng cấp cho trang bị");
 		ItemStackUtils.addEnchantEffect(item);

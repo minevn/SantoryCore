@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
@@ -42,7 +43,25 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Utils {
-	
+
+	public static void circleParticles(Particle.DustOptions doo, Location location, double radius) {
+		int amount = new Double(radius * 20).intValue();
+		double increment = (2 * Math.PI) / amount;
+		ArrayList<Location> locations = new ArrayList<Location>();
+
+		for (int i = 0; i < amount; i++) {
+			double angle = i * increment;
+			double x = location.getX() + (radius * Math.cos(angle));
+			double z = location.getZ() + (radius * Math.sin(angle));
+			locations.add(new Location(location.getWorld(), x, location.getY(), z));
+		}
+
+		for (Location l : locations) {
+//        	ParticleAPI.sendParticle(e, l, 0, 0, 0, 0, 1);
+			location.getWorld().spawnParticle(Particle.REDSTONE, l, 1, 0, 0, 0, 0, doo);
+		}
+	}
+
 	public static void circleParticles(Particle particle, Location location, double radius) {
 		int amount = new Double(radius * 20).intValue();
 		double increment = (2 * Math.PI) / amount;
@@ -80,7 +99,7 @@ public class Utils {
 	}
 	
 	public static ItemStack getColoredSlot(DyeColor color) {
-		ItemStack other = new ItemStack(Material.STAINED_GLASS_PANE, 1);
+		ItemStack other = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1);
 		other.setDurability(getColor(color));
 		ItemMeta meta = other.getItemMeta();
 		meta.setDisplayName(" ");
@@ -90,7 +109,7 @@ public class Utils {
 	}
 	
 	public static ItemStack getBlackSlot() {
-		ItemStack other = new ItemStack(Material.STAINED_GLASS_PANE, 1);
+		ItemStack other = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1);
 		other.setDurability((short) 15);
 		ItemMeta meta = other.getItemMeta();
 		meta.setDisplayName(" ");
@@ -101,11 +120,11 @@ public class Utils {
 	
 	public static ItemStack getTieredIcon(Tier tier) {
 		switch (tier) {
-			case COMMON: return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 8);
-			case UNCOMMON: return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 3);
-			case RARE: return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
-			case EPIC: return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 4);
-			case LEGEND: return new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 5);
+			case COMMON: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 8);
+			case UNCOMMON: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 3);
+			case RARE: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 14);
+			case EPIC: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 4);
+			case LEGEND: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 5);
 		}
 		return null;
 	}
@@ -140,7 +159,14 @@ public class Utils {
 				+ md5.substring(16, 20) + "-" + md5.substring(20);
 		return UUID.fromString(uuid);
 	}
-	
+
+	public static ItemStack buildSkull(String texture) {
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta meta = (SkullMeta) head.getItemMeta();
+		head.setItemMeta(buildSkull(meta, texture));
+		return head;
+	}
+
 	public static ItemMeta buildSkull(SkullMeta meta, String texture) {
 		GameProfile profile;
 		Field profileField;
@@ -163,6 +189,19 @@ public class Utils {
 		}
 
 		return meta;
+	}
+
+	public static ItemStack buildChestplate(Color color) {
+		ItemStack is = new ItemStack(Material.LEATHER_CHESTPLATE);
+		LeatherArmorMeta meta = (LeatherArmorMeta) is.getItemMeta();
+		meta.setColor(color);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.setUnbreakable(true);
+		is.setItemMeta(meta);
+
+		return is;
 	}
 	
 	public static long calPower(Player player) {
@@ -253,12 +292,12 @@ public class Utils {
 		return s;
 	}
 	
-	public static void addHealth(Player player, double amount) {
-		double currentHealth = player.getHealth();
-		double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-		if (player.isDead())
+	public static void addHealth(LivingEntity le, double amount) {
+		double currentHealth = le.getHealth();
+		double maxHealth = le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if (le.isDead())
 			return;
-		player.setHealth(Math.min(maxHealth, Math.max(0, Math.min(currentHealth + amount, maxHealth))));
+		le.setHealth(Math.min(maxHealth, Math.max(0, Math.min(currentHealth + amount, maxHealth))));
 	}
 	
 	public static void hologram(Location location, String message, int tick, Player player) {

@@ -1,15 +1,5 @@
 package mk.plugin.santory.command;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.ArtifactGUI;
@@ -25,13 +15,19 @@ import mk.plugin.santory.item.modifty.ItemEnhances;
 import mk.plugin.santory.item.modifty.ItemUpgrades;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
-import mk.plugin.santory.traveler.Traveler;
-import mk.plugin.santory.traveler.TravelerData;
-import mk.plugin.santory.traveler.TravelerOptions;
-import mk.plugin.santory.traveler.TravelerState;
-import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.slave.*;
+import mk.plugin.santory.traveler.*;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class AdminCommand implements CommandExecutor {
 
@@ -268,7 +264,72 @@ public class AdminCommand implements CommandExecutor {
 				}
 			}
 			
-			
+			/*
+			Slave commands
+			 */
+			else if (args[0].equalsIgnoreCase("slave")) {
+
+				if (args[1].equalsIgnoreCase("add")) {
+					Player player = (Player) sender;
+					String mid = args[2];
+					Slave slave = new Slave(mid, player.getName());
+					Masters.add(player, slave);
+					Masters.save(player);
+					sender.sendMessage("Done!");
+				}
+
+				else if (args[1].equalsIgnoreCase("summon")) {
+					Player player = (Player) sender;
+					Master m = Masters.get(player);
+					Slave slave = m.getCurrentSlave();
+					if (slave == null) {
+						sender.sendMessage("No current slave");
+						return false;
+					}
+					Slaves.summonSlave(player, slave.getID());
+				}
+
+				else if (args[1].equalsIgnoreCase("setcurrent")) {
+					Player player = (Player) sender;
+					String modelID = args[2];
+					Master m = Masters.get(player);
+					m.setCurrentSlave(m.getSlaveFromModel(modelID));
+					sender.sendMessage("OK all done!");
+				}
+
+				else if (args[1].equalsIgnoreCase("setlevel")) {
+					Player player = (Player) sender;
+					int level = Integer.valueOf(args[2]);
+					Master m = Masters.get(player);
+					Slave slave = m.getCurrentSlave();
+					slave.getData().setLevel(level);
+					sender.sendMessage("§aAll done!");
+				}
+
+				else if (args[1].equalsIgnoreCase("getfood")) {
+					Player player = (Player) sender;
+					SlaveFood food = SlaveFood.valueOf(args[2].toUpperCase());
+					player.getInventory().addItem(food.build());
+					sender.sendMessage("§aAll done motherfucker!");
+				}
+
+				else if (args[1].equalsIgnoreCase("addexp")) {
+					Player player = (Player) sender;
+					int exp = Integer.valueOf(args[2]);
+					Master m = Masters.get(player);
+					Slave slave = m.getCurrentSlave();
+					slave.getData().setExp(slave.getData().getExp() + exp);
+					sender.sendMessage("§aAll done!");
+				}
+
+				else if (args[1].equalsIgnoreCase("getstone")) {
+					Player player = (Player) sender;
+					SlaveStone st = SlaveStone.valueOf(args[2].toUpperCase());
+					player.getInventory().addItem(st.build());
+					sender.sendMessage("§aAll done motherfucker!");
+				}
+
+			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -317,7 +378,17 @@ public class AdminCommand implements CommandExecutor {
 		
 		// Mobs
 		sender.sendMessage("§9/santory mob damage <*mob_uuid> <*player_uuid> <multi>");
-		
+		sender.sendMessage("");
+
+		// Slaves
+		sender.sendMessage("§a/santory slave add <modelID>");
+		sender.sendMessage("§a/santory slave summon");
+		sender.sendMessage("§a/santory slave setcurrent <modelID>");
+		sender.sendMessage("§a/santory slave setlevel <level>");
+		sender.sendMessage("§a/santory slave getfood <I/II/III>");
+		sender.sendMessage("§a/santory slave addexp <exp>");
+		sender.sendMessage("§a/santory slave getstone <I/II/III/IV/V>");
+
 		sender.sendMessage("§2§l=================================================");
 		
 	}

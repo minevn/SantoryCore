@@ -114,6 +114,7 @@ public class ItemStackUtils {
     
     public static boolean hasTag(ItemStack item, String key) {
     	if (item == null) return false;
+        if (item.getType() == Material.AIR) return false;
     	NBTItem nbti = new NBTItem(item);
     	return nbti.hasNBTData() && nbti.hasKey(key);
 	}

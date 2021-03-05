@@ -12,8 +12,6 @@ import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -97,7 +95,7 @@ public class WeaponListener implements Listener {
 			// Check durability
 			ItemData data = item.getData();
 			if (data.getDurability() <= 0) {
-				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("§cVũ khí có độ bền bằng 0, cần phải sữa chữa").create());
+				player.sendMessage("§cVũ khí có độ bền bằng 0, cần phải sữa chữa");
 				return;
 			}
 			

@@ -4,6 +4,7 @@ version: 1.0
 main: mk.plugin.santory.main.SantoryCore
 depend: [PlayerData, HolographicDisplays]
 soft-depend: [PlaceholderAPI]
+api-version: 1.13
 commands:
     santory:
         descripton: Santory's command

@@ -5,8 +5,8 @@ import mk.plugin.playerdata.storage.PlayerDataAPI;
 
 public class TravelerStorage {
 	
-	private static final String KEY = "santoryTraveler";
-	private static final String HOOK = "santoryPlayers";
+	private static final String KEY = "traveler";
+	public static final String HOOK = "santory";
 	
 	public static TravelerData get(String name) {
 		PlayerData pb = PlayerDataAPI.get(name, HOOK);

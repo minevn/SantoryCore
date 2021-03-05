@@ -1,11 +1,10 @@
 package mk.plugin.santory.traveler;
 
-import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.stat.Stat;
+
+import java.util.Map;
 
 public class TravelerOptions {
 	
@@ -24,7 +23,7 @@ public class TravelerOptions {
 		return Configs.LEVEL_BASE_EXP + (level - 1) * Configs.LEVEL_PLUS_EXP;
 	}
 	
-	public static long getTotalExpTo(int level) {
+	public static int getTotalExpTo(int level) {
 		int total = 0;
 		for (int i = 1 ; i <= level ; i++) {
 			total += getExpOf(i);

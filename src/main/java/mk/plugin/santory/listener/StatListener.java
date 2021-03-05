@@ -15,8 +15,6 @@ import mk.plugin.santory.mob.Mobs;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -53,7 +51,7 @@ public class StatListener implements Listener {
 						Item item = Items.read(is);
 						ItemData data = item.getData();
 						if (data.getDurability() == 0) {
-							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa").create());
+							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
 							continue;
 						}
 						data.setDurability(Math.max(0, data.getDurability() - 1));
@@ -245,7 +243,7 @@ public class StatListener implements Listener {
 							target.setStatistic(Statistic.DAMAGE_TAKEN, target.getStatistic(Statistic.DAMAGE_TAKEN) + new Double(realDamage).intValue());
 						}
 					}
-				}.runTaskAsynchronously(SantoryCore.get());
+				}.runTask(SantoryCore.get());
 			}
 			
 			// End event check

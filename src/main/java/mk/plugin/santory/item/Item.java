@@ -1,9 +1,9 @@
 package mk.plugin.santory.item;
 
+import mk.plugin.santory.config.Configs;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-
-import mk.plugin.santory.config.Configs;
 
 public class Item {
 	
@@ -45,7 +45,8 @@ public class Item {
 		JSONObject jo = (JSONObject) JSONValue.parse(s);
 		String model = jo.get("model").toString();
 		ItemData data = ItemData.parse(jo.get("data").toString());
-		
+		ItemMeta meta = null;
+
 		return new Item(model, data);
 	}
 	
