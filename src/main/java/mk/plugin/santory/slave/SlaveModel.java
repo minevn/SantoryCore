@@ -2,6 +2,7 @@ package mk.plugin.santory.slave;
 
 import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.skill.Skill;
+import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.tier.Tier;
 import org.bukkit.Color;
 
@@ -16,9 +17,10 @@ public class SlaveModel {
     private Tier tier;
     private Skill skill;
     private WeaponType weaponType;
+    private List<String> skillDesc;
     private Map<SlaveState, List<String>> sounds;
 
-    public SlaveModel(String name, String head, Color chestColor, Tier tier, Skill skill, WeaponType weaponType, Map<SlaveState, List<String>> sounds) {
+    public SlaveModel(String name, String head, Color chestColor, Tier tier, Skill skill, WeaponType weaponType, Map<SlaveState, List<String>> sounds, List<String> skillDesc) {
         this.name = name;
         this.head = head;
         this.chestColor = chestColor;
@@ -26,6 +28,7 @@ public class SlaveModel {
         this.skill = skill;
         this.weaponType = weaponType;
         this.sounds = sounds;
+        this.skillDesc = skillDesc;
     }
 
     public String getName() {
@@ -54,5 +57,9 @@ public class SlaveModel {
 
     public Map<SlaveState, List<String>> getSounds() {
         return sounds;
+    }
+
+    public List<String> getSkillDesc() {
+        return skillDesc;
     }
 }

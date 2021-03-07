@@ -1,7 +1,11 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.task;
 
+import mk.plugin.santory.slave.Slave;
+import mk.plugin.santory.slave.Slaves;
+import mk.plugin.santory.slave.state.SlaveState;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Husk;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SlaveTask extends BukkitRunnable {
@@ -44,7 +48,7 @@ public class SlaveTask extends BukkitRunnable {
             double d = Slaves.getDistanceVsMaster(id);
 
             // Check follow
-            if (Slaves.isInState(id, SlaveState.FOLLOW)) {
+            if (!Slaves.isInState(id, SlaveState.GREET) && Slaves.isInState(id, SlaveState.FOLLOW)) {
                 if (d > TELEPORT_DISTANCE) Slaves.backtoMaster(id, true);
                 else {
                     Slaves.backtoMaster(id, false);
@@ -52,16 +56,24 @@ public class SlaveTask extends BukkitRunnable {
             }
 
             // Run follow
-            if (d >= dr && !Slaves.isInState(id, SlaveState.FOLLOW)) {
+            if (d >= dr && !Slaves.isInState(id, SlaveState.GREET) &&  !Slaves.isInState(id, SlaveState.FOLLOW)) {
                 Slaves.stateCall(id, SlaveState.FOLLOW);
             }
 
             // Call idle state
-            if (!Slaves.isInState(id, SlaveState.IDLE) && d < DISTANCE && !Slaves.isInState(id, SlaveState.TARGET)) {
+            if (!Slaves.isInState(id, SlaveState.GREET) && !Slaves.isInState(id, SlaveState.IDLE) && d < DISTANCE && !Slaves.isInState(id, SlaveState.TARGET)) {
                 Slaves.stateCall(id, SlaveState.IDLE);
                 Husk husk = Slaves.getSlaveEntity(id);
                 husk.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
                 husk.setTarget(null);
+            }
+
+            // Target
+            if (Slaves.isInState(id, SlaveState.TARGET)) {
+                LivingEntity le = Slaves.getTarget(id);
+                if (le == null) return;
+                Husk husk = Slaves.getSlaveEntity(id);
+                husk.setTarget(le);
             }
         }
     }

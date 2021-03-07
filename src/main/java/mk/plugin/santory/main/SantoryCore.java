@@ -4,11 +4,14 @@ import mk.plugin.santory.command.AdminCommand;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
-import mk.plugin.santory.slave.SlaveTask;
+import mk.plugin.santory.slave.Slaves;
+import mk.plugin.santory.slave.master.Masters;
+import mk.plugin.santory.slave.task.SlaveTask;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SantoryCore extends JavaPlugin {
@@ -34,6 +37,9 @@ public class SantoryCore extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		this.saveOninePlayers();
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			Slaves.despawnCurrentSlave(player);
+		}
 	}
 	
 	@Override
@@ -72,6 +78,7 @@ public class SantoryCore extends JavaPlugin {
 	public void saveOninePlayers() {
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			Travelers.saveAndClearCache(player.getName());
+			Masters.saveAndClearCache(player);
 		});
 	}
 	

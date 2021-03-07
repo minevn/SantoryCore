@@ -29,6 +29,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.Field;
@@ -36,10 +39,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -85,10 +85,17 @@ public class Utils {
 		Location temp = l.clone();
 		while (temp.getBlock().getType() == Material.AIR) {
 			j++;
-			if (j > 100) {
-				return null;
+			if (j > 10) {
+				return l;
 			}
 			temp = temp.add(0,-1,0);
+		}
+		while (temp.getBlock().getType() != Material.AIR) {
+			j++;
+			if (j > 10) {
+				return l;
+			}
+			temp = temp.add(0,1,0);
 		}
 		return temp;
 	}
@@ -285,7 +292,7 @@ public class Utils {
 	
 	public static String toStars(Ascent tier) {
 		String s = "";
-		String star = "✝"; 
+		String star = "⭒";
 		for (int i = 0 ; i < tier.getValue() ; i++) s += "§a" + star;
 		for (int i = tier.getValue() ; i < Ascent.values().length ; i++) s += "§7" + star;
 
@@ -350,10 +357,20 @@ public class Utils {
 	public static double round(double i) {
 		return Double.valueOf(new DecimalFormat("#.##").format(i).replace(",", "."));
 	}
-	
+
+	public static Set<Material> getAttackable() {
+		Set<Material> set = Sets.newHashSet();
+		for (Material m : Material.values()) {
+			if (!m.isSolid()) set.add(m);
+		}
+
+		return set;
+	}
+
 	public static LivingEntity getTarget(Player source, double range) {
-		List<Block> blocksInSight = source.getLineOfSight(Sets.newHashSet(Material.AIR), Double.valueOf(range).intValue());
+		List<Block> blocksInSight = source.getLineOfSight(getAttackable(), Double.valueOf(range).intValue());
 		List<Entity> nearEntities = source.getNearbyEntities(range, range, range);
+		Block b = null;
 		
 		if (blocksInSight != null && nearEntities != null) {
 			for (Block block : blocksInSight) {
@@ -376,5 +393,39 @@ public class Utils {
 		}
 		return null;
 	}
-	
+
+	public static void stunPlayer(Player player, int seconds) {
+		player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * seconds, 5));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * seconds, 5));
+		long start = System.currentTimeMillis();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (System.currentTimeMillis() - start >= seconds * 1000) {
+					this.cancel();
+					return;
+				}
+				player.getWorld().spawnParticle(Particle.SPELL_MOB, player.getLocation().add(0, 1, 0), 3, 0.3, 0.3, 0.3, 0.3);
+			}
+		}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 5);
+	}
+
+	public static void stunEntity(LivingEntity le, int seconds) {
+		le.setAI(false);
+		World world = le.getWorld();
+		long start = System.currentTimeMillis();
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (System.currentTimeMillis() - start >= seconds * 1000) {
+					this.cancel();
+					le.setAI(true);
+					return;
+				}
+				world.spawnParticle(Particle.SPELL_MOB, le.getLocation().add(0, 1, 0), 3, 0.3, 0.3, 0.3, 0.3);
+			}
+		}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 5);
+	}
+
+
 }

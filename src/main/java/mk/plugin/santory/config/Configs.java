@@ -10,7 +10,7 @@ import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.mob.MobType;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.slave.SlaveModel;
-import mk.plugin.santory.slave.SlaveState;
+import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.utils.Utils;
@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Configs {
 	
@@ -196,15 +197,16 @@ public class Configs {
 		String name = config.getString("name");
 		Tier tier = Tier.valueOf(config.getString("tier").toUpperCase());
 		String head = config.getString("head");
-		Color color = Color.fromBGR(Integer.valueOf(config.getString("color").split("-")[0]), Integer.valueOf(config.getString("color").split("-")[1]), Integer.valueOf(config.getString("color").split("-")[2]));
+		Color color = Color.fromRGB(Integer.valueOf(config.getString("color").split("-")[0]), Integer.valueOf(config.getString("color").split("-")[1]), Integer.valueOf(config.getString("color").split("-")[2]));
 		Skill skill = Skill.valueOf(config.getString("skill").toUpperCase());
 		WeaponType wt = WeaponType.valueOf(config.getString("weapon"));
 		Map<SlaveState, List<String>> sounds = Maps.newHashMap();
 		for (String k : config.getConfigurationSection("sounds").getKeys(false)) {
 			sounds.put(SlaveState.valueOf(k.toUpperCase()), config.getStringList("sounds." + k));
 		}
+		List<String> skillDesc = ConfigGetter.from(config).getStringList("skill-desc", Lists.newArrayList()).stream().map(s -> s.replace("&", "§")).collect(Collectors.toList());
 
-		return new SlaveModel(name, head, color, tier, skill, wt, sounds);
+		return new SlaveModel(name, head, color, tier, skill, wt, sounds, skillDesc);
 	}
 
 	private static ItemModel readModel(FileConfiguration config) {

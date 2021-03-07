@@ -76,7 +76,7 @@ public enum Stat{
 	HEAL("Hồi phục", 2, "§2") {
 		@Override
 		public double pointsToValue(int point) {
-			return 1 + point * 0.13;
+			return 1 + point * 0.15;
 		}
 		
 		@Override

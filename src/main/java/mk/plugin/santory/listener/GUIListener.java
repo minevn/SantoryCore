@@ -1,5 +1,7 @@
 package mk.plugin.santory.listener;
 
+import mk.plugin.santory.slave.gui.SlaveInfoGUI;
+import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,7 +30,10 @@ public class GUIListener implements Listener {
 	
 	@EventHandler
 	public void onGUIClick(InventoryClickEvent e) {
+		if (e.getClickedInventory() == null) return;
 		ArtifactGUI.eventClick(e);
+		SlaveSelectGUI.onClick(e);
+		SlaveInfoGUI.onClick(e);
 	}
 	
 	@EventHandler
@@ -36,6 +41,12 @@ public class GUIListener implements Listener {
 		Player player = (Player) e.getPlayer();
 		if (!check(player)) return;
 		ArtifactGUI.eventClose(e);
+		SlaveInfoGUI.onClose(e);
+	}
+
+	@EventHandler
+	public void onGUIDrag(InventoryDragEvent e) {
+		SlaveSelectGUI.onDrag(e);
 	}
 	
 	/*

@@ -1,6 +1,7 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.state;
 
 import com.google.common.collect.Sets;
+import mk.plugin.santory.slave.Slaves;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Husk;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 public enum SlaveState {
 
-    IDLE(true, 5) {
+    IDLE(true, 40) {
         @Override
         public Set<SlaveState> getSeparates() { 
             return Sets.newHashSet(TARGET, ATTACK, FOLLOW, KILL, DAMAGED, DEATH, RUNAWAY);
@@ -19,7 +20,7 @@ public enum SlaveState {
             husk.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(Slaves.DEFAULT_MOVE_SPEED);
         }
     },
-    TARGET(true, 10) {
+    TARGET(true, 20) {
         @Override
         public Set<SlaveState> getSeparates() {
             return Sets.newHashSet(IDLE, GREET, FOLLOW, KILL, DAMAGED, DEATH, RUNAWAY);
@@ -30,7 +31,7 @@ public enum SlaveState {
             husk.setTarget(null);
         }
     },
-    ATTACK(false, 1) {
+    ATTACK(false, 5) {
         @Override
         public Set<SlaveState> getSeparates() {
             return Sets.newHashSet(IDLE, GREET, FOLLOW, KILL, DAMAGED, DEATH, RUNAWAY);
@@ -52,7 +53,7 @@ public enum SlaveState {
 
         }
     },
-    FOLLOW(true, 10) {
+    FOLLOW(true, 40) {
         @Override
         public Set<SlaveState> getSeparates() {
             return Sets.newHashSet(IDLE, TARGET, ATTACK, GREET, KILL, DAMAGED, DEATH, RUNAWAY);
@@ -62,7 +63,7 @@ public enum SlaveState {
 
         }
     },
-    KILL(false, 10) {
+    KILL(false, 30) {
         @Override
         public Set<SlaveState> getSeparates() {
             return Sets.newHashSet(IDLE, TARGET, ATTACK, GREET, FOLLOW, DAMAGED, DEATH, RUNAWAY);
@@ -105,7 +106,19 @@ public enum SlaveState {
         public void unnset(Husk husk) {
 
         }
-    };
+    },
+    SKILL(false, 1) {
+        @Override
+        public Set<SlaveState> getSeparates() {
+            return Sets.newHashSet(IDLE, ATTACK, GREET, FOLLOW, DAMAGED, KILL, RUNAWAY, DEATH);
+        }
+
+        @Override
+        public void unnset(Husk husk) {
+
+        }
+    },
+    ;
 
     private int soundDelay;
     private boolean isPeriod;

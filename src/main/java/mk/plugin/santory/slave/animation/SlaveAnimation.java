@@ -1,6 +1,7 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.animation;
 
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.slave.Slaves;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -53,7 +54,8 @@ public enum SlaveAnimation {
         @Override
         public void play(LivingEntity le, Player player) {
             Location l = le.getLocation();
-            le.getWorld().spawnParticle(Particle.SMOKE_LARGE, l.clone().add(0, 0.2, 0), 20, 0.5, 0.5, 0.5, 1);
+            le.getWorld().spawnParticle(Particle.SMOKE_LARGE, l.clone().add(0, 0.2, 0), 25, 0.5, 0.5, 0.5, 0.1);
+            le.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, l.clone().add(0, 0.2, 0), 20, 0.5, 0.5, 0.5, 0.1);
             l.getWorld().playSound(l, Sound.BLOCK_FIRE_AMBIENT, 1, 1);
         }
     };

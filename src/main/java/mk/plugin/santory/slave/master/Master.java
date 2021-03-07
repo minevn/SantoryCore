@@ -1,4 +1,6 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.master;
+
+import mk.plugin.santory.slave.Slave;
 
 import java.util.List;
 

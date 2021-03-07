@@ -4,10 +4,10 @@ import mk.plugin.santory.item.shooter.Shooter;
 
 public enum WeaponType {
 	
-	LIGHT("Nhẹ", 2.5),
-	HEAVY("Nặng", 2.5),
-	SHOOTER("Tầm xa", Shooter.BOW),
-	RANGED("Dài", 3.5);
+	LIGHT("Vũ khí ngắn", 2.5),
+	HEAVY("Vũ khí nặng", 2.5),
+	SHOOTER("Vũ khí tầm xa", Shooter.BOW),
+	RANGED("Vũ khí dài", 3.5);
 	
 	private final String name;
 	private final double range;

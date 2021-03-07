@@ -4,8 +4,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.StatValue;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.slave.animation.SlaveAnimation;
+import mk.plugin.santory.slave.item.SlaveFood;
+import mk.plugin.santory.slave.item.SlaveStone;
+import mk.plugin.santory.slave.master.Master;
+import mk.plugin.santory.slave.master.Masters;
+import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.TravelerOptions;
 import mk.plugin.santory.utils.Utils;
@@ -14,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.Map;
@@ -28,25 +36,37 @@ public class Slaves {
     
     private static final Map<String, Set<SlaveState>> currentStates = Maps.newHashMap();
     private static final Map<Entity, String> currentSlaves = Maps.newHashMap();
-
     private static final Map<String, Map<SlaveState, Long>> soundDelay = Maps.newHashMap();
     private static final Map<String, Long> deadSlaves = Maps.newHashMap();
-
     private static final Map<String, Long> lastEat = Maps.newHashMap();
+    private static final Map<String, String> lastSound = Maps.newHashMap();
+
+    private static final Map<String, LivingEntity> targets = Maps.newHashMap();
 
     // 3 = Full
     private static final Map<String, Integer> hungers = Maps.newHashMap();
 
+    public static void update(String id) {
+        Slave slave = getSlave(id);
+        Husk h = getSlaveEntity(id);
+        if (h == null) return;
+        if (slave.getData().getWeapon() == null)  h.getEquipment().setItemInMainHand(null);
+        else h.getEquipment().setItemInMainHand(Items.build(null, Item.parse(slave.getData().getWeapon())));
+        double maxHealth = Stat.HEALTH.pointsToValue(getStats(id).get(Stat.HEALTH));
+        h.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+    }
+
     public static void summonSlave(Player player, String id) {
+        if (isDead(id)) return;
         despawnCurrentSlave(player);
 
         Master m = Masters.get(player);
         Slave slave = getSlave(id);
         m.setCurrentSlave(slave);
 
-        Location l = player.getLocation().add(player.getLocation().getDirection().multiply(2).setY(0));
+        Location l = Utils.getLandedLocation(player.getLocation().add(player.getLocation().getDirection().multiply(2).setY(0)));
         Husk h = (Husk) player.getWorld().spawnEntity(l, EntityType.HUSK);
-        h.setCustomName(slave.getModel().getName());
+        h.setCustomName(slave.getModel().getTier().getColor() + slave.getModel().getName());
         h.setCustomNameVisible(true);
         h.setBaby(true);
         h.getEquipment().setHelmet(Utils.buildSkull(slave.getModel().getHead()));
@@ -55,16 +75,17 @@ public class Slaves {
         h.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
         h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(DEFAULT_MOVE_SPEED);
 
-        double maxHealth = Stat.HEALTH.pointsToValue(getStats(id).get(Stat.HEALTH));
-        h.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
-        h.setHealth(maxHealth);
-
         currentSlaves.put(h, id);
+        update(id);
 
-        lookAt(h, player, 40);
+        lookAt(h, player, 50);
         SlaveAnimation.SUMMONED.play(h, player);
+
         Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
             stateCall(id, SlaveState.GREET);
+            Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+                removeState(id, SlaveState.GREET);
+            }, 100);
         }, 20);
     }
 
@@ -185,16 +206,23 @@ public class Slaves {
             if (isInState(id, si)) removeState(id, si);
         }
 
-        currentStates.put(id, states);
-
-        // Sound play
-        if (slave.getModel().getSounds().containsKey(state)) {
-            String sound = slave.getModel().getSounds().get(state).get(new Random().nextInt(slave.getModel().getSounds().get(state).size()));
-            playSound(id, state, sound);
+        // Remove target
+        if (state.getSeparates().contains(SlaveState.TARGET)) {
+            targets.remove(id);
         }
+
+        currentStates.put(id, states);
 
         // Check state
         if (!state.isPeriod()) removeState(id, state);
+
+        // Sound play
+        if (slave.getModel().getSounds().containsKey(state)) {
+            if (lastSound.containsKey(id)) getMasterPlayer(id).stopSound(lastSound.get(id));
+            String sound = slave.getModel().getSounds().get(state).get(new Random().nextInt(slave.getModel().getSounds().get(state).size()));
+            lastSound.put(id, sound);
+            playSound(id, state, sound);
+        }
     }
 
     public static boolean isInSameWorld(String id) {
@@ -228,12 +256,22 @@ public class Slaves {
     public static void lookAt(LivingEntity le, Player player, int tick) {
         Location l = le.getLocation();
         Husk h = (Husk) le;
-        h.setTarget(player);
-        h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
-        Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
-            h.setTarget(null);
-            h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(DEFAULT_MOVE_SPEED);
-        }, tick);
+
+        long start = System.currentTimeMillis();
+        long period = tick * 50;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                h.setTarget(player);
+                h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
+                if (System.currentTimeMillis() - start >= period) {
+                    h.setTarget(null);
+                    h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(DEFAULT_MOVE_SPEED);
+                    this.cancel();
+                }
+            }
+        };
     }
 
     public static boolean isHealthLowerThan(LivingEntity le, double percent) {
@@ -254,7 +292,15 @@ public class Slaves {
         }
         states.put(state, System.currentTimeMillis() + state.getSoundDelay() * 1000);
         soundDelay.put(id, states);
-        getMasterPlayer(id).playSound(getSlaveEntity(id).getLocation(), sound, 0.5f, 1);
+        getMasterPlayer(id).playSound(getSlaveEntity(id).getLocation(), sound, 1, 1);
+    }
+
+    public static double getDamage(String id) {
+        return Stat.DAMAGE.pointsToValue(getStats(id).get(Stat.DAMAGE));
+    }
+
+    public static double getHeal(String id) {
+        return Stat.HEAL.pointsToValue(getStats(id).get(Stat.HEAL));
     }
 
     public static Map<Stat, Integer> getStats(String id) {
@@ -263,11 +309,13 @@ public class Slaves {
 
         int h = 10 + 1 * lv;
         int d = 5 + 1 * lv;
+        int heal = 5 + 1 * lv;
 
         // Base stats
         Map<Stat, Integer> stats = Maps.newLinkedHashMap();
         stats.put(Stat.HEALTH, h);
         stats.put(Stat.DAMAGE, d);
+        stats.put(Stat.HEAL, heal);
 
         // Weapon
         String wd = slave.getData().getWeapon();
@@ -293,7 +341,9 @@ public class Slaves {
         player.sendMessage("");
         player.sendMessage("§aTên: §f" + name);
         player.sendMessage("§aCấp độ: §f" + lv);
+        player.sendMessage("§aSát thương: §f" + getDamage(id));
         player.sendMessage("§aMáu: §f" + health + "/" + maxHealth);
+        player.sendMessage("§aHồi phục: §f" + getHeal(id) + " HP/s");
         player.sendMessage("§aKinh nghiệm: §f" + exp + " (" + Utils.round(rate * 100) + "%)");
         player.sendMessage("");
     }
@@ -342,6 +392,8 @@ public class Slaves {
         player.playSound(entity.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
         SlaveAnimation.HAPPY.play((LivingEntity) entity, player);
 
+        update(id);
+
         return true;
     }
 
@@ -369,6 +421,14 @@ public class Slaves {
         String name = id.split("~")[0];
         if (Bukkit.getPlayer(name) == null) return false;
         return true;
+    }
+
+    public static void setTarget(String id, LivingEntity target) {
+        targets.put(id, target);
+    }
+
+    public static LivingEntity getTarget(String id) {
+        return targets.getOrDefault(id, null);
     }
 
 }

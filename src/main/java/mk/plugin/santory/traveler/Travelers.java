@@ -89,11 +89,21 @@ public class Travelers {
 			t.getData().setExp(exp);
 			return;
 		}
+
 		int i = 1;
 		while (TravelerOptions.getTotalExpTo(i) <= t.getData().getExp()) i++;
 		long remain = t.getData().getExp() - TravelerOptions.getTotalExpTo(i - 1);
-		player.setLevel(i - 1);
-		player.setExp(Float.valueOf((float) remain / TravelerOptions.getExpOf(i)).floatValue());
+		int lv = i - 1;
+
+		if (lv > t.getData().getGrade().getMaxLevel()) {
+			player.setLevel(t.getData().getGrade().getMaxLevel());
+			player.setExp(0.9999f);
+			player.sendMessage("§c§oNâng bậc để có thể tăng giới hạn cấp độ!");
+		}
+		else {
+			player.setLevel(lv);
+			player.setExp(Float.valueOf((float) remain / TravelerOptions.getExpOf(i)).floatValue());
+		}
 	}
 	
 	public static List<Item> getItemsOn(Player player) {

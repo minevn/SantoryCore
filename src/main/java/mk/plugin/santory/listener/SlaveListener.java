@@ -1,7 +1,15 @@
 package mk.plugin.santory.listener;
 
+import com.google.common.collect.Maps;
+import mk.plugin.santory.event.PlayerDamagedEntityEvent;
 import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.slave.*;
+import mk.plugin.santory.skill.Skill;
+import mk.plugin.santory.slave.Slave;
+import mk.plugin.santory.slave.Slaves;
+import mk.plugin.santory.slave.animation.SlaveAnimation;
+import mk.plugin.santory.slave.item.SlaveFood;
+import mk.plugin.santory.slave.item.SlaveStone;
+import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.TravelerOptions;
 import mk.plugin.santory.utils.Utils;
@@ -14,28 +22,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 public class SlaveListener implements Listener {
 
     private final int HEALTH_MIN = 15;
+    private final int SKILL_CHANCE = 20;
 
     /*
     Make slave target as master
      */
     @EventHandler(ignoreCancelled = true)
-    public void onMasterDamage(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player == false) return;
-        if (e.getEntity() instanceof LivingEntity == false) return;
-        Player player = (Player) e.getDamager();
+    public void onMasterDamage(PlayerDamagedEntityEvent e) {
+        Player player = e.getPlayer();
+        LivingEntity entity = e.getTarget();
+
         if (!Slaves.hasSlave(player)) return;
-        if (Slaves.isMaster(player, e.getEntity())) return;
+        if (Slaves.isMaster(player, entity)) return;
         if (!Slaves.isSlaveAlive(player)) return;
 
         String id = Slaves.getSlave(player);
@@ -43,7 +51,8 @@ public class SlaveListener implements Listener {
 
         if (Slaves.isInSameWorld(id) && Slaves.getDistanceVsMaster(id) > 10) return;
         if (Slaves.isHealthLowerThan((LivingEntity) se, HEALTH_MIN)) return;
-        se.setTarget((LivingEntity) e.getEntity());
+
+        Slaves.setTarget(id, entity);
         Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
             Slaves.stateCall(id, SlaveState.TARGET);
         }, 30);
@@ -51,22 +60,8 @@ public class SlaveListener implements Listener {
     }
 
     /*
-    Master damaged
+    Master damaged >> StatListener
     */
-    @EventHandler
-    public void onMasterDamaged(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player == false) return;
-        if (e.getDamager() instanceof LivingEntity == false) return;
-
-        LivingEntity entity = (LivingEntity) e.getDamager();
-        Player player = (Player) e.getEntity();
-        if (!Slaves.hasSlave(player)) return;
-        if (Slaves.isMaster(player, entity)) {
-            e.setCancelled(true);
-            return;
-        }
-    }
-
 
     /*
     Slave target control
@@ -101,17 +96,28 @@ public class SlaveListener implements Listener {
         if (!Slaves.isSlave(entity)) return;
 
         // Damaged
-        String id = Slaves.getSlave(entity).getID();
+        Slave slave = Slaves.getSlave(entity);
+        String id = slave.getID();
         Slaves.stateCall(id, SlaveState.ATTACK);
         double damage = Stat.DAMAGE.pointsToValue(Slaves.getStats(id).getOrDefault(Stat.DAMAGE, 1));
         e.setDamage(damage);
+
+        // Skill
+        if (Utils.rate(SKILL_CHANCE) && slave.getData().getWeapon() != null) {
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("slave", id);
+            map.put("level", slave.getData().getAscent().getValue());
+            Skill skill = slave.getModel().getSkill();
+            skill.getExecutor().start(map);
+            Slaves.stateCall(id, SlaveState.SKILL);
+        }
 
         // Death
         Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
             if (!e.getEntity().isDead()) return;
             Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
                 Slaves.stateCall(id, SlaveState.KILL);
-            }, 40);
+            }, 20);
         });
     }
 
@@ -197,7 +203,6 @@ public class SlaveListener implements Listener {
 
                     player.sendMessage("");
                     player.sendMessage("§aMáu: §c" + health + "/" + maxHealth);
-                    player.sendMessage("");
 
                     is.setAmount(is.getAmount() - 1);
                     player.updateInventory();
@@ -232,6 +237,12 @@ public class SlaveListener implements Listener {
 
     }
 
+
+    @EventHandler
+    public void onSlaveTransfrom(EntityTransformEvent e) {
+        Entity entity = e.getEntity();
+        if (Slaves.isSlave(entity)) e.setCancelled(true);
+    }
 
 
 }

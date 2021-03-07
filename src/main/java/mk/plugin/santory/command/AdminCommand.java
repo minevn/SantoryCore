@@ -16,6 +16,11 @@ import mk.plugin.santory.item.modifty.ItemUpgrades;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
 import mk.plugin.santory.slave.*;
+import mk.plugin.santory.slave.gui.SlaveSelectGUI;
+import mk.plugin.santory.slave.item.SlaveFood;
+import mk.plugin.santory.slave.item.SlaveStone;
+import mk.plugin.santory.slave.master.Master;
+import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.traveler.*;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
@@ -329,6 +334,13 @@ public class AdminCommand implements CommandExecutor {
 					sender.sendMessage("§aAll done motherfucker!");
 				}
 
+				else if (args[1].equalsIgnoreCase("gui")) {
+					Player player = null;
+					if (args.length > 2) player = Bukkit.getPlayer(args[1]);
+					else player = (Player) sender;
+					SlaveSelectGUI.open(player);
+				}
+
 			}
 			
 		}
@@ -381,13 +393,14 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("");
 
 		// Slaves
-		sender.sendMessage("§a/santory slave add <modelID>");
+		sender.sendMessage("§a/santory slave add <*modelID>");
 		sender.sendMessage("§a/santory slave summon");
-		sender.sendMessage("§a/santory slave setcurrent <modelID>");
-		sender.sendMessage("§a/santory slave setlevel <level>");
-		sender.sendMessage("§a/santory slave getfood <I/II/III>");
-		sender.sendMessage("§a/santory slave addexp <exp>");
-		sender.sendMessage("§a/santory slave getstone <I/II/III/IV/V>");
+		sender.sendMessage("§a/santory slave setcurrent <*modelID>");
+		sender.sendMessage("§a/santory slave setlevel <*level>");
+		sender.sendMessage("§a/santory slave getfood <*I/II/III>");
+		sender.sendMessage("§a/santory slave addexp <*exp>");
+		sender.sendMessage("§a/santory slave getstone <*I/II/III/IV/V>");
+		sender.sendMessage("§a/santory slave gui <player>");
 
 		sender.sendMessage("§2§l=================================================");
 		

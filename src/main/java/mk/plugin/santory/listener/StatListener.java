@@ -5,6 +5,7 @@ import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.event.PlayerDamagedEntityEvent;
 import mk.plugin.santory.hologram.Holograms;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
@@ -12,6 +13,7 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mob;
 import mk.plugin.santory.mob.Mobs;
+import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
@@ -93,7 +95,7 @@ public class StatListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
 		// Player Damage entity
 		if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
 			if (e.getEntity() instanceof LivingEntity) {
@@ -102,14 +104,15 @@ public class StatListener implements Listener {
 				
 				Damage d = null;
 				double damage = 0;
-				
+
 				// Get player damager
 				Player p;
 				if (e.getDamager() instanceof Projectile) {
 					Projectile a = (Projectile) e.getDamager();
+
 					if (a.getShooter() instanceof Player) {
 						p = (Player) a.getShooter();
-						
+
 						// Check projectile
 						if (!Damages.hasProjectileDamage(a)) return;
 						isProjectileDamage = true;
@@ -124,12 +127,19 @@ public class StatListener implements Listener {
 							e.setCancelled(true);
 							return;
 						}
-						
+
 					} else return;
 				} else p = (Player) e.getDamager();
 				Player player = p;
 
 				LivingEntity entity = (LivingEntity) e.getEntity();
+
+				// Slave
+				if (!Slaves.hasSlave(player)) return;
+				if (Slaves.isMaster(player, entity)) {
+					e.setCancelled(true);
+					return;
+				}
 
 				// Check god
 				if (Utils.isGod(entity)) {
@@ -235,7 +245,10 @@ public class StatListener implements Listener {
 						
 						// Armor damage
 						double realDamage = lastHealth - entity.getHealth();
-						
+
+						// Event
+						Bukkit.getPluginManager().callEvent(new PlayerDamagedEntityEvent(player, entity, realDamage));
+
 						// Statistic
 						player.setStatistic(Statistic.DAMAGE_DEALT, player.getStatistic(Statistic.DAMAGE_DEALT) + new Double(realDamage).intValue());
 						if (e.getEntity() instanceof Player) {

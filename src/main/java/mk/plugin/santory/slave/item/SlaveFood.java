@@ -1,4 +1,4 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.item;
 
 import com.google.common.collect.Lists;
 import mk.plugin.santory.tier.Tier;

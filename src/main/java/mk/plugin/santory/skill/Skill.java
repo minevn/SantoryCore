@@ -1,19 +1,6 @@
 package mk.plugin.santory.skill;
 
-import mk.plugin.santory.skills.WSBaoKiem;
-import mk.plugin.santory.skills.WSBongDem;
-import mk.plugin.santory.skills.WSChiaCat;
-import mk.plugin.santory.skills.WSDapRiu;
-import mk.plugin.santory.skills.WSDiaChan;
-import mk.plugin.santory.skills.WSDienTinh;
-import mk.plugin.santory.skills.WSHeavyHit;
-import mk.plugin.santory.skills.WSMuaTen;
-import mk.plugin.santory.skills.WSQuetKiem;
-import mk.plugin.santory.skills.WSTanXaTien;
-import mk.plugin.santory.skills.WSThauXuong;
-import mk.plugin.santory.skills.WSThienPhat;
-import mk.plugin.santory.skills.WSXoayNuoc;
-import mk.plugin.santory.skills.WSXungPhong;
+import mk.plugin.santory.skills.*;
 
 public enum Skill {
 	
@@ -30,7 +17,9 @@ public enum Skill {
 	DIA_CHAN("Địa chấn", new WSDiaChan(), 5),
 	XUNG_PHONG("Xung phong", new WSXungPhong(), 5),
 	MUA_TEN("Mưa tên", new WSMuaTen(), 5),
-	DANH_THUONG("Đánh thường", new WSHeavyHit(), 5);
+	DANH_THUONG("Đánh thường", new WSHeavyHit(), 5),
+	XOAY_KY("Xoáy kỹ", new SkillXoayKy(), 0),
+	SET_DIEN("Sét điện", new SkillSetDien(), 0);
 	
 	private final String name;
 	private final SkillExecutor executor;

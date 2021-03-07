@@ -1,4 +1,4 @@
-package mk.plugin.santory.slave;
+package mk.plugin.santory.slave.master;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import mk.plugin.playerdata.storage.PlayerData;
 import mk.plugin.playerdata.storage.PlayerDataAPI;
 import mk.plugin.santory.ascent.Ascent;
+import mk.plugin.santory.slave.Slave;
 import mk.plugin.santory.traveler.TravelerStorage;
 import org.bukkit.entity.Player;
 

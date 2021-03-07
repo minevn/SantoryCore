@@ -1,6 +1,6 @@
 package mk.plugin.santory.listener;
 
-import mk.plugin.santory.slave.Masters;
+import mk.plugin.santory.slave.master.Masters;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;

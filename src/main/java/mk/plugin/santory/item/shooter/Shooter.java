@@ -17,6 +17,7 @@ public enum Shooter {
 		@Override
 		public Arrow shoot(Player player, Damage damage, Vector v, Location location) {
 			Arrow arrow = player.getWorld().spawnArrow(location, v, 0, 0);
+			arrow.setShooter(player);
 			arrow.setVelocity(v);
 			Damages.setProjectileDamage(arrow, damage);
 			player.playSound(location, Sound.ENTITY_ARROW_SHOOT, 1, 1);
