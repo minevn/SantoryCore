@@ -300,7 +300,7 @@ public class Slaves {
     }
 
     public static double getHeal(String id) {
-        return Stat.HEAL.pointsToValue(getStats(id).get(Stat.HEAL));
+        return Stat.HEAL.pointsToValue(getStats(id).get(Stat.HEAL)) / 3;
     }
 
     public static Map<Stat, Integer> getStats(String id) {

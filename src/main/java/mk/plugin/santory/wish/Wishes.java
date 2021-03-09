@@ -1,22 +1,17 @@
 package mk.plugin.santory.wish;
 
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import org.bukkit.entity.Player;
-
 import com.google.common.collect.Lists;
-
-import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class Wishes {
 	
-	public static String finalRate(Wish w, Player player) {
+	public static WishRewardItem finalRate(Wish w, Player player) {
 		// Check insures
 		Traveler t = Travelers.get(player);
 		WishData wd = t.getData().getWish(w.getID());
@@ -25,27 +20,32 @@ public class Wishes {
 		w.getInsures().keySet().forEach(ti -> {
 			wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1);
 		});
-		
+
+		// Check insure
 		Tier it = null;
 		for (Tier ti : wd.getInsures().keySet()) {
 			int i = wd.getInsures().get(ti);
 			if (i > 0 && w.getInsures().containsKey(ti) && i >= w.getInsures().get(ti)) it = ti; 
 		}
+
+		// No insure
 		if (it == null) {
 			Tier tr = rate(w);
+
+			// Set 0 to insure tier
 			if (w.getInsures().containsKey(tr)) wd.setInsure(tr, 0);
 
 			t.getData().setWish(w.getID(), wd);
 			Travelers.save(player.getName());
 
-			return rate(tr);
+			return rate(w, tr);
 		}
 		
-		// Bao hiem
+		// Has insure
 		wd.setInsure(it, 0);
 		Travelers.save(player.getName());
 		
-		return rate(it);
+		return rate(w, it);
 	}
 	
 	public static Tier rate(Wish w) {
@@ -65,9 +65,11 @@ public class Wishes {
 		return tiers.get(check.size() - 1);
 	}
 	
-	public static String rate(Tier tier) {
-		List<String> l = Configs.getModels().keySet().stream().filter(id -> Configs.getModel(id).getTier() == tier).collect(Collectors.toList());
-		return l.get(new Random().nextInt(l.size()));
+	public static WishRewardItem rate(Wish wish, Tier tier) {
+		WishReward reward = wish.getRewards().getOrDefault(tier, null);
+		if (reward == null) return null;
+		List<WishRewardItem> items = reward.getItems();
+		return items.get(Utils.randomInt(0, items.size() - 1));
 	}
 	
 }

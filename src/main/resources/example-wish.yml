@@ -8,13 +8,13 @@ rewards:
   COMMON:
     chance: 125
     items:
-    - item1
-    - item2
-    - item3
+    - item item1
+    - item item2
+    - item item3
   UNCOMMON: 
     chance: 25
     items:
-    - item4
+    - slave arthur
     - item5
     - item6
     - item7

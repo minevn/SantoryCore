@@ -1,19 +1,7 @@
 package mk.plugin.santory.item;
 
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
@@ -21,6 +9,16 @@ import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Items {
 	
@@ -34,7 +32,12 @@ public class Items {
 		if (is == null) return false;
 		return ItemStackUtils.hasTag(is, DATA_TAG);
 	}	
-	
+
+	public static boolean isType(ItemStack is, ItemType type) {
+		if (!is(is)) return false;
+		return Items.read(is).getModel().getType() == type;
+	}
+
 	public static Item read(ItemStack is) {
 		if (!is(is)) return null;
 		Map<String, String> tags = ItemStackUtils.getTags(is);

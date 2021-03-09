@@ -40,5 +40,10 @@ public class Holograms {
 	public static void hologram(Plugin plugin, List<String> messages, int tick, Player player, LivingEntity target, int radius) {
 		hologram(plugin, randomLocation(target.getEyeLocation(), radius), messages, tick, player);
 	}
+
+	public static void hologram(Plugin plugin, String messages, int tick, Player player, Location l, int radius, boolean random) {
+		if (random) hologram(plugin, randomLocation(l, radius), messages, tick, player);
+		else hologram(plugin, l, messages, tick, player);
+	}
 	
 }

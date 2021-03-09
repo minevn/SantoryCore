@@ -16,6 +16,7 @@ import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishReward;
+import mk.plugin.santory.wish.WishRewardItem;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -249,8 +250,9 @@ public class Configs {
 		config.getConfigurationSection("rewards").getKeys(false).forEach(ts -> {
 			Tier t = Tier.valueOf(ts);
 			double chance = config.getDouble("rewards." + ts + ".chance");
-			List<String> items = config.getStringList("rewards." + ts + ".items");
-			rewards.put(t, new WishReward(chance, items));
+			List<WishRewardItem> items = config.getStringList("rewards." + ts + ".items").stream().map(s -> WishRewardItem.parse(t, s)).collect(Collectors.toList());
+			WishReward wr = new WishReward(chance, items);
+			rewards.put(t, wr);
 		});
 		Map<Tier, Integer> insures = Maps.newHashMap();
 		config.getStringList("insures").forEach(s -> {
@@ -278,6 +280,7 @@ public class Configs {
 	public static Map<String, ItemModel> getModels() {
 		return Maps.newHashMap(models);
 	}
+
 	
 	public static boolean isPvPWorld(World w) {
 		return pvpWorlds.contains(w.getName());

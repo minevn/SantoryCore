@@ -138,9 +138,11 @@ public class Utils {
 	
 	public static Color readColor(String s) {
 		if (s == null) return null;
-		int red = Integer.valueOf(s.split(";")[0]);
-		int green = Integer.valueOf(s.split(";")[1]);
-		int blue = Integer.valueOf(s.split(";")[2]);
+		String split = ";";
+		if (s.contains(", ")) split = ", ";
+		int red = Integer.valueOf(s.split(split)[0]);
+		int green = Integer.valueOf(s.split(split)[1]);
+		int blue = Integer.valueOf(s.split(split)[2]);
 		return Color.fromRGB(red, green, blue);
 	}
 	
@@ -298,13 +300,17 @@ public class Utils {
 
 		return s;
 	}
-	
-	public static void addHealth(LivingEntity le, double amount) {
+
+	public static double addHealth(LivingEntity le, double amount) {
 		double currentHealth = le.getHealth();
 		double maxHealth = le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-		if (le.isDead())
-			return;
-		le.setHealth(Math.min(maxHealth, Math.max(0, Math.min(currentHealth + amount, maxHealth))));
+		if (le.isDead()) return 0;
+
+		double regen = Math.min(maxHealth - currentHealth, amount);
+		double set = Math.min(maxHealth, Math.max(0, Math.min(currentHealth + amount, maxHealth)));
+		le.setHealth(set);
+
+		return regen;
 	}
 	
 	public static void hologram(Location location, String message, int tick, Player player) {

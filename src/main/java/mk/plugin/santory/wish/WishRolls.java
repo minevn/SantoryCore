@@ -1,8 +1,6 @@
 package mk.plugin.santory.wish;
 
 import com.google.common.collect.Lists;
-import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.utils.ItemStackUtils;
@@ -11,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -25,10 +24,11 @@ public class WishRolls {
 	private static final List<Integer> rollSlots = Lists.newArrayList(2, 3, 4, 5, 6, 15, 24, 33, 42, 41, 40, 39, 38, 29, 20, 11);
 	
 	public static void roll(Wish wish, Player player) {
-		String model = Wishes.finalRate(wish, player);
-		Tier tier = Configs.getModel(model).getTier();
+		WishRewardItem wri = Wishes.finalRate(wish, player);
+		Tier tier = wri.getTier();
 		ItemStack ri = getIcon(tier);
-		ItemStack r = Items.build(player, model);
+
+		ItemStack icon = wri.getIcon();
 		
 		Inventory inv = Bukkit.createInventory(new WishGUIHolder(), 45, "§0§lQUAY ĐỀU, QUAY ĐỀU,...");
 		player.openInventory(inv);
@@ -58,9 +58,11 @@ public class WishRolls {
 							inv.setItem(RESULT_SLOT, ri);
 							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
-								inv.setItem(RESULT_SLOT, r);
+								inv.setItem(RESULT_SLOT, icon);
 								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-								player.getInventory().addItem(r.clone());
+//								player.getInventory().addItem(r.clone());
+								wri.give(player);
+								player.sendMessage("§aNhận quà thành công!");
 							}, 20);
 							this.cancel();
 							return;
@@ -99,6 +101,10 @@ public class WishRolls {
 		ItemStack is = Utils.getTieredIcon(tier);
 		ItemStackUtils.setDisplayName(is, tier.getColor() + "§l" + tier.getName());
 		return is;
+	}
+
+	public static void onClick(InventoryClickEvent e) {
+		if (e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof WishGUIHolder) e.setCancelled(true);
 	}
 	
 }

@@ -5,9 +5,9 @@ import java.util.List;
 public class WishReward {
 	
 	private final double chance;
-	private final List<String> items;
+	private final List<WishRewardItem> items;
 	
-	public WishReward(double chance, List<String> items) {
+	public WishReward(double chance, List<WishRewardItem> items) {
 		this.chance = chance;
 		this.items = items;
 	}
@@ -16,7 +16,7 @@ public class WishReward {
 		return this.chance;
 	}
 	
-	public List<String> getItems() {
+	public List<WishRewardItem> getItems() {
 		return this.items;
 	}
 	

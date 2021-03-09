@@ -211,6 +211,14 @@ public class AdminCommand implements CommandExecutor {
 					if (args.length >= 4) player = Bukkit.getPlayer(args[3]);
 					GUIs.open(player, gui);
 				}
+
+				else if (args[1].equalsIgnoreCase("see")) {
+					Player target = Bukkit.getPlayer(args[2]);
+					Player viewer = null;
+					if (args.length > 3) viewer = Bukkit.getPlayer(args[3]);
+					else viewer = (Player) sender;
+					TravelerInfoGUI.open(viewer, target);
+				}
 			}
 			
 			/*
@@ -380,6 +388,7 @@ public class AdminCommand implements CommandExecutor {
 		
 		// GUI commands
 		sender.sendMessage("§d/santory gui open <*id> <player>");
+		sender.sendMessage("§d/santory gui see <*target> <viewer>");
 		sender.sendMessage("");
 		
 		// Custom items
