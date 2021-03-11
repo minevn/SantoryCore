@@ -49,7 +49,7 @@ public class StatListener implements Listener {
 				ItemStack[] armors =  player.getInventory().getArmorContents();
 				for (int i = 0 ; i < armors.length ; i++) {
 					ItemStack is = armors[i];
-					if (is != null && Items.is(is) && realDamage > 5) {
+					if (Items.is(is) && realDamage > 5) {
 						Item item = Items.read(is);
 						ItemData data = item.getData();
 						if (data.getDurability() == 0) {

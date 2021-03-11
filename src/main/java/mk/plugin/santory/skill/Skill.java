@@ -19,7 +19,15 @@ public enum Skill {
 	MUA_TEN("Mưa tên", new WSMuaTen(), 5),
 	DANH_THUONG("Đánh thường", new WSHeavyHit(), 5),
 	XOAY_KY("Xoáy kỹ", new SkillXoayKy(), 0),
-	SET_DIEN("Sét điện", new SkillSetDien(), 0);
+	SET_DIEN("Sét điện", new SkillSetDien(), 0),
+	TU_THAN("Tử thần", new SkillTuThan(), 5),
+	HUY_DIET("Hủy diệt", new SkillHuyDiet(), 5),
+	HAC_SINH("Hắc sinh", new SkillHacSinh(), 5),
+	DOC_TO("Độc tố", new SkillDocTo(), 5),
+	DAI_MA("Đại ma", new SkillDaiMa(), 5),
+	BAO_TEN("Bão tên", new SkillBaoTen(), 5),
+
+	;
 	
 	private final String name;
 	private final SkillExecutor executor;
