@@ -128,15 +128,5 @@ public class Travelers {
 		
 		return items;
 	}
-
-	public static int calPower(Player player) {
-		int power = 0;
-		Traveler t = get(player);
-		for (Stat stat : t.getState().getStats().keySet()) {
-			power += t.getState().getStat(player, stat);
-		}
-
-		return power * 13;
-	}
 	
 }

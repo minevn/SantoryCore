@@ -22,9 +22,9 @@ import java.util.List;
 
 public class TravelerInfoGUI {
 
-    private static int STAT_SLOT = 0;
-    private static int DATA_SLOT = 1;
-    private static int ARMOR_SLOT = 2;
+    private static final int STAT_SLOT = 0;
+    private static final int DATA_SLOT = 1;
+    private static final int ARMOR_SLOT = 2;
     private static List<Integer> ARTIFACT_SLOTS = Lists.newArrayList(3, 4, 5, 6, 7);
 
     public static void open(Player viewer, Player target) {
@@ -59,7 +59,7 @@ public class TravelerInfoGUI {
                 if (art != null) {
                     i++;
                     ItemStack is = Items.build(target, art);
-                    inv.setItem(bonus + i, is);
+                    inv.setItem(bonus + ARTIFACT_SLOTS.get(i), is);
                 }
             }
 
@@ -85,7 +85,7 @@ public class TravelerInfoGUI {
         Traveler t = Travelers.get(player);
         TravelerData td = t.getData();
         List<String> lore = Lists.newArrayList();
-        lore.add("§eLực chiến: §f" + Travelers.calPower(player));
+        lore.add("§eLực chiến: §f" + Utils.calPower(player));
         lore.add("§eCấp độ: §f" + player.getLevel());
         lore.add("§eKinh nghiệm: §f" + td.getExp() + " (" + Utils.round(player.getExp()) + "%)");
         lore.add("§eCấp bậc: §f" + td.getGrade());

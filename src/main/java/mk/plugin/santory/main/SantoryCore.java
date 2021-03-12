@@ -1,6 +1,7 @@
 package mk.plugin.santory.main;
 
 import mk.plugin.santory.command.AdminCommand;
+import mk.plugin.santory.command.PlayerCommand;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
@@ -12,25 +13,17 @@ import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SantoryCore extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		// Reload config
 		this.reloadConfig();
-		
-		// Register listeners
 		this.registerListeners();
-		
-		// Register commands
 		this.registerCommands();
-		
-		// Register tasks
 		this.registerTasks();
-		
-		// Register placeholders
 		this.registerPlaceholders();
 	}
 	
@@ -49,16 +42,26 @@ public class SantoryCore extends JavaPlugin {
 	}
 	
 	public void registerListeners() {
-		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
-		Bukkit.getPluginManager().registerEvents(new LevelListener(), this);
-		Bukkit.getPluginManager().registerEvents(new StateListener(), this);
-		Bukkit.getPluginManager().registerEvents(new StatListener(), this);
-		Bukkit.getPluginManager().registerEvents(new WeaponListener(), this);
-		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-		Bukkit.getPluginManager().registerEvents(new ArmorListener(), this);
-		Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
-		Bukkit.getPluginManager().registerEvents(new MobListener(), this);
-		Bukkit.getPluginManager().registerEvents(new SlaveListener(), this);
+		PluginManager pm = Bukkit.getPluginManager();
+		
+		pm.registerEvents(new ItemListener(), this);
+		pm.registerEvents(new LevelListener(), this);
+		pm.registerEvents(new StateListener(), this);
+		pm.registerEvents(new StatListener(), this);
+		pm.registerEvents(new WeaponListener(), this);
+		pm.registerEvents(new PlayerListener(), this);
+		pm.registerEvents(new ArmorListener(), this);
+		pm.registerEvents(new GUIListener(), this);
+		
+		pm.registerEvents(new SlaveListener(), this);
+		
+		if (pm.isPluginEnabled("MythicMobs")) {
+			pm.registerEvents(new MobListener(), this);
+		}
+
+		if (pm.isPluginEnabled("XacMinh")) {
+			pm.registerEvents(new XacMinhListener(), this);
+		}
 	}
 	
 	public void registerTasks() {
@@ -72,7 +75,14 @@ public class SantoryCore extends JavaPlugin {
 	}
 	
 	public void registerCommands() {
-		this.getCommand("santory").setExecutor(new AdminCommand());
+		var adminCmd = new AdminCommand();
+		var playerCmd = new PlayerCommand();
+
+		this.getCommand("santory").setExecutor(adminCmd);
+		this.getCommand("player").setExecutor(playerCmd);
+		this.getCommand("forge").setExecutor(playerCmd);
+		this.getCommand("see").setExecutor(playerCmd);
+		this.getCommand("artifact").setExecutor(playerCmd);
 	}
 	
 	public void saveOninePlayers() {

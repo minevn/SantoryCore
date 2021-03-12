@@ -16,7 +16,7 @@ public class SantoryPlaceholder extends PlaceholderExpansion {
 
 	@Override
 	public String getIdentifier() {
-		return "skycore";
+		return "santory";
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class SantoryPlaceholder extends PlaceholderExpansion {
 		}
 		
 		else if (s.equalsIgnoreCase("player_xacminh")) {
-			if (player.hasMetadata("skycore-xacminh")) {
+			if (player.hasMetadata("santory-xacminh")) {
 				return "§b✔ ";
 			} else return "§7✘ ";
 		}

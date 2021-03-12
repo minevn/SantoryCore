@@ -1,5 +1,6 @@
 package mk.plugin.santory.listener;
 
+import mk.plugin.santory.item.modifty.ModifyGUI;
 import mk.plugin.santory.slave.gui.SlaveInfoGUI;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.traveler.TravelerInfoGUI;
@@ -38,6 +39,7 @@ public class GUIListener implements Listener {
 		SlaveInfoGUI.onClick(e);
 		WishRolls.onClick(e);
 		TravelerInfoGUI.onClick(e);
+		ModifyGUI.onClick(e);
 	}
 	
 	@EventHandler

@@ -9,3 +9,15 @@ commands:
     santory:
         descripton: Santory's command
         aliases: [str]
+    artifact:
+        description: Artifacts
+        aliases: [divat]
+    forge:
+        description: Forges
+        aliases: [tiemren]
+    see:
+        description: Sees
+        aliases: [xem]
+    player:
+        description: Info
+        aliases: [me, ditme]
