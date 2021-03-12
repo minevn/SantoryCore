@@ -9,6 +9,7 @@ import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -28,6 +29,7 @@ public class ArtifactGUI implements InventoryHolder {
 		Traveler t = Travelers.get(player);
 		Inventory inv = Bukkit.createInventory(new ArtifactGUI(), 27, "§0§lDI VẬT");
 		player.openInventory(inv);
+		player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 		
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < 27 ; i++) inv.setItem(i, Utils.getBlackSlot());
@@ -46,6 +48,8 @@ public class ArtifactGUI implements InventoryHolder {
 		int slot = e.getSlot();
 		
 		if (e.getInventory() == e.getWhoClicked().getOpenInventory().getTopInventory()) {
+			var player = (Player) e.getWhoClicked();
+			player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1);
 			e.setCancelled(true);
 			ItemStack current = e.getCurrentItem();
 			if (SLOTS.contains(slot) || Artifacts.is(current)) {

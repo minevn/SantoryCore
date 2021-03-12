@@ -13,8 +13,6 @@ sounds:
     - slave.target
   attack:
     - slave.attack
-  look:
-    - slave.look
   greet:
     - slave.greet
   follow:

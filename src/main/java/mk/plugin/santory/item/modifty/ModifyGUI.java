@@ -23,6 +23,7 @@ public class ModifyGUI {
     public static void open(Player player) {
         var inv = Bukkit.createInventory(new Holder(), 9, "§0§lTIỆM RÈN");
         player.openInventory(inv);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
         Tasks.async(() -> {
             for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
             inv.setItem(ENHANCE_SLOT, getEnhanceIcon());
@@ -35,9 +36,10 @@ public class ModifyGUI {
         Inventory inv = e.getClickedInventory();
         if (inv == null) return;
         if (inv.getHolder() instanceof Holder == false) return;
-
+        e.setCancelled(true);
 
         var player = (Player) e.getWhoClicked();
+        player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1);
         player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
         int slot = e.getSlot();
         switch (slot) {

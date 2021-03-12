@@ -38,6 +38,7 @@ public class SlaveSelectGUI {
         List<Slave> slaves = sort(m.getSlaves());
         Inventory inv = Bukkit.createInventory(new Holder(slaves), 18, "§0§lBẠN ĐỒNG HÀNH");
         player.openInventory(inv);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 
         Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
             SlaveSelectGUI.update(m, slaves, inv);

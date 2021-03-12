@@ -15,16 +15,16 @@ rewards:
     chance: 25
     items:
     - slave arthur
-    - item5
-    - item6
-    - item7
+    - item item5
+    - item item6
+    - item item7
   RARE:
     chance: 5
     items:
-    - item8
-    - item9
-    - item10
+    - item item8
+    - item item9
+    - item item10
   EPIC:
     chance: 1
     items:
-    - item11
+    - item item11
