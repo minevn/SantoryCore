@@ -5,6 +5,7 @@ import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
@@ -75,7 +76,7 @@ public class TravelerInfoGUI {
             lore.add("§c" + stat.getName() + ": §f" + point + " (" + value + ")");
         }
 
-        ItemStack is = new ItemStack(Material.APPLE);
+        ItemStack is = Icon.INFO.clone();
         ItemStackUtils.setDisplayName(is, "§6§lChỉ số");
         ItemStackUtils.setLore(is, lore);
         return is;
@@ -90,7 +91,7 @@ public class TravelerInfoGUI {
         lore.add("§eKinh nghiệm: §f" + td.getExp() + " (" + Utils.round(player.getExp()) + "%)");
         lore.add("§eCấp bậc: §f" + td.getGrade());
 
-        ItemStack is = new ItemStack(Material.GOLDEN_APPLE);
+        ItemStack is = Icon.SKILL.clone();
         ItemStackUtils.setDisplayName(is, "§6§lThông tin");
         ItemStackUtils.setLore(is, lore);
         return is;

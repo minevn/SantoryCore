@@ -8,9 +8,9 @@ import mk.plugin.santory.item.modifty.ItemUpgrades;
 
 public enum GUI {
 	
-	ASCENT(54, "§0§lTINH LUYỆN TRANG BỊ", ItemAscents.getSlots(), ItemAscents.getInputChecker(), ItemAscents.getAmountChecker()),
-	UPGRADE(45, "§0§lNÂNG BẬC TRANG BỊ", ItemUpgrades.getSlots(), ItemUpgrades.getInputChecker(), ItemUpgrades.getAmountChecker()),
-	ENHANCE(45, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker());
+	ASCENT(9, "§0§lĐỘT PHÁ TRANG BỊ", ItemAscents.getSlots(), ItemAscents.getInputChecker(), ItemAscents.getAmountChecker()),
+	UPGRADE(9, "§0§lNÂNG BẬC TRANG BỊ", ItemUpgrades.getSlots(), ItemUpgrades.getInputChecker(), ItemUpgrades.getAmountChecker()),
+	ENHANCE(9, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker());
 
     private final int size;
 	private final String title;

@@ -99,25 +99,9 @@ public class Utils {
 		}
 		return temp;
 	}
-	
-	@SuppressWarnings("deprecation")
-	public static short getColor(DyeColor color) {
-		return color.getWoolData();
-	}
-	
-	public static ItemStack getColoredSlot(DyeColor color) {
-		ItemStack other = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1);
-		other.setDurability(getColor(color));
-		ItemMeta meta = other.getItemMeta();
-		meta.setDisplayName(" ");
-		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		other.setItemMeta(meta);
-		return other;
-	}
-	
+
 	public static ItemStack getBlackSlot() {
-		ItemStack other = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1);
-		other.setDurability((short) 15);
+		ItemStack other = Icon.BACKGROUND.clone();
 		ItemMeta meta = other.getItemMeta();
 		meta.setDisplayName(" ");
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -434,4 +418,12 @@ public class Utils {
 	}
 
 
+	public static ItemStack getColoredSlot(DyeColor color) {
+		ItemStack other = new ItemStack(Material.valueOf(color.name() + "_STAINED_GLASS_PANE"), 1);
+		ItemMeta meta = other.getItemMeta();
+		meta.setDisplayName(" ");
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		other.setItemMeta(meta);
+		return other;
+	}
 }

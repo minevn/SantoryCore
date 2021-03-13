@@ -3,6 +3,7 @@ package mk.plugin.santory.gui;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -33,7 +34,7 @@ public class GUIs {
 		player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 		
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
-			for (int i = 0 ; i < gui.getSize() ; i++) inv.setItem(i, GUIs.getItemSlot(DyeColor.BLACK, "§l"));
+			for (int i = 0 ; i < gui.getSize() ; i++) inv.setItem(i, GUIs.getItemSlot(Icon.BACKGROUND.clone(), "§l"));
 			gui.getSlots().forEach((sl, gs) -> {
 				inv.setItem(sl, gs.getIcon());
 			});
@@ -96,8 +97,7 @@ public class GUIs {
 		statuses.remove(status.getGUI());
 	}
 	
-	public static ItemStack getItemSlot(DyeColor color, String desc) {
-		ItemStack item = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, Utils.getColor(color));
+	public static ItemStack getItemSlot(ItemStack item, String desc) {
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(desc);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

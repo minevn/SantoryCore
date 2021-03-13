@@ -51,6 +51,16 @@ public class AdminCommand implements CommandExecutor {
 				sender.sendMessage("§aConfig reloaded!");
 				return false;
 			}
+
+			else if (args[0].equalsIgnoreCase("setmodel")) {
+				var model = Integer.parseInt(args[1]);
+				var player = (Player) sender;
+				var is = player.getInventory().getItemInMainHand();
+				var meta = is.getItemMeta();
+				meta.setCustomModelData(model);
+				is.setItemMeta(meta);
+				sender.sendMessage("§aAll done!");
+			}
 			
 			/*
 			 * Player commands
@@ -365,6 +375,7 @@ public class AdminCommand implements CommandExecutor {
 		
 		// System commands
 		sender.sendMessage("§a/santory reload");
+		sender.sendMessage("§a/santory setmodel <id>");
 		sender.sendMessage("");
 		
 		// Player commands

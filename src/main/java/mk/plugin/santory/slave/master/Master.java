@@ -1,5 +1,7 @@
 package mk.plugin.santory.slave.master;
 
+import com.google.common.collect.Lists;
+import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.slave.Slave;
 
 import java.util.List;
@@ -37,7 +39,11 @@ public class Master {
     }
 
     public List<Slave> getSlaves() {
-        return slaves;
+        List<Slave> l = Lists.newArrayList();
+        for (Slave slave : this.slaves) {
+            if (slave.getModel() != null) l.add(slave);
+        }
+        return l;
     }
 
     public void remove(String id) {

@@ -30,6 +30,7 @@ public class WSBaoKiem implements SkillExecutor {
 		double scale = ((double) components.get("scale")) * 0.01;
 		double damage = Travelers.getStatValue(player, Stat.DAMAGE) * scale;
 		Location location = player.getLocation();
+		var d = location.getDirection();
 		new BukkitRunnable() {
 			int i = 0;
 			@Override
@@ -39,7 +40,7 @@ public class WSBaoKiem implements SkillExecutor {
 					this.cancel();
 					return;
 				}
-				Location newLocation = location.clone().add(location.getDirection().multiply(i * 1.8));
+				Location newLocation = location.clone().add(d.clone().multiply(i * 1.8));
 				player.playSound(newLocation, Sound.ENTITY_GHAST_SHOOT, 0.5f, 1.5f);
 
 				int i = 0;
@@ -55,7 +56,7 @@ public class WSBaoKiem implements SkillExecutor {
 							public void run() {
 //								Utils.damage((LivingEntity) e, player, damage, 20, MainSky2RPGCore.getMain());
 								Damages.damage(player, (LivingEntity) e, new Damage(damage, DamageType.SKILL), 5);
-								e.setVelocity(new Vector(0, 0.7, 0));
+								e.setVelocity(d.multiply(1.5).setY(0.8));
 							}
 						}.runTask(SantoryCore.get());
 					}

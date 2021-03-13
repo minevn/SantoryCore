@@ -11,6 +11,7 @@ import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
@@ -25,20 +26,20 @@ import java.util.Map;
 
 public class ItemAscents {
 	
-	private static final List<Integer> MATERIAL_SLOTS = Lists.newArrayList(10, 12, 28, 30);
-	private static final int ITEM_SLOT = 20;
-	private static final int RESULT_SLOT = 25;
-	private static final int BUTTON_SLOT = 42;
-	private static final int AMULET_SLOT = 23;
+	private static final List<Integer> MATERIAL_SLOTS = Lists.newArrayList(2);
+	private static final int ITEM_SLOT = 1;
+	private static final int BUTTON_SLOT = 8;
+	private static final int AMULET_SLOT = 3;
+	private static final int RESULT_SLOT = 6;
 	
 	public static Map<Integer, GUISlot> getSlots() {
 		Map<Integer, GUISlot> slots = Maps.newHashMap();
 		MATERIAL_SLOTS.forEach(sl -> {
-			slots.put(sl, new GUISlot("material", GUIs.getItemSlot(DyeColor.GREEN, "§a§oĐặt nguyên liệu"), getInputExecutor()));
+			slots.put(sl, new GUISlot("material", GUIs.getItemSlot(Icon.SUBITEM.clone(), "§a§oĐặt nguyên liệu trang bị (Phụ)"), getInputExecutor()));
 		});
-		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(DyeColor.WHITE, "§a§oĐặt trang bị"), getInputExecutor()));
-		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(DyeColor.PURPLE, "§a§oĐặt bùa may"), getInputExecutor()));
-		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(DyeColor.BLUE, "§aKết quả")));
+		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị (Chính)"), getInputExecutor()));
+		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
+		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
 		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(), getButtonExecutor()));
 		
 		return slots;
@@ -81,8 +82,8 @@ public class ItemAscents {
 				// Base item placed
 				else {
 					// Check if full material
-					if (GUIs.countPlaced("material", status) == 4) {
-						player.sendMessage("§cĐã đặt đủ trang bị và nguyên liệu!");
+					if (GUIs.countPlaced("material", status) == MATERIAL_SLOTS.size()) {
+						player.sendMessage("§cĐã đặt đủ trang bị và nguyên liệu rồi!");
 						return false;
 					}
 					// Can place material
@@ -129,7 +130,7 @@ public class ItemAscents {
 					
 					Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 						// Check can do
-						if (GUIs.countPlaced("material", status) == 4) {
+						if (GUIs.countPlaced("material", status) == MATERIAL_SLOTS.size()) {
 							double chance = getChance(status);
 							status.getInventory().setItem(BUTTON_SLOT, getOkButton(chance));
 							status.setData("canDo", "");
@@ -203,12 +204,10 @@ public class ItemAscents {
 	
 	public static ItemStack getDefaultButton() {
 		double fee = Configs.ASCENT_FEE;
-		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
-		is.setDurability(Utils.getColor(DyeColor.RED));
-		ItemStackUtils.setDisplayName(is, "§c§lChưa thể tinh luyện");
+		ItemStack is = Icon.BUTTON.clone();
+		ItemStackUtils.setDisplayName(is, "§c§lChưa thể đột phá");
 		List<String> lore = Lists.newArrayList();
-		lore.add("§f§o- Nguyên liệu phải đủ 4 và ");
-		lore.add("§f§o  cùng loại với trang bị");
+		lore.add("§f§o- Nguyên liệu phải cùng loại với trang bị");
 		lore.add("§f§o- Phí §l" + fee + "$");
 		ItemStackUtils.setLore(is, lore);
 		
@@ -217,9 +216,8 @@ public class ItemAscents {
 	
 	public static ItemStack getOkButton(double chance) {
 		double fee = Configs.ASCENT_FEE;
-		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
-		is.setDurability(Utils.getColor(DyeColor.GREEN));
-		ItemStackUtils.setDisplayName(is, "§a§lCó thể tinh luyện");
+		ItemStack is = Icon.BUTTON.clone();
+		ItemStackUtils.setDisplayName(is, "§a§lCó thể đột phá");
 		List<String> lore = Lists.newArrayList();
 		lore.add("§a§o- Tỉ lệ §l" + chance + "%");
 		lore.add("§f§o- Phí §l" + fee + "$");

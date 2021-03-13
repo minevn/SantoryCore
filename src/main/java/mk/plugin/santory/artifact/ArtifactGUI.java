@@ -6,6 +6,7 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -106,13 +107,10 @@ public class ArtifactGUI implements InventoryHolder {
 	}
 	
 	private static ItemStack getIcon() {
-		ItemStack item = new ItemStack(Material.WOODEN_HOE);
+		ItemStack item = Icon.ARTIFACT.clone();
 		ItemMeta meta = item.getItemMeta();
-		item.setDurability((short) 4);
-		meta.setUnbreakable(true);
 		meta.setDisplayName("§a§oÔ để Di vật");
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		item.setItemMeta(meta);
 		return item;
 	}

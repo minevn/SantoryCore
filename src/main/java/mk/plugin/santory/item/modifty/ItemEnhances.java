@@ -11,6 +11,7 @@ import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
@@ -27,18 +28,18 @@ public class ItemEnhances {
 	
 	public static final int MAX_LEVEL = 50;
 	
-	private static final int ITEM_SLOT = 10;
-	private static final int BUTTON_SLOT = 32;
-	private static final int MATERIAL_SLOT = 12;
-	private static final int AMULET_SLOT = 14;
-	private static final int RESULT_SLOT = 25;
+	private static final int ITEM_SLOT = 1;
+	private static final int BUTTON_SLOT = 8;
+	private static final int MATERIAL_SLOT = 2;
+	private static final int AMULET_SLOT = 3;
+	private static final int RESULT_SLOT = 5;
 
 	public static Map<Integer, GUISlot> getSlots() {
 		Map<Integer, GUISlot> slots = Maps.newHashMap();
-		slots.put(MATERIAL_SLOT, new GUISlot("material", GUIs.getItemSlot(DyeColor.GREEN, "§a§oĐặt Đá cường hóa"), getInputExecutor()));
-		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(DyeColor.WHITE, "§a§oĐặt trang bị"), getInputExecutor()));
-		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(DyeColor.PURPLE, "§a§oĐặt bùa may"), getInputExecutor()));
-		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(DyeColor.BLUE, "§aKết quả")));
+		slots.put(MATERIAL_SLOT, new GUISlot("material", GUIs.getItemSlot(Icon.ENHANCE_STONE.clone(), "§a§oĐặt Đá cường hóa"), getInputExecutor()));
+		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị"), getInputExecutor()));
+		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
+		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
 		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(), getButtonExecutor()));
 		
 		return slots;
@@ -140,6 +141,7 @@ public class ItemEnhances {
 					Amulet a = null;
 					if (GUIs.countPlaced("amulet", status) == 1) {
 						a = Amulet.read(GUIs.getItem("amulet", status));
+						status.setData("hasAmulet", true);
 					}
 					final Amulet amulet = a;
 					
@@ -196,6 +198,15 @@ public class ItemEnhances {
 				else {
 					player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
+
+					boolean amulet = status.hasData("hasAmulet");
+					if (amulet) player.sendTitle("§7§lTHẤT BẠI T_T", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 15, 0);
+					else {
+						Item i = Items.read(is);
+						i.getData().setLevel(Math.min(0, i.getData().getLevel() - 1));
+						Items.write(player, is, i);
+						player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 15, 0);
+					}
 					player.getInventory().addItem(is.clone());
 				}
 				
@@ -225,8 +236,7 @@ public class ItemEnhances {
 	
 	public static ItemStack getDefaultButton() {
 		double fee = Configs.ENHANCE_FEE;
-		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
-		is.setDurability(Utils.getColor(DyeColor.RED));
+		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể cường hóa");
 		List<String> lore = Lists.newArrayList();
 		lore.add("§f§o- Phí §l" + fee + "$");
@@ -240,9 +250,8 @@ public class ItemEnhances {
 	
 	public static ItemStack getOkButton(int level, int up, Amulet a) {
 		double fee = Configs.ENHANCE_FEE;
-		ItemStack is = new ItemStack(Material.LEGACY_CONCRETE);
-		is.setDurability(Utils.getColor(DyeColor.GREEN));
-		ItemStackUtils.setDisplayName(is, "§a§lCó thể nâng bậc");
+		ItemStack is = Icon.BUTTON.clone();
+		ItemStackUtils.setDisplayName(is, "§a§lCó thể cường hóa");
 		List<String> lore = Lists.newArrayList();
 		lore.add("§f§o- Phí §l" + fee + "$");
 		for (int i = level + 1 ; i <= level + up ; i++) {
@@ -272,7 +281,7 @@ public class ItemEnhances {
 	private static final String NAME = "§c§lĐá cường hóa";
 	
 	public static ItemStack get() {
-		ItemStack item = new ItemStack(Material.LEGACY_INK_SACK, 1, (short) 15);
+		ItemStack item = ItemStackUtils.create(Material.IRON_NUGGET, 1);
 		ItemStackUtils.setDisplayName(item, NAME);
 		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng tăng cấp cho trang bị");
 		ItemStackUtils.addEnchantEffect(item);

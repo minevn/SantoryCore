@@ -22,7 +22,16 @@ import java.util.Map;
 
 
 public class ItemStackUtils {
-	
+
+    public static ItemStack create(Material m, int model) {
+        var is = new ItemStack(m);
+        var meta = is.getItemMeta();
+        meta.setCustomModelData(model);
+        is.setItemMeta(meta);
+
+        return is;
+    }
+
 	public static boolean isNull(ItemStack item) {
 		return item == null || item.getType() == Material.AIR;
 	}

@@ -305,6 +305,7 @@ public class Slaves {
 
     public static Map<Stat, Integer> getStats(String id) {
         Slave slave = getSlave(id);
+        if (slave == null) return Maps.newLinkedHashMap();
         int lv = slave.getData().getLevel();
 
         int h = 10 + 1 * lv;

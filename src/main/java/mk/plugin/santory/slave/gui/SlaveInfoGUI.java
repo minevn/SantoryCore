@@ -12,6 +12,7 @@ import mk.plugin.santory.slave.SlaveModel;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.traveler.TravelerOptions;
+import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
@@ -110,7 +111,7 @@ public class SlaveInfoGUI {
     public static ItemStack getInfoIcon(Slave slave) {
         SlaveData data = slave.getData();
         SlaveModel model = slave.getModel();
-        ItemStack is = new ItemStack(Material.PAPER);
+        ItemStack is = Icon.INFO.clone();
         int exp = data.getExp();
         double rate = (double) (exp - TravelerOptions.getTotalExpTo(data.getLevel())) / (double) TravelerOptions.getExpOf(data.getLevel() + 1);
 
@@ -129,7 +130,7 @@ public class SlaveInfoGUI {
 
     public static ItemStack getSkillIcon(Slave slave) {
         SlaveModel model = slave.getModel();
-        ItemStack is = new ItemStack(Material.PAPER);
+        ItemStack is = Icon.SKILL.clone();
         ItemStackUtils.setDisplayName(is, "§a§lKỹ năng: §c§l" + model.getSkill().getName());
         ItemStackUtils.setLore(is, model.getSkillDesc());
 
@@ -137,7 +138,7 @@ public class SlaveInfoGUI {
     }
 
     public static ItemStack getEmptyWeaponIcon(Slave slave) {
-        ItemStack is = new ItemStack(Material.PAPER);
+        ItemStack is = Icon.ITEM.clone();
         ItemStackUtils.setDisplayName(is, "§f§l§oVũ khí trống (" + slave.getModel().getWeaponType().getName() + ")");
         ItemStackUtils.setLore(is, Lists.newArrayList("§7§oĐặt vũ khí vào đây"));
 
