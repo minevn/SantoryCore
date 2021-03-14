@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mk.plugin.santory.utils.Tasks;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -36,7 +37,7 @@ public class WSBaoKiem implements SkillExecutor {
 			@Override
 			public void run() {
 				i++;
-				if (i >= 10) {
+				if (i >= 20) {
 					this.cancel();
 					return;
 				}
@@ -46,19 +47,23 @@ public class WSBaoKiem implements SkillExecutor {
 				int i = 0;
 				List<Location> list = getListLocation(newLocation);
 				for (i = 0 ; i < list.size() ; i ++) {
-					player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, list.get(i), new Double(i / 3).intValue(), i*0.05f, i*0.05f, i*0.05f, i*0.01f);
+					player.getWorld().spawnParticle(Particle.SWEEP_ATTACK, list.get(i), Double.valueOf(i / 2).intValue(), i*0.05f, i*0.05f, i*0.05f, i*0.01f);
 				}
-				for (Entity e : location.getWorld().getNearbyEntities(newLocation, 2, 5, 2)) {
-					if (e instanceof LivingEntity && e != player) {
-						if (!Utils.canAttack(e)) continue;
-						new BukkitRunnable() {
-							@Override
-							public void run() {
-//								Utils.damage((LivingEntity) e, player, damage, 20, MainSky2RPGCore.getMain());
-								Damages.damage(player, (LivingEntity) e, new Damage(damage, DamageType.SKILL), 5);
-								e.setVelocity(d.multiply(1.5).setY(0.8));
-							}
-						}.runTask(SantoryCore.get());
+				for (Entity entity : newLocation.getWorld().getEntities()) {
+					double yd = 5;
+					double xzd = 2;
+					if (Math.abs(entity.getLocation().getY() - newLocation.getY()) < yd
+						&& Math.abs(entity.getLocation().getX() - newLocation.getX()) < xzd
+						&& Math.abs(entity.getLocation().getZ() - newLocation.getZ()) < xzd
+						&& Utils.canAttack(entity)
+						&& entity != player
+						&& entity instanceof LivingEntity)
+					{
+						Tasks.sync(() -> {
+							if (Damages.isDelayed((LivingEntity) entity)) return;
+							Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 20);
+							entity.setVelocity(d.clone().multiply(1.5).setY(1.2));
+						});
 					}
 				}
 			}

@@ -79,13 +79,13 @@ public class ItemData {
 		this.level = level;
 	}
 	
-	public int getDurability() {
-		return this.durability;
-	}
+//	public int getDurability() {
+//		return this.durability;
+//	}
 	
-	public void setDurability(int durability) {
-		this.durability = durability;
-	}
+//	public void setDurability(int durability) {
+//		this.durability = durability;
+//	}
 	
 	public Ascent getAscent() {
 		return this.ascent;

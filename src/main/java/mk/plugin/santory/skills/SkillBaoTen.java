@@ -40,7 +40,7 @@ public class SkillBaoTen implements SkillExecutor {
                     this.cancel();
                     return;
                 }
-                Location l = target.getLocation().add(0, 1, 0);
+                Location l = target.getLocation().add(0, 1.5, 0);
                 Location rl = player.getLocation().add(0, 10, 0);
                 Location sl = Utils.ranLoc(rl, 8);
                 Vector v = l.subtract(sl).toVector().normalize().multiply(2.1f);

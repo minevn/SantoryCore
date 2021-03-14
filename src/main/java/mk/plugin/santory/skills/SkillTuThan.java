@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -50,8 +51,7 @@ public class SkillTuThan implements SkillExecutor {
     public static void shoot(Player player, double damage) {
         Location l = player.getLocation().clone();
         l.add(0, 1, 0);
-        double ranX = new Random().nextInt(100) - 50;
-
+        double pitch = Utils.random(20, 170);
         new BukkitRunnable() {
             int c = 0;
 
@@ -64,8 +64,8 @@ public class SkillTuThan implements SkillExecutor {
                     return;
                 }
                 double r = 5;
-                Location center = l.clone().add(l.getDirection().multiply(c * 1.2).setY(0));
-                List<Location> list = show(center, ranX, 0, 0);
+                Location center = l.clone().add(l.getDirection().setY(0).multiply(c * 1.2));
+                List<Location> list = show(center, l.getPitch() + pitch, -1 * l.getYaw() + 90, 0);
 
                 // Effect
                 if (c % 5 == 0) center.getWorld().playSound(center, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1);
@@ -94,7 +94,7 @@ public class SkillTuThan implements SkillExecutor {
     public static List<Location> show(Location l, double angleX, double angleY, double angleZ) {
         Location pl = l;
         Location c = l;
-        List<Location> list = getCurve(pl, 4);
+        List<Location> list = createCircle(pl, 4);
         List<Vector> list2 = Lists.newArrayList();
         for (Location location : list) {
             list2.add(location.clone().subtract(c.clone()).toVector().clone());
@@ -119,24 +119,40 @@ public class SkillTuThan implements SkillExecutor {
         return list;
     }
 
-    public static List<Location> getCurve(Location loc, double radius) {
-        List<Location> list = Lists.newArrayList();
-
-        int amount = 20;
-        double maxAngle = 180;
-        double angleBetweenArrows = (maxAngle / (amount - 1)) * Math.PI / 180;
-        double pitch = (loc.getPitch() + 90) * Math.PI / 180;
-        double yaw = (loc.getYaw() + 90 - maxAngle / 2) * Math.PI / 180;
+    public static List<Location> createCircle(Location location, double radius) {
+        int amount = new Double(radius * 20).intValue() / 3 * 2;
+        double increment = (2 * Math.PI) / amount;
+        ArrayList<Location> locations = new ArrayList<Location>();
 
         for (int i = 0; i < amount; i++) {
-            double nX = Math.sin(pitch) * Math.cos(yaw + angleBetweenArrows * i);
-            double nY = Math.sin(pitch) * Math.sin(yaw + angleBetweenArrows * i);
-            Vector newDir = new Vector(nX, 0, nY);
-            list.add(loc.clone().add(newDir.multiply(5)));
+            double angle = i * increment;
+            double x = location.getX() + (radius * Math.cos(angle));
+            double z = location.getZ() + (radius * Math.sin(angle));
+            locations.add(new Location(location.getWorld(), x, location.getY(), z));
         }
 
-        return list;
+        return locations;
     }
+
+
+//    public static List<Location> getCurve(Location loc, double radius) {
+//        List<Location> list = Lists.newArrayList();
+//
+//        int amount = 40;
+//        double maxAngle = 180;
+//        double angleBetweenArrows = (maxAngle / (amount - 1)) * Math.PI / 180;
+//        double pitch = (loc.getPitch() + 90) * Math.PI / 180;
+//        double yaw = (loc.getYaw() + 90 - maxAngle / 2) * Math.PI / 180;
+//
+//        for (int i = 0; i < amount; i++) {
+//            double nX = Math.sin(pitch) * Math.cos(yaw + angleBetweenArrows * i);
+//            double nY = Math.sin(pitch) * Math.sin(yaw + angleBetweenArrows * i);
+//            Vector newDir = new Vector(nX, 0, nY);
+//            list.add(loc.clone().add(newDir.multiply(5)));
+//        }
+//
+//        return list;
+//    }
 
 
     public static Vector rotateAroundAxisX(Vector v, double cos, double sin) {

@@ -52,12 +52,15 @@ public class Items {
 		ItemData data = item.getData();
 		ItemModel model = item.getModel();
 		if (model.getType() == ItemType.ARTIFACT) Artifacts.setDesc(item);
-		String desc = gradeCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getGrade());
 		String lvf = "§7§l[§f§l" + model.getTier().getColor() + "§l+" + data.getLevel() + "§7§l]";
 		String namef = model.getTier().getColor() + "§l" + model.getName();
 		String gradef = "§e§l" + Utils.toStars(data.getGrade()) + " §f| §a§l" + Utils.toStars(data.getAscent());
 		String durf = "§aĐộ bền: §f" + data.getDurability() + "/" + Configs.MAX_DURABILITY;
-		List<String> descf = Utils.toList(desc, 20, "§f§o");
+		List<String> descf = Lists.newArrayList();
+		if (model.getDesc() != null) {
+			String desc = gradeCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getGrade());
+			descf = Utils.toList(desc, 25, "§f§o");
+		}
 		List<String> statf = Lists.newArrayList();
 		
 		int c = 0;

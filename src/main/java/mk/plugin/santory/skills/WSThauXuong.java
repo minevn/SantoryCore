@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -36,23 +37,22 @@ public class WSThauXuong implements SkillExecutor {
 					this.cancel();
 					return;
 				}
-//				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
-//				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 				Location mainLoc = player.getLocation().add(0, 0.9, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.2f, 1.1f);
-				Vector v = random(mainLoc.clone().getDirection(), 2f);
+				Vector v = random(mainLoc.clone().getDirection(), 1f);
 				for (int i = 0 ; i < 10; i ++) {
 					Location loc =  mainLoc.clone().add(v.clone().multiply(i));
 					player.getWorld().spawnParticle(Particle.CRIT, loc, 4, 0.1f, 0.1f, 0.1f, 0);
 					player.getWorld().spawnParticle(Particle.CRIT_MAGIC, loc, 4, 0.1f, 0.1f, 0.1f, 0);
-					loc.getWorld().getNearbyEntities(loc, 1, 1, 1).forEach(e -> {
-						if (e instanceof LivingEntity && e != player) {
-							if (!Utils.canAttack(e)) return;
+					for (Entity entity : loc.getWorld().getEntities()) {
+						if (entity.getLocation().distanceSquared(loc) > 1) continue;
+						if (entity instanceof LivingEntity && entity != player) {
+							if (!Utils.canAttack(entity)) return;
 							Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-								Damages.damage(player, (LivingEntity) e, new Damage(damage, DamageType.SKILL), 5);
+								Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 5);
 							});
 						}
-					});
+					}
 				}
 			}
 			

@@ -42,28 +42,28 @@ public class StatListener implements Listener {
 		if (Configs.isPvPWorld(player.getWorld())) return;
 		
 		// Durability
-		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
-		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-			double realDamage = lastHealth - player.getHealth();
-			if (e.getEntity() instanceof Player) {
-				ItemStack[] armors =  player.getInventory().getArmorContents();
-				for (int i = 0 ; i < armors.length ; i++) {
-					ItemStack is = armors[i];
-					if (Items.is(is) && realDamage > 5) {
-						Item item = Items.read(is);
-						ItemData data = item.getData();
-						if (data.getDurability() == 0) {
-							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
-							continue;
-						}
-						data.setDurability(Math.max(0, data.getDurability() - 1));
-						armors[i] = Items.write(player, is, item);
-						
-					}
-				}
-				player.getInventory().setArmorContents(armors);
-			}
-		});
+//		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
+//		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+//			double realDamage = lastHealth - player.getHealth();
+//			if (e.getEntity() instanceof Player) {
+//				ItemStack[] armors =  player.getInventory().getArmorContents();
+//				for (int i = 0 ; i < armors.length ; i++) {
+//					ItemStack is = armors[i];
+//					if (Items.is(is) && realDamage > 5) {
+//						Item item = Items.read(is);
+//						ItemData data = item.getData();
+//						if (data.getDurability() == 0) {
+//							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
+//							continue;
+//						}
+//						data.setDurability(Math.max(0, data.getDurability() - 1));
+//						armors[i] = Items.write(player, is, item);
+//
+//					}
+//				}
+//				player.getInventory().setArmorContents(armors);
+//			}
+//		});
 	}
 	
 	// Player get damaged by entity not player

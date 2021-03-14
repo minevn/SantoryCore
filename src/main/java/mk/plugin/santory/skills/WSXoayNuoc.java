@@ -9,9 +9,7 @@ import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,21 +39,19 @@ public class WSXoayNuoc implements SkillExecutor {
 			@Override
 			public void run() {
 				c++;
-				show(player, l.clone().add(l.getDirection().multiply(c * 0.6)), 1.5, l.getPitch() + 90, -1 * l.getYaw(), 0, c * 10).forEach(lc -> {
-					player.getWorld().spawnParticle(Particle.REDSTONE, lc, 0, (double) 204 / 255, (double) 255 / 255, 255 / 255, 1);
+				Location newl = l.clone().add(l.getDirection().multiply(c * 0.6));
+				show(player, newl, 1.5, l.getPitch() + 90, -1 * l.getYaw(), 0, c * 10).forEach(lc -> {
+					player.getWorld().spawnParticle(Particle.REDSTONE, lc, 0, (double) 204 / 255, (double) 255 / 255, 255 / 255, 1, new Particle.DustOptions(Color.AQUA, 1));
 					player.getWorld().spawnParticle(Particle.WATER_DROP, lc, 0, (double) 204 / 255, (double) 255 / 255, 255 / 255, 1);
 					player.getWorld().spawnParticle(Particle.DRIP_WATER, lc, 0, (double) 204 / 255, (double) 255 / 255, 255 / 255, 1);
-					
-					for (Entity e : lc.getWorld().getNearbyEntities(lc, 1, 1, 1)) {
-						if (e instanceof LivingEntity && e != player) {
-							if (!Utils.canAttack(e)) continue;
-							new BukkitRunnable() {
-								@Override
-								public void run() {
-									Damages.damage(player, (LivingEntity) e, new Damage(damage, DamageType.SKILL), 15);
-									
-								}
-							}.runTask(SantoryCore.get());
+
+					for (Entity entity : l.getWorld().getEntities()) {
+						if (entity.getLocation().distanceSquared(lc) > 1) continue;
+						if (entity instanceof LivingEntity && entity != player) {
+							if (!Utils.canAttack(entity)) return;
+							Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+								Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 15);
+							});
 						}
 					}
 					

@@ -47,8 +47,8 @@ public class SkillDocTo implements SkillExecutor {
                     return;
                 }
 
-                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 40, 1, 1, 1, 0.01);
-                player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, l, 40, 1, 1, 1, 0.01);
+                player.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, l, 40, 1.5, 1, 1.5, 0.01);
+                player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, l, 40, 1.5, 1, 1.5, 0.01);
                 for (Entity entity : l.getWorld().getEntities()) {
                     if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(l) < 15) {
                         Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {

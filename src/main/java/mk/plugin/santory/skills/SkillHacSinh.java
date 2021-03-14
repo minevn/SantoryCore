@@ -29,7 +29,7 @@ public class SkillHacSinh implements SkillExecutor {
         Location l = player.getLocation().add(player.getLocation().getDirection()).add(0, 1.3, 0);
         Vector d = player.getLocation().getDirection();
         Phantom p = (Phantom) player.getWorld().spawnEntity(l, EntityType.PHANTOM);
-        p.setVelocity(d.multiply(3));
+        p.setVelocity(d.multiply(2));
         p.setAI(false);
         p.setNoDamageTicks(1000);
 

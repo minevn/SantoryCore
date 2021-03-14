@@ -7,6 +7,7 @@ import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,17 +36,18 @@ public class SkillHuyDiet implements SkillExecutor {
         g.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
         g.setNoDamageTicks(1000);
         g.setCollidable(false);
-        g.setVelocity(new Vector(0, -3.5, 0));
+        g.setVelocity(new Vector(0, -4.5, 0));
 
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (!g.isOnGround()) return;
-                player.getWorld().playSound(g.getLocation(), Sound.ENTITY_RAVAGER_HURT, 1, 1);
-                player.getWorld().spawnParticle(Particle.BLOCK_CRACK, g.getLocation().add(0, 0.3, 0), 40, 1, 0.3, 1, 0.01, Bukkit.createBlockData(Material.REDSTONE_BLOCK));
-                player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, g.getLocation().add(0, 0.3, 0), 10, 2, 1, 2, 0.01);
                 this.cancel();
+                player.getWorld().playSound(g.getLocation(), Sound.ENTITY_RAVAGER_HURT, 1, 1);
+                player.getWorld().playSound(g.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                player.getWorld().spawnParticle(Particle.BLOCK_CRACK, g.getLocation().add(0, 0.3, 0), 100, 1, 1, 1, 0.01, Bukkit.createBlockData(Material.REDSTONE_BLOCK));
+                player.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, g.getLocation().add(0, 0.3, 0), 10, 2, 1, 2, 0.01);
                 Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
                     for (Entity entity : landed.getWorld().getEntities()) {
                         if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(landed) < 15) {
@@ -53,7 +55,9 @@ public class SkillHuyDiet implements SkillExecutor {
                         }
                     }
                 });
-                Bukkit.getScheduler().runTaskLater(SantoryCore.get(), g::remove, 30);
+                Tasks.sync(() -> {
+                    g.setHealth(0);
+                });
             }
         }.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);
 
