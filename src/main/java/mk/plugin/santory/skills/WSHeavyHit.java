@@ -31,7 +31,8 @@ public class WSHeavyHit implements SkillExecutor  {
 		if (!Items.is(is)) return;
 		Item item = Items.read(is);
 		ItemModel model = item.getModel();
-		
+		player.swingMainHand();
+
 		if (model.getType() == ItemType.WEAPON) {
 			Weapon w = Weapon.parse(model);
 			if (w.getType().isShooter()) w.getType().getShooter().shoot(player, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.ATTACK), player.getLocation().getDirection().multiply(3), player.getLocation().add(player.getLocation().getDirection().multiply(3)).add(0, 1.5, 0));

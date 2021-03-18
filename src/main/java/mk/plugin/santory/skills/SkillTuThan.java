@@ -43,6 +43,7 @@ public class SkillTuThan implements SkillExecutor {
                     this.cancel();
                     return;
                 }
+                player.swingMainHand();
                 shoot(player, damage);
             }
         }.runTaskTimer(SantoryCore.get(), 0, 15);

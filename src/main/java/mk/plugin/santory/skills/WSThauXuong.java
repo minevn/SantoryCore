@@ -37,6 +37,7 @@ public class WSThauXuong implements SkillExecutor {
 					this.cancel();
 					return;
 				}
+				player.swingMainHand();
 				Location mainLoc = player.getLocation().add(0, 0.9, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.2f, 1.1f);
 				Vector v = random(mainLoc.clone().getDirection(), 1f);
