@@ -89,13 +89,6 @@ public class StatListener implements Listener {
 	// Player damage entity
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamageEntity(EntityDamageByEntityEvent e) {
-		// Check Entity
-		Entity en = e.getEntity();
-		if (!Utils.canAttack(en)) {
-			e.setCancelled(true);
-			return;
-		}
-
 		// Player Damage entity
 		if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
 			if (e.getEntity() instanceof LivingEntity) {
@@ -133,6 +126,12 @@ public class StatListener implements Listener {
 				Player player = p;
 
 				LivingEntity entity = (LivingEntity) e.getEntity();
+
+				// Check
+				if (!Utils.canAttack(entity)) {
+					e.setCancelled(true);
+					return;
+				}
 
 				// Slave
 				if (!Slaves.hasSlave(player)) return;
