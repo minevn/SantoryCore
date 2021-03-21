@@ -14,7 +14,7 @@ commands:
         aliases: [divat]
     forge:
         description: Forges
-        aliases: [tiemren]
+        aliases: [tiemren, fapsu]
     see:
         description: Sees
         aliases: [xem]

@@ -26,7 +26,7 @@ public class ModifyGUI {
     private static final int ASCENT_SLOT = 6;
 
     public static void open(Player player) {
-        var inv = Bukkit.createInventory(new Holder(), 9, "§0§lTIỆM RÈN");
+        var inv = Bukkit.createInventory(new Holder(), 9, "§0§lFAP SƯ SORASKY");
         player.openInventory(inv);
         player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
         Tasks.async(() -> {
