@@ -56,6 +56,7 @@ public class Items {
 		String namef = model.getTier().getColor() + "§l" + model.getName();
 		String gradef = "§e§l" + Utils.toStars(data.getGrade()) + " §f| §a§l" + Utils.toStars(data.getAscent());
 		String durf = "§aĐộ bền: §f" + data.getDurability() + "/" + Configs.MAX_DURABILITY;
+		String element = model.getElement().getColor() + "Nguyên tố: " + model.getElement().getName();
 		List<String> descf = Lists.newArrayList();
 		if (model.getDesc() != null) {
 			String desc = gradeCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getGrade());
@@ -81,7 +82,7 @@ public class Items {
 		lore.add("");
 		lore.addAll(statf);
 		lore.add("");
-		lore.add(durf);
+		lore.add(element);
 		ItemStackUtils.setLore(is, lore);
 		
 		ItemMeta meta = is.getItemMeta();
@@ -93,12 +94,11 @@ public class Items {
 	}
 	
 	// Write data into item
-	public static ItemStack write(Player player, ItemStack is, Item item) {
+	public static void write(Player player, ItemStack is, Item item) {
 		Map<String, String> tags = Maps.newHashMap();
 		tags.put(DATA_TAG, item.getData().toString());
 		tags.put(MODEL_TAG, item.getModelID());
-		
-		return ItemStackUtils.setTag(is, tags);
+		ItemStackUtils.setTag(is, tags);
 	}
 	
 	public static ItemStack build(Player player, Item item) {
@@ -108,7 +108,7 @@ public class Items {
 		}
 		ItemStack is = new ItemStack(Material.STONE);
 		update(player, is, item);
-		is = write(player, is, item);
+		write(player, is, item);
 		
 		return is;
 	}
@@ -123,7 +123,7 @@ public class Items {
 		}
 		ItemStack is = new ItemStack(Material.STONE);
 		update(player, is, item);
-		is = write(player, is, item);
+		write(player, is, item);
 		
 		return is;
 	}

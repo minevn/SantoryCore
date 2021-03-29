@@ -245,9 +245,6 @@ public class StatListener implements Listener {
 						// Armor damage
 						double realDamage = lastHealth - entity.getHealth();
 
-						// Event
-						Bukkit.getPluginManager().callEvent(new PlayerDamagedEntityEvent(player, entity, realDamage));
-
 						// Statistic
 						player.setStatistic(Statistic.DAMAGE_DEALT, player.getStatistic(Statistic.DAMAGE_DEALT) + new Double(realDamage).intValue());
 						if (e.getEntity() instanceof Player) {

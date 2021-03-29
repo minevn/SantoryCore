@@ -46,8 +46,9 @@ public enum SlaveFood {
         meta.setDisplayName(this.getTier().getColor() + "§lĐồ ăn xịn");
         meta.setLore(Lists.newArrayList("§7Dùng cho bạn đồng hành (chuột phải)"));
         is.setItemMeta(meta);
+        ItemStackUtils.setTag(is, "slave-food", this.name());
 
-        return ItemStackUtils.setTag(is, "slave-food", this.name());
+        return is;
     }
 
     public static boolean is(ItemStack is) {

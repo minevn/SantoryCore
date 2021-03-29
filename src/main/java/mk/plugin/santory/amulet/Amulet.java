@@ -40,7 +40,7 @@ public enum Amulet {
 		ItemStackUtils.addEnchantEffect(item);
 		ItemStackUtils.addLoreLine(item, "§7§oGiúp thực thi thất bại không bị");
 		ItemStackUtils.addLoreLine(item, "§7§omất vật phẩm và tăng " + this.bonus + "% thành công");
-		item = ItemStackUtils.setTag(item, "sRPG.sachmayman", this.name());
+		ItemStackUtils.setTag(item, "sRPG.sachmayman", this.name());
 		
 		return item;
 	}

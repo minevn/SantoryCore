@@ -91,12 +91,12 @@ public class GUIListener implements Listener {
 	
 	@EventHandler
 	public void onDrag(InventoryDragEvent e) {
-		if (e.getInventory().getHolder() instanceof GUIHolder == false) e.setCancelled(true);
+		if (!(e.getInventory().getHolder() instanceof GUIHolder)) e.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onClose(InventoryCloseEvent e) {
-		if (e.getInventory().getHolder() instanceof GUIHolder == false) return;		
+		if (!(e.getInventory().getHolder() instanceof GUIHolder)) return;
 		Player player = (Player) e.getPlayer();
 		
 		if (!check(player)) return;
@@ -108,6 +108,7 @@ public class GUIListener implements Listener {
 	
 	public void doPlace(ItemStack ci, Player player, GUIStatus status, GUI gui, GUISlot gs, int slot) {
 		player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
+		if (ci == null || ci.getType() == Material.AIR) return;
 		ItemStack pi = ci.clone(); // placed item
 		int amount = 1;
 		if (gui.getAmounter().allowMulti(pi)) amount = pi.getAmount();

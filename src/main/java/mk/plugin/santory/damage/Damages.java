@@ -3,6 +3,8 @@ package mk.plugin.santory.damage;
 import java.util.HashMap;
 import java.util.Map;
 
+import mk.plugin.santory.event.PlayerDamagedEntityEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -30,6 +32,9 @@ public class Damages {
 			}
 			damaged.put(target, System.currentTimeMillis() + (tickDelay * 1000 / 20));
 		}
+
+		// Event
+		Bukkit.getPluginManager().callEvent(new PlayerDamagedEntityEvent(player, target, damage.getValue(), damage.getType()));
 	}
 	
 	public static boolean isDelayed(LivingEntity target) {

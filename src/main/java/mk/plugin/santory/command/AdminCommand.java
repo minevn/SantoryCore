@@ -5,6 +5,7 @@ import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.ArtifactGUI;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.element.Element;
 import mk.plugin.santory.gui.GUI;
 import mk.plugin.santory.gui.GUIs;
 import mk.plugin.santory.item.Item;
@@ -13,6 +14,7 @@ import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.modifty.ItemEnhances;
 import mk.plugin.santory.item.modifty.ItemUpgrades;
+import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
 import mk.plugin.santory.slave.*;
@@ -135,7 +137,8 @@ public class AdminCommand implements CommandExecutor {
 					ItemData data = item.getData();
 					data.setLevel(level);
 					Items.update(player, is, item);
-					player.getInventory().setItemInMainHand(Items.write(player, is, item));
+					Items.write(player, is, item);
+					player.updateInventory();
 					sender.sendMessage("§aDone!");
 				}
 				
@@ -150,7 +153,8 @@ public class AdminCommand implements CommandExecutor {
 						Artifacts.check(item, art);
 					}
 					Items.update(player, is, item);
-					player.getInventory().setItemInMainHand(Items.write(player, is, item));
+					Items.write(player, is, item);
+					player.updateInventory();
 					sender.sendMessage("§aDone!");
 				}
 				
@@ -165,7 +169,8 @@ public class AdminCommand implements CommandExecutor {
 					ItemData data = item.getData();
 					data.setDesc(desc);
 					Items.update(player, is, item);
-					player.getInventory().setItemInMainHand(Items.write(player, is, item));
+					Items.write(player, is, item);
+					player.updateInventory();
 					sender.sendMessage("§aDone!");
 				}
 				
@@ -176,7 +181,8 @@ public class AdminCommand implements CommandExecutor {
 					ItemData data = item.getData();
 					data.setDurability(dur);
 					Items.update(player, is, item);
-					player.getInventory().setItemInMainHand(Items.write(player, is, item));
+					Items.write(player, is, item);
+					player.updateInventory();
 					sender.sendMessage("§aDone!");
 				}
 				
@@ -247,7 +253,10 @@ public class AdminCommand implements CommandExecutor {
 				
 				else if (args[1].equalsIgnoreCase("upstone")) {
 					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
-					player.getInventory().addItem(ItemUpgrades.get());
+					for (var us : UpgradeStone.values()) {
+						player.getInventory().addItem(us.build());
+					}
+
 				}
 				
 				else if (args[1].equalsIgnoreCase("enstone")) {
@@ -276,15 +285,15 @@ public class AdminCommand implements CommandExecutor {
 					p.damage(0, e);
 				}
 				
-				else if (args[1].equalsIgnoreCase("upstone")) {
-					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
-					player.getInventory().addItem(ItemUpgrades.get());
-				}
-				
-				else if (args[1].equalsIgnoreCase("enstone")) {
-					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
-					player.getInventory().addItem(ItemEnhances.get());
-				}
+//				else if (args[1].equalsIgnoreCase("upstone")) {
+//					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
+//					player.getInventory().addItem(ItemUpgrades.get());
+//				}
+//
+//				else if (args[1].equalsIgnoreCase("enstone")) {
+//					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
+//					player.getInventory().addItem(ItemEnhances.get());
+//				}
 			}
 			
 			/*

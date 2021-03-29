@@ -6,12 +6,14 @@ import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.event.ItemToggleEvent;
+import mk.plugin.santory.event.PlayerSkillExecuteEvent;
 import mk.plugin.santory.item.*;
 import mk.plugin.santory.item.weapon.Weapon;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,6 +70,9 @@ public class WeaponListener implements Listener {
 			// Execute
 			player.sendTitle("§c§l「" + skill.getName() + "」", "§7§oThực thi kỹ năng", 0, 20, 0);
 			skill.getExecutor().start(getComponents(player, item));
+
+			// Event
+			Bukkit.getPluginManager().callEvent(new PlayerSkillExecuteEvent(player, skill));
 		}
 	}
 	
@@ -118,9 +123,10 @@ public class WeaponListener implements Listener {
 			
 			
 			// Minus durability
-			if (Configs.isPvPWorld(player.getWorld())) return;
-			data.setDurability(Math.max(data.getDurability() - 1, 0));
-			player.getInventory().setItemInMainHand(Items.write(player, is, item));
+//			if (Configs.isPvPWorld(player.getWorld())) return;
+//			data.setDurability(Math.max(data.getDurability() - 1, 0));
+//			Items.write(player, is, item);
+//			player.updateInventory();
 		}
 	}
 	

@@ -66,8 +66,9 @@ public enum SlaveStone {
         meta.setDisplayName(this.tier.getColor() + "§lViên đá linh hồn");
         meta.setLore(Lists.newArrayList("§7§oCông dụng tăng exp cho Bạn đồng hành (chuột phải)", "§7§oDùng cho cấp từ " + this.getMinLevel() + " đến " + this.getMaxLevel()));
         is.setItemMeta(meta);
+        ItemStackUtils.setTag(is, "slave-stone", this.name());
 
-        return ItemStackUtils.setTag(is, "slave-stone", this.name());
+        return is;
     }
 
     public static boolean is(ItemStack is) {

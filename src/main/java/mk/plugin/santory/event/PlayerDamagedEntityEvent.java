@@ -1,5 +1,6 @@
 package mk.plugin.santory.event;
 
+import mk.plugin.santory.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -15,11 +16,13 @@ public class PlayerDamagedEntityEvent extends PlayerEvent {
 
     private LivingEntity target;
     private double damage;
+    private DamageType damageType;
 
-    public PlayerDamagedEntityEvent(Player who, LivingEntity target, double damage) {
+    public PlayerDamagedEntityEvent(Player who, LivingEntity target, double damage, DamageType damageType) {
         super(who);
         this.target = target;
         this.damage = damage;
+        this.damageType = damageType;
     }
 
     public LivingEntity getTarget() {
@@ -31,6 +34,10 @@ public class PlayerDamagedEntityEvent extends PlayerEvent {
     }
 
     private static final HandlerList handlers = new HandlerList();
+
+    public DamageType getDamageType() {
+        return damageType;
+    }
 
     public static HandlerList getHandlerList() {
         return handlers;

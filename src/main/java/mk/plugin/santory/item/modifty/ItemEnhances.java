@@ -5,6 +5,8 @@ import com.google.common.collect.Maps;
 import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
+import mk.plugin.santory.event.PlayerItemAscentEvent;
+import mk.plugin.santory.event.PlayerItemEnhanceEvent;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.*;
 import mk.plugin.santory.item.Item;
@@ -124,7 +126,7 @@ public class ItemEnhances {
 					ItemData data = i.getData();
 					int lvUp = m.getAmount();
 					data.setLevel(Math.min(lvUp, data.getGrade().getMaxEnhance()));
-					r = Items.write(player, r, i);
+					Items.write(player, r, i);
 					Items.update(player, r, i);
 					
 					// Icon result
@@ -193,6 +195,8 @@ public class ItemEnhances {
 					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					player.getInventory().addItem(r.clone());
+					// Event
+					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true));
 				}
 				// Fail
 				else {
@@ -208,6 +212,9 @@ public class ItemEnhances {
 						player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 15, 0);
 					}
 					player.getInventory().addItem(is.clone());
+
+					// Event
+					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false));
 				}
 				
 				GUIs.clearItems("item", status);
@@ -284,7 +291,6 @@ public class ItemEnhances {
 		ItemStack item = ItemStackUtils.create(Material.IRON_NUGGET, 1);
 		ItemStackUtils.setDisplayName(item, NAME);
 		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng tăng cấp cho trang bị");
-		ItemStackUtils.addEnchantEffect(item);
 		return item;
 	}
 	

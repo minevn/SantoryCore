@@ -2,6 +2,7 @@ texture:
   material: WOODEN_SWORD
   data: 0
 type: WEAPON
+element: FLAME
 tier: COMMON
 name: Kiếm tập gỗ
 desc: Trang bị khởi đầu cho người chơi mới

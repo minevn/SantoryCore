@@ -2,6 +2,7 @@ package mk.plugin.santory.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import mk.plugin.santory.element.Element;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.item.ItemModel;
 import mk.plugin.santory.item.ItemTexture;
@@ -227,6 +228,7 @@ public class Configs {
 		
 		ItemTexture texture = new ItemTexture(m, data, headTexture, color);
 		ItemType it = ItemType.valueOf(config.getString("type"));
+		Element element = Element.valueOf(config.getString("element"));
 		Tier tier = Tier.valueOf(config.getString("tier"));
 		String name = config.getString("name");
 		String desc = config.getString("desc");
@@ -240,7 +242,7 @@ public class Configs {
 		config.getConfigurationSection("metadata").getKeys(false).forEach(id -> {
 			metadata.put(id, config.getString("metadata." + id));
 		});
-		return new ItemModel(texture, it, name, tier, desc, stats, metadata);
+		return new ItemModel(texture, it, element, name, tier, desc, stats, metadata);
 	}
 	
 	private static Wish readWish(String id, FileConfiguration config) {

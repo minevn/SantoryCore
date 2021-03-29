@@ -1,6 +1,7 @@
 package mk.plugin.santory.utils;
 
-import de.tr7zw.nbtapi.NBTItem;
+
+import mk.plugin.santory.main.SantoryCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -123,44 +124,33 @@ public class ItemStackUtils {
     
     public static boolean hasTag(ItemStack item, String key) {
     	if (item == null) return false;
-        if (item.getType() == Material.AIR) return false;
-    	NBTItem nbti = new NBTItem(item);
-    	return nbti.hasNBTData() && nbti.hasKey(key);
+    	var ism = new ItemStackManager(SantoryCore.get(), item);
+    	return ism.hasTag(key);
 	}
     
     public static String getTag(ItemStack item, String key) {
     	if (item == null) return null;
-    	NBTItem nbti = new NBTItem(item);
-    	return nbti.getString(key);
+        var ism = new ItemStackManager(SantoryCore.get(), item);
+        return ism.getTag(key);
     }
     
-    public static ItemStack setTag(ItemStack item, String key, String value) {
-		NBTItem nbti = new NBTItem(item);
-		nbti.setString(key, value);
-		return nbti.getItem();
+    public static void setTag(ItemStack item, String key, String value) {
+        var ism = new ItemStackManager(SantoryCore.get(), item);
+        ism.setTag(key, value);
     }
     
-    public static ItemStack setTag(ItemStack item, Map<String, String> map) {
-		NBTItem nbti = new NBTItem(item);
-    	for (String key : map.keySet()) {
-			nbti.setString(key, map.get(key));
-    	}
-    	return nbti.getItem();
-    }
-    
-    public static ItemStack removeTag(ItemStack item, String key) {
-		NBTItem nbti = new NBTItem(item);
-		nbti.removeKey(key);
-		return nbti.getItem();
+    public static void setTag(ItemStack item, Map<String, String> map) {
+        var ism = new ItemStackManager(SantoryCore.get(), item);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            ism.setTag(k, v);
+        }
     }
     
     public static Map<String, String> getTags(ItemStack is) {
-		Map<String, String> m = new HashMap<>();
-		NBTItem nbti = new NBTItem(is);
-		for (String key : nbti.getKeys()) {
-			m.put(key, nbti.getString(key));
-		}
-    	return m;
+        var ism = new ItemStackManager(SantoryCore.get(), is);
+        return ism.getTags();
     }
     
     public static boolean hasLore(ItemStack item) {

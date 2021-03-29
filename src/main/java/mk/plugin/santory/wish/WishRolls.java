@@ -1,6 +1,7 @@
 package mk.plugin.santory.wish;
 
 import com.google.common.collect.Lists;
+import mk.plugin.santory.event.PlayerWishRollEvent;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.utils.ItemStackUtils;
@@ -95,6 +96,9 @@ public class WishRolls {
 			}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);
 			
 		});
+
+		// Event
+		Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
 	}
 	
 	private static ItemStack getIcon(Tier tier) {

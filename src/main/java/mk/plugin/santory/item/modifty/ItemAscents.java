@@ -6,6 +6,7 @@ import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
+import mk.plugin.santory.event.PlayerItemAscentEvent;
 import mk.plugin.santory.gui.*;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
@@ -118,7 +119,7 @@ public class ItemAscents {
 					Item i = Items.read(r);
 					ItemData data = i.getData();
 					data.setAscent(Ascent.from(data.getAscent().getValue() + 1));
-					r = Items.write(player, r, i);
+					Items.write(player, r, i);
 					Items.update(player, r, i);
 					
 					// Icon result
@@ -171,12 +172,18 @@ public class ItemAscents {
 					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					player.getInventory().addItem(r.clone());
+
+					// Event
+					Bukkit.getPluginManager().callEvent(new PlayerItemAscentEvent(player, true));
 				}
 				// Fail
 				else {
 					player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 					player.getInventory().addItem(is.clone());
+
+					// Event
+					Bukkit.getPluginManager().callEvent(new PlayerItemAscentEvent(player, false));
 				}
 				GUIs.clearItems("item", status);
 				GUIs.clearItems("amulet", status);
@@ -186,6 +193,7 @@ public class ItemAscents {
 				Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 					GUIs.open(player, GUI.ASCENT);
 				}, 10);
+
 			}
 		};
 	}

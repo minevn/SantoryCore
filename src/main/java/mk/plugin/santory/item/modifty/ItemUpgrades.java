@@ -7,12 +7,15 @@ import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
+import mk.plugin.santory.event.PlayerItemEnhanceEvent;
+import mk.plugin.santory.event.PlayerItemUpgradeEvent;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.*;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
@@ -37,7 +40,7 @@ public class ItemUpgrades {
 
 	public static Map<Integer, GUISlot> getSlots() {
 		Map<Integer, GUISlot> slots = Maps.newHashMap();
-		slots.put(MATERIAL_SLOT, new GUISlot("material", GUIs.getItemSlot(Icon.UPGRADE_STONE.clone(), "§a§oĐặt Đá nâng bậc"), getInputExecutor()));
+		slots.put(MATERIAL_SLOT, new GUISlot("material", GUIs.getItemSlot(Icon.UPGRADE_STONE.clone(), "§a§oĐặt Đá Nguyên tố"), getInputExecutor()));
 		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị"), getInputExecutor()));
 		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
 		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
@@ -134,7 +137,7 @@ public class ItemUpgrades {
 				Artifact art = Artifact.parse(i.getModel());
 				Artifacts.check(i, art);
 			}
-			r = Items.write(player, r, i);
+			Items.write(player, r, i);
 			Items.update(player, r, i);
 			status.setData("result", r);
 
@@ -163,6 +166,16 @@ public class ItemUpgrades {
 				return;
 			}
 
+			// Check element
+			ItemStack is = GUIs.getItem("item", status);
+			ItemStack stone = GUIs.getItem("material", status);
+			var item = Items.read(is);
+			var us = UpgradeStone.read(stone);
+			if (item.getModel().getElement() != us.getElement()) {
+				player.sendMessage("§cĐá không cùng nguyên tố với trang bị!");
+				return;
+			}
+
 			int fee = Configs.UPGRADE_FEE;
 			double chance = getChance(status);
 
@@ -173,7 +186,7 @@ public class ItemUpgrades {
 			}
 
 			// Do
-			ItemStack is = GUIs.getItem("item", status);
+
 			ItemStack r = (ItemStack) status.getData("result");
 
 			// Success
@@ -181,12 +194,18 @@ public class ItemUpgrades {
 				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 				player.getInventory().addItem(r.clone());
+
+				// Event
+				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, true));
 			}
 			// Fail
 			else {
 				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 				player.getInventory().addItem(is.clone());
+
+				// Event
+				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, false));
 			}
 
 			GUIs.clearItems("item", status);
@@ -243,20 +262,25 @@ public class ItemUpgrades {
 		return is;
 	}
 	
-	private static final String NAME = "§a§lĐá nâng bậc";
-	
-	public static ItemStack get() {
-		ItemStack item = ItemStackUtils.create(Material.IRON_NUGGET, 2);
-		ItemStackUtils.setDisplayName(item, NAME);
-		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng nâng bậc cho trang bị");
-		ItemStackUtils.addEnchantEffect(item);
-		return item;
+//	private static final String NAME = "§a§lĐá nâng bậc";
+//
+//	public static ItemStack get() {
+//		ItemStack item = ItemStackUtils.create(Material.IRON_NUGGET, 2);
+//		ItemStackUtils.setDisplayName(item, NAME);
+//		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng nâng bậc cho trang bị");
+//		ItemStackUtils.addEnchantEffect(item);
+//		return item;
+//	}
+//
+//	public static boolean is(ItemStack item) {
+//		if (item == null) return false;
+//		if (!item.hasItemMeta()) return false;
+//		return ItemStackUtils.getName(item).contains(NAME);
+//	}
+//
+
+	public static boolean is(ItemStack is) {
+		return UpgradeStone.read(is) != null;
 	}
-	
-	public static boolean is(ItemStack item) {
-		if (item == null) return false;
-		if (!item.hasItemMeta()) return false;
-		return ItemStackUtils.getName(item).contains(NAME);
-	}
-	
+
 }
