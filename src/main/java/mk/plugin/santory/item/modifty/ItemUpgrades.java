@@ -186,8 +186,12 @@ public class ItemUpgrades {
 			}
 
 			// Do
-
 			ItemStack r = (ItemStack) status.getData("result");
+
+
+			// Get
+			int previous = Items.read(is).getData().getAscent().getValue();
+			int after = Items.read(is).getData().getAscent().getValue();
 
 			// Success
 			if (Utils.rate(chance)) {
@@ -196,7 +200,7 @@ public class ItemUpgrades {
 				player.getInventory().addItem(r.clone());
 
 				// Event
-				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, true));
+				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, true, previous, after));
 			}
 			// Fail
 			else {
@@ -205,7 +209,7 @@ public class ItemUpgrades {
 				player.getInventory().addItem(is.clone());
 
 				// Event
-				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, false));
+				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, false, previous, previous));
 			}
 
 			GUIs.clearItems("item", status);

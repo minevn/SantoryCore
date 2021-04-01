@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 
 public class PlayerItemAscentEvent extends PlayerItemModifyEvent {
 
-    public PlayerItemAscentEvent(Player who, boolean isSuccess) {
-        super(who, isSuccess);
+    public PlayerItemAscentEvent(Player who, boolean isSuccess, int previous, int after) {
+        super(who, isSuccess, previous, after);
     }
 
 }

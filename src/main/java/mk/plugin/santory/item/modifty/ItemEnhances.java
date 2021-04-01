@@ -189,14 +189,18 @@ public class ItemEnhances {
 				// Do
 				ItemStack is = GUIs.getItem("item", status);
 				ItemStack r = (ItemStack) status.getData("result");
-				
+
+				// Get
+				int previous = Items.read(is).getData().getAscent().getValue();
+				int after = Items.read(r).getData().getAscent().getValue();
+
 				// Success
 				if (Utils.rate(chance)) {
 					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					player.getInventory().addItem(r.clone());
 					// Event
-					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true));
+					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true, previous, after));
 				}
 				// Fail
 				else {
@@ -208,13 +212,14 @@ public class ItemEnhances {
 					else {
 						Item i = Items.read(is);
 						i.getData().setLevel(Math.min(0, i.getData().getLevel() - 1));
+						after = i.getData().getLevel();
 						Items.write(player, is, i);
 						player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 15, 0);
 					}
 					player.getInventory().addItem(is.clone());
 
 					// Event
-					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false));
+					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false, previous, after));
 				}
 				
 				GUIs.clearItems("item", status);
