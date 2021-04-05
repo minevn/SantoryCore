@@ -11,6 +11,7 @@ import mk.plugin.santory.slave.task.SlaveTask;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;

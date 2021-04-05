@@ -1,9 +1,11 @@
 name: Thủy thần
 desc: 'Chúc phúc có cơ hội nhận Thủy trượng (Cực phẩm). Sau 9 lần ra Trung, lần thứ 10 chắc chắn ra Hiếm'
 insures:
-- 'UNCOMMON:5'
-- 'RARE:25'
-- 'EPIC:100'
+  - 'UNCOMMON:5'
+  - 'RARE:25'
+  - 'EPIC:100'
+locations:
+  - world;0;0;0
 rewards:
   COMMON:
     chance: 125

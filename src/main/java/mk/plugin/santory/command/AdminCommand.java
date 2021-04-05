@@ -26,6 +26,7 @@ import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.traveler.*;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
+import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -202,6 +203,11 @@ public class AdminCommand implements CommandExecutor {
 					if (args.length >= 4)	player = Bukkit.getPlayer(args[3]);
 					Wish wish = Configs.getWish(id);
 					WishRolls.roll(wish, player);
+				}
+
+				else if (args[1].equalsIgnoreCase("getkey")) {
+					var id = args[2];
+					player.getInventory().addItem(Wishes.buildKey(id));
 				}
 			}
 			
@@ -404,6 +410,7 @@ public class AdminCommand implements CommandExecutor {
 		
 		// Wish commands
 		sender.sendMessage("§e/santory wish roll <*id> <player>");
+		sender.sendMessage("§e/santory wish getkey <*id> <player>");
 		sender.sendMessage("");
 		
 		// GUI commands

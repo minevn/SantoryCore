@@ -1,25 +1,32 @@
 package mk.plugin.santory.wish;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.ItemStackManager;
+import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Wishes {
-	
+
 	public static WishRewardItem finalRate(Wish w, Player player) {
 		// Check insures
 		Traveler t = Travelers.get(player);
 		WishData wd = t.getData().getWish(w.getID());
 		
 		// Add 1 to all
-		w.getInsures().keySet().forEach(ti -> {
-			wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1);
-		});
+		w.getInsures().keySet().forEach(ti -> wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1));
 
 		// Check insure
 		Tier it = null;
@@ -70,6 +77,22 @@ public class Wishes {
 		if (reward == null) return null;
 		List<WishRewardItem> items = reward.getItems();
 		return items.get(Utils.randomInt(0, items.size() - 1));
+	}
+
+	public static ItemStack buildKey(String keyID) {
+		var wk = Configs.getWishKey(keyID);
+		var is = wk.getItemStack();
+		var im = new ItemStackManager(SantoryCore.get(), is);
+		im.setTag("wishKey", keyID);
+
+		return is;
+	}
+
+	public static String keyFrom(ItemStack is) {
+		if (is == null) return null;
+		var im = new ItemStackManager(SantoryCore.get(), is);
+		if (!im.hasTag("wishKey")) return null;
+		return im.getTag("wishkey");
 	}
 	
 }

@@ -52,3 +52,32 @@ mob:
     level: 10
     type: minion
 
+wish-key:
+  key1:
+    wishes:
+      - armor
+      - weapon
+    item:
+      name: '&f&lChìa trắng'
+      type: IRON_INGOT
+      model: 1
+      lore:
+        - '&7&oDùng để mở hòm Vũ khí và Giáp'
+      enchant: []
+      flag:
+        - HIDE_ATTRIBUTES
+  key2:
+    wishes:
+      - armor
+      - weapon
+      - event
+    item:
+      name: '&b&lChìa xanh'
+      type: IRON_INGOT
+      model: 2
+      lore:
+        - '&7&oDùng để mở tất cả loại hòm'
+      enchant: []
+      flag:
+        - HIDE_ATTRIBUTES
+

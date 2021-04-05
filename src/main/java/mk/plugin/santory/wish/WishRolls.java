@@ -1,29 +1,40 @@
 package mk.plugin.santory.wish;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.event.PlayerWishRollEvent;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.ItemStackManager;
 import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class WishRolls {
 	
 	private static final int RESULT_SLOT = 22;
 	
 	private static final List<Integer> rollSlots = Lists.newArrayList(2, 3, 4, 5, 6, 15, 24, 33, 42, 41, 40, 39, 38, 29, 20, 11);
-	
+
+	private static Set<String> rollings = Sets.newHashSet();
+
 	public static void roll(Wish wish, Player player) {
 		WishRewardItem wri = Wishes.finalRate(wish, player);
 		Tier tier = wri.getTier();
@@ -33,11 +44,13 @@ public class WishRolls {
 		
 		Inventory inv = Bukkit.createInventory(new WishGUIHolder(), 45, "§0§lQUAY ĐỀU, QUAY ĐỀU,...");
 		player.openInventory(inv);
-		
+		rollings.add(player.getName());
+
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
 			for (int i = 0 ; i < 4 ; i++) inv.setItem(rollSlots.get(i * 4), Utils.getColoredSlot(DyeColor.LIME));
-			
+			inv.setItem(inv.getSize() - 1, getInfo(wish.getID(), player));
+
 			// Roll
 			long current = System.currentTimeMillis();
 			long mili = Utils.randomInt(4000, 6000);
@@ -65,6 +78,7 @@ public class WishRolls {
 								wri.give(player);
 								player.sendMessage("§aNhận quà thành công!");
 							}, 20);
+							rollings.remove(player.getName());
 							this.cancel();
 							return;
 						}
@@ -107,8 +121,35 @@ public class WishRolls {
 		return is;
 	}
 
+	private static ItemStack getInfo(String id, Player player) {
+		var w = Configs.getWish(id);
+		var t = Travelers.get(player.getName());
+		var m = t.getData().getWish(id).getInsures();
+
+		var is = new ItemStack(Material.BOOK);
+		var im = new ItemStackManager(SantoryCore.get(), is);
+		im.setName("§a§lBảo hiểm");
+		List<String> lore = Lists.newArrayList();
+		for (Map.Entry<Tier, Integer> e : m.entrySet()) {
+			if (!w.getInsures().containsKey(e.getKey())) continue;
+			lore.add(e.getKey().getColor() + e.getKey().getName() + ": §f" + e.getValue());
+		}
+		im.setLore(lore);
+
+		return is;
+	}
+
 	public static void onClick(InventoryClickEvent e) {
 		if (e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof WishGUIHolder) e.setCancelled(true);
+	}
+
+	public static void onClose(InventoryCloseEvent e) {
+		if (!rollings.contains(e.getPlayer().getName())) return;
+		if (e.getInventory() != null && e.getInventory().getHolder() instanceof WishGUIHolder) {
+			Tasks.sync(() -> {
+				e.getPlayer().openInventory(e.getInventory());
+			});
+		}
 	}
 	
 }

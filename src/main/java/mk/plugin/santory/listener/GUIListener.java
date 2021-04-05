@@ -48,6 +48,7 @@ public class GUIListener implements Listener {
 		if (!check(player)) return;
 		ArtifactGUI.eventClose(e);
 		SlaveInfoGUI.onClose(e);
+		WishRolls.onClose(e);
 	}
 
 	@EventHandler

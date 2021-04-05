@@ -14,12 +14,16 @@ import mk.plugin.santory.slave.SlaveModel;
 import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.LocationData;
 import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.Wish;
+import mk.plugin.santory.wish.WishKey;
 import mk.plugin.santory.wish.WishReward;
 import mk.plugin.santory.wish.WishRewardItem;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Configs {
@@ -66,8 +71,9 @@ public class Configs {
 	private static final Map<String, MobType> mobTypes = Maps.newHashMap();
 
 	private static final Map<String, SlaveModel> slaves = Maps.newHashMap();
-	
-		
+
+	private static final Map<String, WishKey> wishKeys = Maps.newHashMap();
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -179,6 +185,22 @@ public class Configs {
 			mobLevels.put(id, level);
 			mobTypes.put(id, type);
 		});
+
+		// Wish keys
+		wishKeys.clear();
+		for (String id : config.getConfigurationSection("wish-key").getKeys(false)) {
+			List<String> wishes = config.getStringList("wish-key." + id + ".wishes");
+			var is = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("wish-key." + id + ".item")));
+			wishKeys.put(id, new WishKey(wishes, is));
+		}
+	}
+
+	public static WishKey getWishKey(String id) {
+		return wishKeys.getOrDefault(id, null);
+	}
+
+	public static Map<String, WishKey> getWishKeys() {
+		return Maps.newHashMap(wishKeys);
 	}
 	
 	public static boolean isMob(String id) {
@@ -260,7 +282,8 @@ public class Configs {
 		config.getStringList("insures").forEach(s -> {
 			insures.put(Tier.valueOf(s.split(":")[0]), Integer.valueOf(s.split(":")[1]));
 		});
-		return new Wish(id, name, desc, rewards, insures);
+		List<LocationData> locations = config.getStringList("locations").stream().map(LocationData::parse).collect(Collectors.toList());
+		return new Wish(id, name, desc, locations, rewards, insures);
 	}
 	
 	public static Map<Tier, Double> getArtTierUp() {

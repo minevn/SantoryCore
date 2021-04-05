@@ -28,7 +28,7 @@ public class WSMuaTen implements SkillExecutor {
 		double damage = Travelers.getStatValue(player, Stat.DAMAGE) * scale;
 		
 		Location l = Utils.getLandedLocation(player.getLocation().add(player.getLocation().getDirection().multiply(5)));
-		int times = 5;
+		int times = 7;
 		
 		// Arrow
 		new BukkitRunnable() {
@@ -38,7 +38,7 @@ public class WSMuaTen implements SkillExecutor {
 				i++;
 				if (i >= times * 2) this.cancel();
 				for (int i = 0 ; i < 8 ; i++) {
-					Location main = l.clone().add(0, 10, 0);
+					Location main = l.clone().add(0, 12, 0);
 					double y = main.getY() + (double) (new Random().nextInt(10000) - 5000) / 1000;
 					double x = main.getX() + (double) (new Random().nextInt(10000) - 5000) / 1500;
 					double z = main.getZ() + (double) (new Random().nextInt(10000) - 5000) / 1500;
