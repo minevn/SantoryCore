@@ -81,3 +81,24 @@ wish-key:
       flag:
         - HIDE_ATTRIBUTES
 
+keep-stone:
+  name: '&a&lĐá bảo hộ'
+  type: IRON_INGOT
+  model: 2
+  lore:
+    - '&7&oGiúp chết không bị mất đồ'
+  enchant: []
+  flag:
+    - HIDE_ATTRIBUTES
+
+global-speaker:
+  name: '&a&lLoa thế giới'
+  type: GOLD_INGOT
+  model: 2
+  lore:
+    - '&7&oDùng để nói chuyện liên máy chủ'
+    - '&7&oCách dùng: /loa <chat>'
+    - '&7&oVí dụ: /loa Chào các bạn bên MineStrike'
+  enchant: []
+  flag:
+    - HIDE_ATTRIBUTES

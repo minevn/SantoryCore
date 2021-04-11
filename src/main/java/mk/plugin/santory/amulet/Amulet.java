@@ -8,9 +8,9 @@ import mk.plugin.santory.utils.ItemStackUtils;
 
 public enum Amulet {
 	
-	I("§f§lBùa may I", 25, new ItemTexture(Material.LAPIS_LAZULI, 1)),
-	II("§9§lBùa may II", 50, new ItemTexture(Material.LAPIS_LAZULI, 2)),
-	III("§c§lBùa may III", 100, new ItemTexture(Material.LAPIS_LAZULI, 3));
+	I("§9§lBùa may I", 25, new ItemTexture(Material.IRON_NUGGET, 3)),
+	II("§c§lBùa may II", 50, new ItemTexture(Material.IRON_NUGGET, 4)),
+	III("§e§lBùa may III", 100, new ItemTexture(Material.IRON_NUGGET, 5));
 	
 	private final String name;
 	private final int bonus;
@@ -35,9 +35,11 @@ public enum Amulet {
 	}
 	
 	public ItemStack get() {
-		ItemStack item = new ItemStack(this.getItemTexture().getMaterial(), 1, (short) this.getItemTexture().getData());
+		ItemStack item = new ItemStack(this.getItemTexture().getMaterial());
+		var meta = item.getItemMeta();
+		meta.setCustomModelData(this.texture.getData());
+		item.setItemMeta(meta);
 		ItemStackUtils.setDisplayName(item, this.getName());
-		ItemStackUtils.addEnchantEffect(item);
 		ItemStackUtils.addLoreLine(item, "§7§oGiúp thực thi thất bại không bị");
 		ItemStackUtils.addLoreLine(item, "§7§omất vật phẩm và tăng " + this.bonus + "% thành công");
 		ItemStackUtils.setTag(item, "sRPG.sachmayman", this.name());

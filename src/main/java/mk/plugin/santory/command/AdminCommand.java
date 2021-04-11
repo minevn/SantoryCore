@@ -269,6 +269,16 @@ public class AdminCommand implements CommandExecutor {
 					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
 					player.getInventory().addItem(ItemEnhances.get());
 				}
+
+				else if (args[1].equalsIgnoreCase("keepstone")) {
+					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
+					player.getInventory().addItem(Configs.getKeepStone());
+				}
+
+				else if (args[1].equalsIgnoreCase("globalspeaker")) {
+					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
+					player.getInventory().addItem(Configs.getGlobalSpeaker());
+				}
 			}
 			
 			/*
@@ -290,16 +300,7 @@ public class AdminCommand implements CommandExecutor {
 					Mobs.setDamageMulti(e, multi);
 					p.damage(0, e);
 				}
-				
-//				else if (args[1].equalsIgnoreCase("upstone")) {
-//					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
-//					player.getInventory().addItem(ItemUpgrades.get());
-//				}
-//
-//				else if (args[1].equalsIgnoreCase("enstone")) {
-//					if (args.length >= 3) player = Bukkit.getPlayer(args[2]);
-//					player.getInventory().addItem(ItemEnhances.get());
-//				}
+
 			}
 			
 			/*
@@ -422,6 +423,8 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§9/santory custom amulet <*id> <player>");
 		sender.sendMessage("§9/santory custom upstone <player>");
 		sender.sendMessage("§9/santory custom enstone <player>");
+		sender.sendMessage("§9/santory custom keepstone <player>");
+		sender.sendMessage("§9/santory custom globalspeaker <player>");
 		sender.sendMessage("");
 		
 		// Mobs

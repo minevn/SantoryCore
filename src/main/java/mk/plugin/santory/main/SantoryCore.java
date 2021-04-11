@@ -84,6 +84,7 @@ public class SantoryCore extends JavaPlugin {
 		this.getCommand("forge").setExecutor(playerCmd);
 		this.getCommand("see").setExecutor(playerCmd);
 		this.getCommand("artifact").setExecutor(playerCmd);
+		this.getCommand("globalspeaker").setExecutor(playerCmd);
 	}
 	
 	public void saveOninePlayers() {

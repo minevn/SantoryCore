@@ -1,11 +1,13 @@
 package mk.plugin.santory.listener;
 
+import com.google.common.collect.Lists;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishKey;
 import mk.plugin.santory.wish.WishRolls;
 import mk.plugin.santory.wish.Wishes;
+import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -14,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -22,11 +25,44 @@ import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayerListener implements Listener {
+
+	/*
+	Keep Stone
+	 */
+	@EventHandler
+	public void onDeath(PlayerDeathEvent e) {
+		e.setKeepInventory(true);
+		e.setKeepLevel(true);
+
+		var player = e.getEntity();
+		if (player.hasPermission("santorycore.admin")) return;
+
+		for (ItemStack is : player.getInventory().getContents()) {
+			if (Configs.isKeepStone(is)) {
+				is.setAmount(is.getAmount() - 1);
+				player.sendMessage("");
+				player.sendMessage("§aGiữ đồ khi chết, tiêu thụ 1 Đá bảo hộ");
+				player.sendMessage("");
+				return;
+			}
+		}
+
+		e.setKeepInventory(false);
+		player.sendMessage("");
+		player.sendMessage("§cKhông có Đá bảo hộ, rơi đồ khi chết");
+		player.sendMessage("");
+	}
+
 
 	/*
 	Crate hit
@@ -67,6 +103,34 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
+
+	// Tab tag
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent e) {
+		String s = e.getBuffer();
+		if (s.contains("@")) {
+			String regex = "@(?<preName>\\S+)";
+
+			Pattern pt = Pattern.compile(regex);
+			Matcher m = pt.matcher(s);
+
+			String preName = null;
+			while (m.find()) {
+				preName = m.group("preName");
+			}
+			if (preName == null) return;
+
+			List<String> avl = Lists.newArrayList();
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.getName().toLowerCase().startsWith(preName.toLowerCase())) {
+					avl.add("@" + p.getName());
+				}
+			}
+
+			e.setCompletions(avl);
+		}
+	}
+
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {

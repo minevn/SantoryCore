@@ -21,3 +21,6 @@ commands:
     player:
         description: Info
         aliases: [me, ditme]
+    globalspeaker:
+        description: Loa the gioi
+        aliases: [loa, loathegioi]

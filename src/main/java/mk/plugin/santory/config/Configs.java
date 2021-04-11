@@ -8,12 +8,14 @@ import mk.plugin.santory.item.ItemModel;
 import mk.plugin.santory.item.ItemTexture;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.weapon.WeaponType;
+import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.MobType;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.slave.SlaveModel;
 import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.tier.Tier;
+import mk.plugin.santory.utils.ItemStackManager;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.LocationData;
 import mk.plugin.santory.utils.Utils;
@@ -28,6 +30,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -56,6 +59,9 @@ public class Configs {
 	public static int ART_BASE_MAIN_STAT = 15;
 	public static int ART_BASE_SUB_STAT = 5;
 	public static double ART_STAT_RANGE = 0.25;
+
+	private static ItemStack KEEP_STONE;
+	private static ItemStack GLOBAL_SPEAKER;
 	
 	private static final Map<Tier, Double> artTierUps = Maps.newHashMap();
 	private static final Map<Integer, Double> artStatSetUp = Maps.newLinkedHashMap();
@@ -89,7 +95,9 @@ public class Configs {
 		ART_BASE_MAIN_STAT = ConfigGetter.from(config).getInt("artifact.base-main-stat", ART_BASE_MAIN_STAT);
 		ART_BASE_SUB_STAT = ConfigGetter.from(config).getInt("artifact.base-sub-stat", ART_BASE_SUB_STAT);
 		ART_STAT_RANGE = ConfigGetter.from(config).getDouble("artifact.stat-range", ART_STAT_RANGE);
-		
+		KEEP_STONE = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("keep-stone")));
+		GLOBAL_SPEAKER = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("global-speaker")));
+
 		// Art tiers up
 		artTierUps.clear();
 		ConfigGetter.from(config).getStringList("artifact.tier-up", Lists.newArrayList()).forEach(s -> {
@@ -322,5 +330,27 @@ public class Configs {
 	public static Map<Integer, Double> getArtSetUp() {
 		return artStatSetUp;
 	}
-	
+
+	public static ItemStack getKeepStone() {
+		var is = KEEP_STONE.clone();
+		var im = new ItemStackManager(SantoryCore.get(), is);
+		im.setTag("keepStone", "true");
+		return is;
+	}
+
+	public static boolean isKeepStone(ItemStack is) {
+		return new ItemStackManager(SantoryCore.get(), is).hasTag("keepStone");
+	}
+
+	public static ItemStack getGlobalSpeaker() {
+		var is = GLOBAL_SPEAKER.clone();
+		var im = new ItemStackManager(SantoryCore.get(), is);
+		im.setTag("globalSpeaker", "true");
+		return is;
+	}
+
+	public static boolean isGlobalSpeaker(ItemStack is) {
+		return new ItemStackManager(SantoryCore.get(), is).hasTag("globalSpeaker");
+	}
+
 }
