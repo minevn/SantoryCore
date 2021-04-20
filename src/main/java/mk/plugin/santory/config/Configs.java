@@ -80,6 +80,11 @@ public class Configs {
 
 	private static final Map<String, WishKey> wishKeys = Maps.newHashMap();
 
+	private static String chatPrefixDefault;
+	private static final Map<String, String> chatPrefixes = Maps.newHashMap();
+
+	private static List<String> xmSuccess = Lists.newArrayList();
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -201,6 +206,17 @@ public class Configs {
 			var is = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("wish-key." + id + ".item")));
 			wishKeys.put(id, new WishKey(wishes, is));
 		}
+
+		// Chat Prefix
+		chatPrefixes.clear();
+		chatPrefixDefault = config.getString("chat-prefix-default");
+		for (String s : config.getStringList("chat-prefix")) {
+			String permision = s.split(":")[0];
+			String prefix = s.split(":")[1];
+			chatPrefixes.put(permision, prefix);
+		}
+
+		xmSuccess = config.getStringList("xacminh-success");
 	}
 
 	public static WishKey getWishKey(String id) {
@@ -353,4 +369,15 @@ public class Configs {
 		return new ItemStackManager(SantoryCore.get(), is).hasTag("globalSpeaker");
 	}
 
+	public static String getChatPrefixDefault() {
+		return chatPrefixDefault;
+	}
+
+	public static Map<String, String> getChatPrefixes() {
+		return chatPrefixes;
+	}
+
+	public static List<String> getXmSuccess() {
+		return xmSuccess;
+	}
 }

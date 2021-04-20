@@ -26,7 +26,7 @@ public class TravelerInfoGUI {
     private static final int STAT_SLOT = 0;
     private static final int DATA_SLOT = 1;
     private static final int ARMOR_SLOT = 2;
-    private static List<Integer> ARTIFACT_SLOTS = Lists.newArrayList(3, 4, 5, 6, 7);
+    private static final List<Integer> ARTIFACT_SLOTS = Lists.newArrayList(3, 4, 5, 6, 7);
 
     public static void open(Player viewer, Player target) {
         boolean isOne = viewer == target;
@@ -53,6 +53,9 @@ public class TravelerInfoGUI {
             inv.setItem(bonus + ARMOR_SLOT, armor);
 
             // Artifacts
+            for (Integer slot : ARTIFACT_SLOTS) {
+                inv.setItem(slot, Icon.ARTIFACT.clone());
+            }
             Traveler t = Travelers.get(target);
             List<Item> artifacts = t.getData().getArtifacts();
             int i = -1;

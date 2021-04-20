@@ -128,5 +128,31 @@ public class Travelers {
 		
 		return items;
 	}
+
+	public static String getFormatChatWithName(Player player) {
+		String format = "%xacminh% &a[%level%/%power%] %prefix% %name%: &f";
+
+		String xacminh;
+		if (player.hasMetadata("santory.xacminh")) xacminh = "§a✔";
+		else xacminh = "§7✘";
+
+		String prefix = Configs.getChatPrefixDefault();
+		for (Map.Entry<String, String> e : Configs.getChatPrefixes().entrySet()) {
+			if (player.hasPermission(e.getKey())) {
+				prefix = e.getValue();
+				break;
+			}
+		}
+
+		String level = player.getLevel() + "";
+		String power;
+		long p = Utils.calPower(player);
+		if (p > 1000000) power = p / 1000000 + "m";
+		else if (p > 10000) power = p / 1000 + "k";
+		else power = p + "";
+
+		format = format.replace("%xacminh%", xacminh).replace("%level%", level).replace("%power%", power).replace("%prefix%", prefix).replace("%name%", player.getName()).replace("&", "§");
+		return format;
+	}
 	
 }

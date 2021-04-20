@@ -2,6 +2,7 @@ package mk.plugin.santory.listener;
 
 import com.google.common.collect.Lists;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishKey;
@@ -14,9 +15,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -28,6 +32,8 @@ import mk.plugin.santory.utils.Utils;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import remvn.reanticheatspigot.event.PlayerCheckedEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -37,9 +43,31 @@ import java.util.regex.Pattern;
 public class PlayerListener implements Listener {
 
 	/*
-	Keep Stone
+	Chat
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onChat(AsyncPlayerChatEvent e) {
+		Player player = e.getPlayer();
+		String format = Travelers.getFormatChatWithName(player);
+		e.setFormat(format + e.getMessage());
+	}
+
+	/*
+	Xac Minh
 	 */
 	@EventHandler
+	public void onXM(PlayerCheckedEvent e) {
+		var player = e.getPlayer();
+		player.setMetadata("santory.xacminh", new FixedMetadataValue(SantoryCore.get(), ""));
+		for (String cmd : Configs.getXmSuccess()) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+		}
+	}
+
+	/*
+	Keep Stone
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent e) {
 		e.setKeepInventory(true);
 		e.setKeepLevel(true);
@@ -110,7 +138,7 @@ public class PlayerListener implements Listener {
 		String s = e.getBuffer();
 		if (s.contains("@")) {
 			String regex = "@(?<preName>\\S+)";
-
+			System.out.println("nani");
 			Pattern pt = Pattern.compile(regex);
 			Matcher m = pt.matcher(s);
 
