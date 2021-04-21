@@ -65,7 +65,7 @@ public class WeaponListener implements Listener {
 					return;
 				}
 			}
-			cooldownSkill.put(player, System.currentTimeMillis() + skill.getCooldown() * 1000);
+			cooldownSkill.put(player, System.currentTimeMillis() + skill.getCooldown() * 1000L);
 			
 			// Execute
 			player.sendTitle("§c§l「" + skill.getName() + "」", "§7§oThực thi kỹ năng", 0, 20, 0);

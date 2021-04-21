@@ -130,7 +130,7 @@ public class Travelers {
 	}
 
 	public static String getFormatChatWithName(Player player) {
-		String format = "%xacminh% &a[%level%/%power%] %prefix% %name%: &f";
+		String format = "%xacminh% &a[%level%/#%power%] %prefix% %name%: &f";
 
 		String xacminh;
 		if (player.hasMetadata("santory.xacminh")) xacminh = "§a✔";
