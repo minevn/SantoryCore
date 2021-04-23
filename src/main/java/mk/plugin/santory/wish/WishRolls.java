@@ -69,6 +69,8 @@ public class WishRolls {
 						
 						// End
 						if (System.currentTimeMillis() - current >= mili) {
+							this.cancel();
+
 							inv.setItem(RESULT_SLOT, ri);
 							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
@@ -80,9 +82,10 @@ public class WishRolls {
 							rollings.remove(player.getName());
 
 							// Event
-							Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
+							Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+								Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
+							});
 
-							this.cancel();
 							return;
 						}
 						

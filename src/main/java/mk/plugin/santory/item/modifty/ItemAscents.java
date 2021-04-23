@@ -197,7 +197,7 @@ public class ItemAscents {
 				
 				Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 					GUIs.open(player, GUI.ASCENT);
-				}, 10);
+				}, 30);
 
 			}
 		};

@@ -9,6 +9,7 @@ commands:
     santory:
         descripton: Santory's command
         aliases: [str]
+        permission: santory.admin
     artifact:
         description: Artifacts
         aliases: [divat]

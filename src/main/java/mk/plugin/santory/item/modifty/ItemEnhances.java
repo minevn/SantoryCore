@@ -48,194 +48,180 @@ public class ItemEnhances {
 	}
 	
 	public static AmountChecker getAmountChecker() {
-		return new AmountChecker() {
-			@Override
-			public boolean allowMulti(ItemStack is) {
-				return false;
+		return is -> {
+			return false;
 //				return is(is) || Amulet.is(is);
-			}
 		};
 	}
 	
 	public static PlaceChecker getInputChecker() {
-		return new PlaceChecker() {
-			@Override
-			public boolean place(Player player, ItemStack is, GUIStatus status) {
-				// AMULET
-				if (Amulet.is(is)) {
-					if (GUIs.countPlaced("amulet", status) != 0) return false; 
-					status.place(player, GUIs.getEmptySlot("amulet", status), is);
-					return true;
-				}
-				
-				if (is(is)) {
-					if (GUIs.countPlaced("material", status) != 0) return false; 
-					status.place(player, GUIs.getEmptySlot("material", status), is);
-					return true;
-				}
-				
-				// ITEM
-				if (!Items.is(is)) {
-					player.sendMessage("§cVật phẩm không hợp lệ!");
+		return (player, is, status) -> {
+			// AMULET
+			if (Amulet.is(is)) {
+				if (GUIs.countPlaced("amulet", status) != 0) return false;
+				status.place(player, GUIs.getEmptySlot("amulet", status), is);
+				return true;
+			}
+
+			if (is(is)) {
+				if (GUIs.countPlaced("material", status) != 0) return false;
+				status.place(player, GUIs.getEmptySlot("material", status), is);
+				return true;
+			}
+
+			// ITEM
+			if (!Items.is(is)) {
+				player.sendMessage("§cVật phẩm không hợp lệ!");
+				return false;
+			}
+
+			// Check base item if placed
+			if (GUIs.countPlaced("item", status) == 0) {
+				status.place(player, GUIs.getEmptySlot("item", status), is);
+				return true;
+			}
+
+			// Base item placed
+			else {
+				// Check if full material
+				if (GUIs.countPlaced("material", status) == 1) {
+					player.sendMessage("§cĐã đặt đủ trang bị và nguyên liệu!");
 					return false;
 				}
-				
-				// Check base item if placed
-				if (GUIs.countPlaced("item", status) == 0) {
-					status.place(player, GUIs.getEmptySlot("item", status), is);
-					return true;
-				}
-				
-				// Base item placed
+				// Can place material
 				else {
-					// Check if full material
-					if (GUIs.countPlaced("material", status) == 1) {
-						player.sendMessage("§cĐã đặt đủ trang bị và nguyên liệu!");
+					// Check if right material
+					if (!is(is)) {
+						player.sendMessage("§cPhải là Đá cường hóa!");
 						return false;
 					}
-					// Can place material
-					else {
-						// Check if right material
-						if (!is(is)) {
-							player.sendMessage("§cPhải là Đá cường hóa!");
-							return false;
-						}
-						
-						// Place material
-						status.place(player, GUIs.getEmptySlot("material", status), is);
-						return true;
-					}
+
+					// Place material
+					status.place(player, GUIs.getEmptySlot("material", status), is);
+					return true;
 				}
 			}
 		};
 	}
 	
 	public static PlaceExecutor getInputExecutor() {
-		return new PlaceExecutor() {	
-			@Override
-			public void execute(Player player, int slot, GUIStatus status) {
-				Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-					if (GUIs.countPlaced("item", status) != 1) return;
+		return (player, slot, status) -> Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+			if (GUIs.countPlaced("item", status) != 1) return;
 
-					// Create result
-					ItemStack r = GUIs.getItem("item", status).clone();
-					ItemStack m = GUIs.getItem("material", status);
-					if (m == null) return;
-					
-					Item i = Items.read(r);
-					ItemData data = i.getData();
-					int lvUp = m.getAmount();
-					data.setLevel(Math.min(lvUp, data.getGrade().getMaxEnhance()));
-					Items.write(player, r, i);
-					Items.update(player, r, i);
-					
-					// Icon result
-					ItemStack icon = r.clone();
-					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
-					ItemStackUtils.addLoreLine(icon, "");
-					ItemStackUtils.addLoreLine(icon, "§c§oGiới hạn cường hóa là Lv." + data.getGrade().getMaxEnhance());
-					ItemStackUtils.addLoreLine(icon, "§c§oNâng bậc để gia tăng giới hạn");
-					
-					status.getInventory().setItem(RESULT_SLOT, icon);
-					status.setData("result", r);
-					
-					// Amulet
-					Amulet a = null;
-					if (GUIs.countPlaced("amulet", status) == 1) {
-						a = Amulet.read(GUIs.getItem("amulet", status));
-						status.setData("hasAmulet", true);
-					}
-					final Amulet amulet = a;
-					
-					Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-						// Check can do
-						if (GUIs.countAmountPlaced("material", status) == GUIs.countAmountPlaced("amulet", status) || GUIs.countPlaced("amulet", status) == 0) {
-							status.getInventory().setItem(BUTTON_SLOT, getOkButton(data.getLevel() - lvUp, lvUp, amulet));
-							status.setData("canDo", "");
-						}
-						else {
-							status.getInventory().setItem(BUTTON_SLOT, getDefaultButton());
-							status.removeData("canDo");
-						}
-						
-					});
+			// Create result
+			ItemStack r = GUIs.getItem("item", status).clone();
+			ItemStack m = GUIs.getItem("material", status);
+			if (m == null) return;
 
-				});
+			Item i = Items.read(r);
+			ItemData data = i.getData();
+			int lvUp = m.getAmount();
+			data.setLevel(Math.min(data.getLevel() + lvUp, data.getGrade().getMaxEnhance()));
+			Items.write(player, r, i);
+			Items.update(player, r, i);
+			status.setData("level", data.getLevel());
 
+			// Icon result
+			ItemStack icon = r.clone();
+			ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
+			ItemStackUtils.addLoreLine(icon, "");
+			ItemStackUtils.addLoreLine(icon, "§c§oGiới hạn cường hóa là Lv." + data.getGrade().getMaxEnhance());
+			ItemStackUtils.addLoreLine(icon, "§c§oNâng bậc để gia tăng giới hạn");
+
+			status.getInventory().setItem(RESULT_SLOT, icon);
+			status.setData("result", r);
+
+			// Amulet
+			Amulet a = null;
+			if (GUIs.countPlaced("amulet", status) == 1) {
+				a = Amulet.read(GUIs.getItem("amulet", status));
+				status.setData("hasAmulet", true);
 			}
 
-		};
+			Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+				// Check can do
+				if (GUIs.countAmountPlaced("material", status) == GUIs.countAmountPlaced("amulet", status) || GUIs.countPlaced("amulet", status) == 0) {
+					status.getInventory().setItem(BUTTON_SLOT, getOkButton(status));
+					status.setData("canDo", "");
+				}
+				else {
+					status.getInventory().setItem(BUTTON_SLOT, getDefaultButton());
+					status.removeData("canDo");
+				}
+
+			});
+
+		});
 	}
 	
 	public static ClickExecutor getButtonExecutor() {
-		return new ClickExecutor() {	
-			@Override
-			public void execute(Player player, GUIStatus status) {
-				// Check can execute
-				if (!status.hasData("canDo")) {
-					player.sendMessage("§cChưa thể cường hóa");
-					return;
-				}
-				
-				int fee = Configs.ENHANCE_FEE;
-				double chance = getChance(status);
-				
-				// Check fee
-				if (!EcoType.MONEY.take(player, fee)) {
-					player.sendMessage("§cKhông đủ tiền!");
-					return;
-				}
-
-				// Do
-				ItemStack is = GUIs.getItem("item", status);
-				ItemStack r = (ItemStack) status.getData("result");
-
-				// Get
-				int previous = Items.read(is).getData().getAscent().getValue();
-				int after = Items.read(r).getData().getAscent().getValue();
-
-				// Success
-				if (Utils.rate(chance)) {
-					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
-					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-					player.getInventory().addItem(r.clone());
-					// Event
-					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true, previous, after));
-				}
-				// Fail
-				else {
-					player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
-					player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
-
-					boolean amulet = status.hasData("hasAmulet");
-					if (amulet) player.sendTitle("§7§lTHẤT BẠI T_T", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 15, 0);
-					else {
-						Item i = Items.read(is);
-						i.getData().setLevel(Math.min(0, i.getData().getLevel() - 1));
-						after = i.getData().getLevel();
-						Items.write(player, is, i);
-						player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 15, 0);
-					}
-					player.getInventory().addItem(is.clone());
-
-					// Event
-					Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false, previous, after));
-				}
-				
-				GUIs.clearItems("item", status);
-				GUIs.clearItems("amulet", status);
-				GUIs.clearItems("material", status);
-				player.closeInventory();
-				
-				Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
-					GUIs.open(player, GUI.UPGRADE);
-				}, 10);
+		return (player, status) -> {
+			// Check can execute
+			if (!status.hasData("canDo")) {
+				player.sendMessage("§cChưa thể cường hóa");
+				return;
 			}
+
+			int fee = Configs.ENHANCE_FEE;
+			double chance = getChance(status);
+
+			// Check fee
+			if (!EcoType.MONEY.take(player, fee)) {
+				player.sendMessage("§cKhông đủ tiền!");
+				return;
+			}
+
+			// Do
+			ItemStack is = GUIs.getItem("item", status);
+			ItemStack r = (ItemStack) status.getData("result");
+
+			// Get
+			int previous = Items.read(is).getData().getAscent().getValue();
+			int after = Items.read(r).getData().getAscent().getValue();
+
+			// Success
+			if (Utils.rate(chance)) {
+				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
+				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+				player.getInventory().addItem(r.clone());
+				// Event
+				Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true, previous, after));
+			}
+			// Fail
+			else {
+				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
+				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
+
+				boolean amulet = status.hasData("hasAmulet");
+				if (amulet) player.sendTitle("§7§lTHẤT BẠI T_T", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 30, 0);
+				else {
+					Item i = Items.read(is);
+					i.getData().setLevel(Math.max(0, i.getData().getLevel() - 1));
+					after = i.getData().getLevel();
+					Items.write(player, is, i);
+					Items.update(player, is, i);
+					player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 30, 0);
+				}
+				player.getInventory().addItem(is.clone());
+
+				// Event
+				Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false, previous, after));
+			}
+
+			GUIs.clearItems("item", status);
+			GUIs.clearItems("amulet", status);
+			GUIs.clearItems("material", status);
+			player.closeInventory();
+
+			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+				GUIs.open(player, GUI.ENHANCE);
+			}, 30);
 		};
 	}
 	
 	private static double getChance(GUIStatus status) {
-		double chance = Configs.UPGRADE_BASE_CHANCE;
+		int level = Integer.parseInt(status.getData("level").toString());
+		double chance = Configs.getEnhanceRate(level);
 
 		// Cal chance
 		if (GUIs.countPlaced("amulet", status) != 0) {
@@ -260,17 +246,14 @@ public class ItemEnhances {
 		return is;
 	}
 	
-	public static ItemStack getOkButton(int level, int up, Amulet a) {
+	public static ItemStack getOkButton(GUIStatus status) {
 		double fee = Configs.ENHANCE_FEE;
 		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể cường hóa");
 		List<String> lore = Lists.newArrayList();
 		lore.add("§f§o- Phí §l" + fee + "$");
-		for (int i = level + 1 ; i <= level + up ; i++) {
-			double chance = Configs.getEnhanceRate(i);
-			if (a != null) chance *= ((double) 100 + a.getBonus()) / 100;
-			lore.add("§a§o- Tỉ lệ " + i + ": §l" + chance + "%");
-		}
+		double chance = status != null ? getChance(status) : 0;
+		lore.add("§a§o- Tỉ lệ: §l" + chance + "%");
 		
 		ItemStackUtils.setLore(is, lore);
 		

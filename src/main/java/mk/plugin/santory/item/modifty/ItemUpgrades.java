@@ -53,7 +53,7 @@ public class ItemUpgrades {
 		return new AmountChecker() {
 			@Override
 			public boolean allowMulti(ItemStack is) {
-				return is(is) || Amulet.is(is);
+				return false;
 			}
 		};
 	}
@@ -207,7 +207,7 @@ public class ItemUpgrades {
 
 			// Success
 			if (Utils.rate(chance)) {
-				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
+				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 				player.getInventory().addItem(r.clone());
 
@@ -216,7 +216,7 @@ public class ItemUpgrades {
 			}
 			// Fail
 			else {
-				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
+				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 30, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 				player.getInventory().addItem(is.clone());
 
@@ -231,7 +231,7 @@ public class ItemUpgrades {
 
 			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 				GUIs.open(player, GUI.UPGRADE);
-			}, 10);
+			}, 30);
 		};
 	}
 	
