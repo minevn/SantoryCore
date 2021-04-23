@@ -1,3 +1,17 @@
+permissions:
+  wish:
+    permission: 'santory.wish'
+    message: '&cBạn cần làm nhiệm vụ &aHòm nhân phẩm&c để có thể dùng tính năng này! &7(/nhiemvu >> Nhiệm vụ chính)'
+  enhance:
+    permission: 'santory.enhance'
+    message: '&cBạn cần làm nhiệm vụ &aNâng cấp&c để có thể dùng tính năng này! &7(/nhiemvu >> Nhiệm vụ chính)'
+  upgrade:
+    permission: 'santory.upgrade'
+    message: '&cBạn cần làm nhiệm vụ &aNâng cấp&c để có thể dùng tính năng này! &7(/nhiemvu >> Nhiệm vụ chính)'
+  ascent:
+    permission: 'santory.ascent'
+    message: '&cBạn cần làm nhiệm vụ &aNâng cấp&c để có thể dùng tính năng này! &7(/nhiemvu >> Nhiệm vụ chính)'
+
 xacminh-success:
   - 'bc %player% xác minh không hack thành công!'
 
@@ -26,15 +40,16 @@ item:
 
 ascent:
   base-chance: 50
-  fee: 10000
+  fee: 5000
+  free-permission: 'santory.ascent.free'
 
 upgrade:
   base-chance: 50
-  fee: 10000
+  fee: 500
   exp-per-material: 100
 
 enhance:
-  fee: 10000
+  fee: 100
   chance:
   - '1-10:80'
   - '11-20:40'

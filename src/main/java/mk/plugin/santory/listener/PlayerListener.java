@@ -109,6 +109,8 @@ public class PlayerListener implements Listener {
 					e.setCancelled(true);
 					String id = entry.getKey();
 
+					if (!Configs.checkPermission(player, "wish")) return;
+
 					// Right crate, key
 					var is = player.getInventory().getItemInMainHand();
 					var keyID = Wishes.keyFrom(is);

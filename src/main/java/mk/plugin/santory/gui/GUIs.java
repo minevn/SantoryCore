@@ -94,6 +94,7 @@ public class GUIs {
 		for (ItemStack is : status.getPlacedItems().values()) {
 			player.getInventory().addItem(is);
 		}
+		status.clearPlacedItems();
 		statuses.remove(status.getGUI());
 	}
 	

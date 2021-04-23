@@ -69,6 +69,18 @@ public class ItemUpgrades {
 
 			if (is(is)) {
 				if (GUIs.countPlaced("material", status) != 0) return false;
+
+				// Check if has item
+				var in = GUIs.getItem("item", status);
+				if (in != null && in.getType() != Material.AIR) {
+					var us = UpgradeStone.read(is);
+					var item = Items.read(in);
+					if (item.getModel().getElement() != us.getElement()) {
+						player.sendMessage("§cĐá nguyên tố không cùng nguyên tố với trang bị");
+						return false;
+					}
+				}
+
 				status.place(player, GUIs.getEmptySlot("material", status), is);
 				return true;
 			}

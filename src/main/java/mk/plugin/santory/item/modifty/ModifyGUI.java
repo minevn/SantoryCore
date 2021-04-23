@@ -1,6 +1,7 @@
 package mk.plugin.santory.item.modifty;
 
 import com.google.common.collect.Lists;
+import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.gui.GUI;
 import mk.plugin.santory.gui.GUIs;
 import mk.plugin.santory.utils.Icon;
@@ -50,12 +51,15 @@ public class ModifyGUI {
         int slot = e.getSlot();
         switch (slot) {
             case ENHANCE_SLOT:
+                if (!Configs.checkPermission(player, "enhance")) return;
                 GUIs.open(player, GUI.ENHANCE);
                 break;
             case UPGRADE_SLOT:
+                if (!Configs.checkPermission(player, "upgrade")) return;
                 GUIs.open(player, GUI.UPGRADE);
                 break;
             case ASCENT_SLOT:
+                if (!Configs.checkPermission(player, "ascent")) return;
                 GUIs.open(player, GUI.ASCENT);
                 break;
         }

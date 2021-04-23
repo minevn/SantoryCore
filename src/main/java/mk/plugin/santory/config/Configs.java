@@ -10,6 +10,7 @@ import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.MobType;
+import mk.plugin.santory.permission.SantoryPermission;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.slave.SlaveModel;
 import mk.plugin.santory.slave.state.SlaveState;
@@ -30,6 +31,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -84,6 +86,7 @@ public class Configs {
 	private static final Map<String, String> chatPrefixes = Maps.newHashMap();
 
 	private static List<String> xmSuccess = Lists.newArrayList();
+	private static Map<String, SantoryPermission> permissions = Maps.newHashMap();
 
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
@@ -214,6 +217,14 @@ public class Configs {
 			String permision = s.split(":")[0];
 			String prefix = s.split(":")[1];
 			chatPrefixes.put(permision, prefix);
+		}
+
+		// Permission
+		permissions.clear();
+		for (String id : config.getConfigurationSection("permissions").getKeys(false)) {
+			var perm = config.getString("permissions." + id + ".permission");
+			var message = config.getString("permissions." + id + ".message").replace("&", "§");
+			permissions.put(id, new SantoryPermission(id, perm, message));
 		}
 
 		xmSuccess = config.getStringList("xacminh-success");
@@ -379,5 +390,17 @@ public class Configs {
 
 	public static List<String> getXmSuccess() {
 		return xmSuccess;
+	}
+
+	public static boolean checkPermission(Player player, String permID) {
+		if (permissions.containsKey(permID)) {
+			var sp = permissions.get(permID);
+			if (!player.hasPermission(sp.getPermission())) {
+				player.sendMessage(sp.getMessage());
+				return false;
+			}
+			return true;
+		}
+		return true;
 	}
 }

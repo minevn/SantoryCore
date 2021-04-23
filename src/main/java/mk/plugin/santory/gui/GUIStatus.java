@@ -37,6 +37,10 @@ public class GUIStatus {
 	public void setPlacedItems(Map<Integer, ItemStack> map) {
 		this.placedItems = map;
 	}
+
+	public void clearPlacedItems() {
+		this.placedItems = Maps.newHashMap();
+	}
 	
 	public void place(Player player, int slot, ItemStack is) {
 		this.inv.setItem(slot, is);

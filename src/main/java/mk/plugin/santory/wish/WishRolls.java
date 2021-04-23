@@ -74,11 +74,14 @@ public class WishRolls {
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 								inv.setItem(RESULT_SLOT, icon);
 								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-//								player.getInventory().addItem(r.clone());
 								wri.give(player);
 								player.sendMessage("§aNhận quà thành công!");
 							}, 20);
 							rollings.remove(player.getName());
+
+							// Event
+							Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
+
 							this.cancel();
 							return;
 						}
@@ -110,9 +113,6 @@ public class WishRolls {
 			}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);
 			
 		});
-
-		// Event
-		Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
 	}
 	
 	private static ItemStack getIcon(Tier tier) {

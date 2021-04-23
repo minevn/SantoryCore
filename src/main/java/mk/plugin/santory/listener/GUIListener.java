@@ -99,9 +99,7 @@ public class GUIListener implements Listener {
 	public void onClose(InventoryCloseEvent e) {
 		if (!(e.getInventory().getHolder() instanceof GUIHolder)) return;
 		Player player = (Player) e.getPlayer();
-		
-		if (!check(player)) return;
-		
+
 		GUI gui = ((GUIHolder) e.getInventory().getHolder()).getGUI();
 		GUIStatus status = GUIs.getStatus(gui);
 		GUIs.beforeClose(player, status);
