@@ -29,7 +29,7 @@ public class MobListener implements Listener {
 		LivingEntity entity = (LivingEntity) e.getEntity();
 		int level = Configs.getLevel(id);
 		MobType type = Configs.getType(id);
-	
+
 		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 			Mobs.set(entity, type, level);
 		});
