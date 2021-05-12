@@ -1,7 +1,11 @@
 package mk.plugin.santory.listener;
 
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.event.ItemToggleEvent;
+import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.main.SantoryCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,13 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.google.common.collect.Lists;
-
-import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.event.ItemToggleEvent;
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.Items;
-import mk.plugin.santory.main.SantoryCore;
+import java.util.List;
 
 public class ItemListener implements Listener {
 	

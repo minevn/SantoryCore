@@ -5,11 +5,7 @@ import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.event.PlayerDamagedEntityEvent;
 import mk.plugin.santory.hologram.Holograms;
-import mk.plugin.santory.item.Item;
-import mk.plugin.santory.item.ItemData;
-import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mob;
 import mk.plugin.santory.mob.Mobs;
@@ -18,12 +14,14 @@ import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -134,10 +132,11 @@ public class StatListener implements Listener {
 				}
 
 				// Slave
-				if (!Slaves.hasSlave(player)) return;
-				if (Slaves.isMaster(player, entity)) {
-					e.setCancelled(true);
-					return;
+				if (Slaves.hasSlave(player)) {
+					if (Slaves.isMaster(player, entity)) {
+						e.setCancelled(true);
+						return;
+					}
 				}
 
 				// Check god
@@ -145,7 +144,7 @@ public class StatListener implements Listener {
 					e.setCancelled(true);
 					return;
 				}
-				
+
 				// Check delay
 				if (Damages.isDelayed(entity)) {
 					e.setCancelled(true);
@@ -226,7 +225,7 @@ public class StatListener implements Listener {
 				
 				// Holograms
 				holos.add(0, crit ? "§6§l§o-" + Utils.round(damage) : "§c§l§o-" + Utils.round(damage));
-				
+
 				// After damage
 				double lastDamage = damage;
 				double lastHealth = ((LivingEntity) e.getEntity()).getHealth();

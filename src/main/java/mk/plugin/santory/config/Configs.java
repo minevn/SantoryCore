@@ -26,7 +26,6 @@ import mk.plugin.santory.wish.WishReward;
 import mk.plugin.santory.wish.WishRewardItem;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -200,6 +199,7 @@ public class Configs {
 			MobType type = MobType.valueOf(config.getString("mob." + id + ".type").toUpperCase());
 			mobLevels.put(id, level);
 			mobTypes.put(id, type);
+			System.out.println("Set mob id " + id + " level " +  level + " and type " + type.name());
 		});
 
 		// Wish keys

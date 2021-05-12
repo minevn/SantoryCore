@@ -34,7 +34,7 @@ public class WeaponListener implements Listener {
     }
 	
 	public static void setCooldownAttack(Player player, long timeMilis, ItemStack item) {
-		if (item != null) player.setCooldown(item.getType(), Long.valueOf(timeMilis / 50).intValue());
+		if (item != null) player.setCooldown(item.getType(), Math.max(1, Long.valueOf(timeMilis / 50).intValue()));
 		cooldownAttack.put(player.getName(), System.currentTimeMillis() + timeMilis);	
 	}
 	
