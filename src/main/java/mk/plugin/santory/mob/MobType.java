@@ -1,11 +1,10 @@
 package mk.plugin.santory.mob;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
 import mk.plugin.santory.item.StatValue;
 import mk.plugin.santory.stat.Stat;
+
+import java.util.List;
 
 public enum MobType {
 	
@@ -20,18 +19,18 @@ public enum MobType {
 			return stats;
 		}
 	},
-	SUB_BOSS {
+	GREAT_MINION {
 		@Override
 		public List<StatValue> getStats(int level) {
 			List<StatValue> stats = Lists.newArrayList();
-			stats.add(new StatValue(Stat.HEALTH, 30 + 50 * level / 10));
-			stats.add(new StatValue(Stat.DAMAGE, 10 + 10 * level / 10));
-			stats.add(new StatValue(Stat.DEFENSE, 15 + 5 * level / 10));
+			stats.add(new StatValue(Stat.HEALTH, 30 + 25 * level / 10));
+			stats.add(new StatValue(Stat.DAMAGE, 10 + 5 * level / 10));
+			stats.add(new StatValue(Stat.DEFENSE, 10 + 3 * level / 10));
 			
 			return stats;
 		}
 	},
-	MAIN_BOSS {
+	BOSS {
 		@Override
 		public List<StatValue> getStats(int level) {
 			List<StatValue> stats = Lists.newArrayList();

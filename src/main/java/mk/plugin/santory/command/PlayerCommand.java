@@ -44,7 +44,7 @@ public class PlayerCommand implements CommandExecutor {
         }
 
         else if (cmd.getName().equalsIgnoreCase("player")) {
-            TravelerInfoGUI.open(player, player);
+            TravelerInfoGUI.open(player);
         }
 
         else if (cmd.getName().equalsIgnoreCase("globalspeaker")) {

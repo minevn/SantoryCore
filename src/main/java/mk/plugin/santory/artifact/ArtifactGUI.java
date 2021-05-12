@@ -9,7 +9,6 @@ import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -24,16 +23,16 @@ import java.util.List;
 
 public class ArtifactGUI implements InventoryHolder {
 	
-	private static final List<Integer> SLOTS = Lists.newArrayList(11, 12, 13, 14, 15);
+	private static final List<Integer> SLOTS = Lists.newArrayList(2, 3, 4, 5, 6);
 	
 	public static void open(Player player) {
 		Traveler t = Travelers.get(player);
-		Inventory inv = Bukkit.createInventory(new ArtifactGUI(), 27, "§0§lDI VẬT");
+		Inventory inv = Bukkit.createInventory(new ArtifactGUI(), 9, "§0§lDI VẬT");
 		player.openInventory(inv);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 		
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
-			for (int i = 0 ; i < 27 ; i++) inv.setItem(i, Utils.getBlackSlot());
+			for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
 			SLOTS.forEach(slot -> inv.setItem(slot, getIcon()));
 			for (int i = 0 ; i < t.getData().getArtifacts().size() ; i++) {
 				Item item = t.getData().getArtifacts().get(i);
@@ -45,7 +44,7 @@ public class ArtifactGUI implements InventoryHolder {
 	
 
 	public static void eventClick(InventoryClickEvent e) {
-		if (e.getInventory().getHolder() instanceof ArtifactGUI == false) return;	
+		if (!(e.getInventory().getHolder() instanceof ArtifactGUI)) return;
 		int slot = e.getSlot();
 		
 		if (e.getInventory() == e.getWhoClicked().getOpenInventory().getTopInventory()) {
