@@ -2,6 +2,7 @@ package mk.plugin.santory.traveler;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
@@ -13,11 +14,26 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Travelers {
 	
 	private static final Map<String, Traveler> travelers = Maps.newHashMap();
-	
+
+	private static Set<String> hackChecked = Sets.newHashSet();
+
+	public static void addHackChecked(String player) {
+		hackChecked.add(player);
+	}
+
+	public static void removeHackChecked(String player) {
+		hackChecked.remove(player);
+	}
+
+	public static boolean isHackChecked(String player) {
+		return hackChecked.contains(player);
+	}
+
 	public static Traveler get(String name) {
 		if (!travelers.containsKey(name)) travelers.put(name, new Traveler(TravelerStorage.get(name)));
 		return travelers.getOrDefault(name, null);
@@ -133,7 +149,7 @@ public class Travelers {
 		String format = "%xacminh% &a[%level%/#%power%] %prefix% %name%: &f";
 
 		String xacminh;
-		if (player.hasMetadata("santory.xacminh")) xacminh = "§a✔";
+		if (isHackChecked(player.getName())) xacminh = "§a✔";
 		else xacminh = "§7✘";
 
 		String prefix = Configs.getChatPrefixDefault();

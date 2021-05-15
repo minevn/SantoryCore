@@ -199,7 +199,6 @@ public class Configs {
 			MobType type = MobType.valueOf(config.getString("mob." + id + ".type").toUpperCase());
 			mobLevels.put(id, level);
 			mobTypes.put(id, type);
-			System.out.println("Set mob id " + id + " level " +  level + " and type " + type.name());
 		});
 
 		// Wish keys
@@ -361,23 +360,21 @@ public class Configs {
 	public static ItemStack getKeepStone() {
 		var is = KEEP_STONE.clone();
 		var im = new ItemStackManager(SantoryCore.get(), is);
-		im.setTag("keepStone", "true");
 		return is;
 	}
 
 	public static boolean isKeepStone(ItemStack is) {
-		return new ItemStackManager(SantoryCore.get(), is).hasTag("keepStone");
+		return new ItemStackManager(SantoryCore.get(), is).compareSpecial(KEEP_STONE);
 	}
 
 	public static ItemStack getGlobalSpeaker() {
 		var is = GLOBAL_SPEAKER.clone();
 		var im = new ItemStackManager(SantoryCore.get(), is);
-		im.setTag("globalSpeaker", "true");
 		return is;
 	}
 
 	public static boolean isGlobalSpeaker(ItemStack is) {
-		return new ItemStackManager(SantoryCore.get(), is).hasTag("globalSpeaker");
+		return new ItemStackManager(SantoryCore.get(), is).compareSpecial(GLOBAL_SPEAKER);
 	}
 
 	public static String getChatPrefixDefault() {

@@ -5,7 +5,6 @@ import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
@@ -15,6 +14,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
@@ -34,6 +34,7 @@ public class SkillDaiMa implements SkillExecutor {
         z.setAdult();
         z.setNoDamageTicks(1000);
         z.setCollidable(false);
+        z.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
 
         long start = System.currentTimeMillis();
         long delay = 1000 * 3;

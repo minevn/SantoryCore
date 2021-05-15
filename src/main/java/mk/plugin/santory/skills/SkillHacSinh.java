@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -32,6 +33,7 @@ public class SkillHacSinh implements SkillExecutor {
         p.setVelocity(d.multiply(2));
         p.setAI(false);
         p.setNoDamageTicks(1000);
+        p.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_AMBIENT, 1, 1);
 

@@ -2,10 +2,14 @@ package mk.plugin.santory.listener;
 
 import com.google.common.collect.Lists;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
+import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.slave.master.Masters;
+import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.Wish;
-import mk.plugin.santory.wish.WishKey;
 import mk.plugin.santory.wish.WishRolls;
 import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
@@ -20,15 +24,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
-import mk.plugin.santory.damage.Damages;
-import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.utils.Utils;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -67,28 +64,42 @@ public class PlayerListener implements Listener {
 	/*
 	Keep Stone
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		e.setKeepInventory(true);
-		e.setKeepLevel(true);
 
-		var player = e.getEntity();
-		if (player.hasPermission("santorycore.admin")) return;
-
-		for (ItemStack is : player.getInventory().getContents()) {
-			if (Configs.isKeepStone(is)) {
-				is.setAmount(is.getAmount() - 1);
-				player.sendMessage("");
-				player.sendMessage("§aGiữ đồ khi chết, tiêu thụ 1 Đá bảo hộ");
-				player.sendMessage("");
-				return;
+		Player player = e.getEntity();
+		if (player.hasPermission("dabaoho.bypass") || Configs.isPvPWorld(player.getWorld())) {
+			e.setKeepInventory(true);
+			e.setKeepLevel(true);
+			e.getDrops().clear();
+			e.setDroppedExp(0);
+			player.sendMessage("§a§o>> Bạn được giữ đồ khi chết tại đây (PvP)");
+			return;
+		}
+		ItemStack[] contents = player.getInventory().getContents();
+		boolean keep = false;
+		for (int i = 0 ; i < contents.length ; i++) {
+			ItemStack item = contents[i];
+			if (item != null) {
+				if (Configs.isKeepStone(item)) {
+					keep = true;
+					player.sendMessage("§a§o>> Giữ đồ khi chết, tiêu thụ 1 Đá bảo hộ");
+					e.setKeepInventory(true);
+					e.setKeepLevel(true);
+					e.getDrops().clear();
+					e.setDroppedExp(0);
+					if (item.getAmount() == 1) contents[i] = null;
+					else item.setAmount(item.getAmount() - 1);
+					player.getInventory().setContents(contents);
+					break;
+				}
 			}
 		}
-
-		e.setKeepInventory(false);
-		player.sendMessage("");
-		player.sendMessage("§cKhông có Đá bảo hộ, rơi đồ khi chết");
-		player.sendMessage("");
+		if (!keep) {
+			player.sendMessage("§c§o>> Không có Đá bảo hộ, rơi đồ khi chết");
+			e.setKeepInventory(false);
+			e.setKeepLevel(true);
+		}
 	}
 
 

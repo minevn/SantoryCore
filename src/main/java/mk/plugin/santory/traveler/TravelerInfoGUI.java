@@ -34,7 +34,7 @@ public class TravelerInfoGUI {
     public static void open(Player player) {
         Inventory inv = Bukkit.createInventory(new TIGHolder(player), 9, "§0§lTHÔNG TIN");
         player.openInventory(inv);
-        player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
+        player.playSound(player .getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
 
         Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
            var datais = getDataIcon(player);
@@ -75,7 +75,7 @@ public class TravelerInfoGUI {
 
             // Artifacts
             for (Integer slot : ARTIFACT_SLOTS) {
-                inv.setItem(slot, Icon.ARTIFACT.clone());
+                inv.setItem(slot + bonus, getEmptyArtifactIcon());
             }
             Traveler t = Travelers.get(target);
             List<Item> artifacts = t.getData().getArtifacts();
@@ -89,6 +89,15 @@ public class TravelerInfoGUI {
             }
 
         });
+    }
+
+    public static ItemStack getEmptyArtifactIcon() {
+        var is = Icon.ARTIFACT.clone();
+        var meta = is.getItemMeta();
+        meta.setCustomModelData(34);
+        meta.setDisplayName("§a§lDi vật trống");
+        is.setItemMeta(meta);
+        return is;
     }
 
     public static ItemStack getArtifactIcon() {

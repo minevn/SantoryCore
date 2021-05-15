@@ -29,6 +29,16 @@ public class ItemStackManager {
         this.plugin = plugin;
     }
 
+    public boolean compareSpecial(ItemStack is2) {
+        if (is2.getType() != is.getType()) return false;
+        if (is2.hasItemMeta() != is.hasItemMeta()) return false;
+        if (is.hasItemMeta()) {
+            if (is2.getItemMeta().getCustomModelData() != is.getItemMeta().getCustomModelData()) return false;
+            if (!is2.getItemMeta().getDisplayName().equals(is.getItemMeta().getDisplayName())) return false;
+        }
+        return true;
+    }
+
     public boolean isNull() {
         return is == null || is.getType() == Material.AIR;
     }

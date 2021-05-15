@@ -15,6 +15,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -37,6 +38,7 @@ public class SkillHuyDiet implements SkillExecutor {
         g.setNoDamageTicks(1000);
         g.setCollidable(false);
         g.setVelocity(new Vector(0, -4.5, 0));
+        g.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
 
 
         new BukkitRunnable() {
