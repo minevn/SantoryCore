@@ -94,7 +94,6 @@ public class TravelerInfoGUI {
     public static ItemStack getEmptyArtifactIcon() {
         var is = Icon.ARTIFACT.clone();
         var meta = is.getItemMeta();
-        meta.setCustomModelData(34);
         meta.setDisplayName("§a§lDi vật trống");
         is.setItemMeta(meta);
         return is;
