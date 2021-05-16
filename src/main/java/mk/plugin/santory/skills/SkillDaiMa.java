@@ -31,6 +31,7 @@ public class SkillDaiMa implements SkillExecutor {
         var l = Utils.getLandedLocation(player.getLocation().add(player.getLocation().getDirection()).add(0, 1.3, 0));
         var z = (Zombie) player.getWorld().spawnEntity(l, EntityType.ZOMBIE);
         z.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
+        z.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(1000);
         z.setAdult();
         z.setNoDamageTicks(1000);
         z.setCollidable(false);

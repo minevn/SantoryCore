@@ -1,5 +1,6 @@
 package mk.plugin.santory.utils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -25,7 +26,7 @@ public class ItemStackManager {
 
     public ItemStackManager(Plugin plugin, ItemStack is) {
         this.is = is;
-        this.meta = isNull() ? null : is.getItemMeta();
+        this.meta = (isNull() || !is.hasItemMeta()) ? null : is.getItemMeta();
         this.plugin = plugin;
     }
 
@@ -44,6 +45,7 @@ public class ItemStackManager {
     }
 
     public boolean hasLore() {
+        if (meta == null) return false;
         return meta.hasLore();
     }
 
@@ -53,6 +55,7 @@ public class ItemStackManager {
     }
 
     public List<String> getLore() {
+        if (meta == null) return Lists.newArrayList();
         return meta.getLore();
     }
 
@@ -80,6 +83,7 @@ public class ItemStackManager {
 
     public boolean hasTag(String key) {
         if (isNull()) return false;
+        if (meta == null) return false;
         NamespacedKey nk = new NamespacedKey(plugin, key);
         return meta.getPersistentDataContainer().has(nk, PersistentDataType.STRING);
     }
