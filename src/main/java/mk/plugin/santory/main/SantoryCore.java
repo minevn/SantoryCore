@@ -9,9 +9,7 @@ import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.slave.task.SlaveTask;
 import mk.plugin.santory.task.HealTask;
-import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
-import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -66,7 +64,7 @@ public class SantoryCore extends JavaPlugin {
 	}
 	
 	public void registerTasks() {
-		new TargetTask().runTaskTimer(this, 0, 2);
+//		new TargetTask().runTaskTimer(this, 0, 2);
 		new HealTask().runTaskTimer(this, 0, 20);
 		new SlaveTask().runTaskTimer(this, 0, 10);
 	}

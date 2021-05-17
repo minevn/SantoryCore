@@ -19,14 +19,9 @@ public class ItemStackManager {
 
     private Plugin plugin;
 
-//    public ItemStackManager(ItemStack is) {
-//        this.is = is;
-//        this.meta = isNull() ? null : is.getItemMeta();
-//    }
-
     public ItemStackManager(Plugin plugin, ItemStack is) {
         this.is = is;
-        this.meta = (isNull() || !is.hasItemMeta()) ? null : is.getItemMeta();
+        this.meta = is == null ? null : is.getItemMeta();
         this.plugin = plugin;
     }
 

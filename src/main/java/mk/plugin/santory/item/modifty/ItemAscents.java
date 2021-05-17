@@ -16,8 +16,6 @@ import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -183,7 +181,7 @@ public class ItemAscents {
 				}
 				// Fail
 				else {
-					player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
+					player.sendTitle("§7§lTHẤT BẠI T_T", "§fMất nguyên liệu", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 					player.getInventory().addItem(is.clone());
 
