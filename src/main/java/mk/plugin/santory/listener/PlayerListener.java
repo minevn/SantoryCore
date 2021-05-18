@@ -1,6 +1,5 @@
 package mk.plugin.santory.listener;
 
-import com.google.common.collect.Lists;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
@@ -26,16 +25,12 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import remvn.reanticheatspigot.event.PlayerCheckedEvent;
 
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PlayerListener implements Listener {
 
@@ -146,31 +141,31 @@ public class PlayerListener implements Listener {
 	}
 
 	// Tab tag
-	@EventHandler
-	public void onTabComplete(TabCompleteEvent e) {
-		String s = e.getBuffer();
-		if (s.contains("@")) {
-			String regex = "@(?<preName>\\S+)";
-			System.out.println("nani");
-			Pattern pt = Pattern.compile(regex);
-			Matcher m = pt.matcher(s);
-
-			String preName = null;
-			while (m.find()) {
-				preName = m.group("preName");
-			}
-			if (preName == null) return;
-
-			List<String> avl = Lists.newArrayList();
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (p.getName().toLowerCase().startsWith(preName.toLowerCase())) {
-					avl.add("@" + p.getName());
-				}
-			}
-
-			e.setCompletions(avl);
-		}
-	}
+//	@EventHandler
+//	public void onTabComplete(TabCompleteEvent e) {
+//		String s = e.getBuffer();
+//		if (s.contains("@")) {
+//			String regex = "@(?<preName>\\S+)";
+//			System.out.println("nani");
+//			Pattern pt = Pattern.compile(regex);
+//			Matcher m = pt.matcher(s);
+//
+//			String preName = null;
+//			while (m.find()) {
+//				preName = m.group("preName");
+//			}
+//			if (preName == null) return;
+//
+//			List<String> avl = Lists.newArrayList();
+//			for (Player p : Bukkit.getOnlinePlayers()) {
+//				if (p.getName().toLowerCase().startsWith(preName.toLowerCase())) {
+//					avl.add("@" + p.getName());
+//				}
+//			}
+//
+//			e.setCompletions(avl);
+//		}
+//	}
 
 
 	@EventHandler
