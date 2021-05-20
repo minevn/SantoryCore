@@ -219,6 +219,7 @@ public class StatListener implements Listener {
 				
 				// End attack
 				int dtick = entity.getNoDamageTicks();
+				int maxdtick = entity.getMaximumNoDamageTicks();
 				entity.setNoDamageTicks(0);
 				entity.setMaximumNoDamageTicks(0);
 				e.setDamage(damage);
@@ -233,7 +234,7 @@ public class StatListener implements Listener {
 					@Override
 					public void run() {
 						entity.setNoDamageTicks(dtick);
-						entity.setMaximumNoDamageTicks(dtick);
+						entity.setMaximumNoDamageTicks(maxdtick);
 						// Hut mau
 						double value = Travelers.getStatValue(player, Stat.LIFE_STEAL);
 						Utils.addHealth(player, lastDamage * value / 100);
