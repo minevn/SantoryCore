@@ -7,7 +7,6 @@ import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
-import mk.plugin.santory.event.PlayerItemEnhanceEvent;
 import mk.plugin.santory.event.PlayerItemUpgradeEvent;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.*;
@@ -21,10 +20,8 @@ import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -141,7 +138,7 @@ public class ItemUpgrades {
 			ItemStack icon = r.clone();
 			ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
 			ItemStackUtils.addLoreLine(icon, "");
-			ItemStackUtils.addLoreLine(icon, "§a§oExp: " + (data.getExp() - expUp) + " >> " + data.getExp());
+			ItemStackUtils.addLoreLine(icon, "§a§oĐiểm nguyên tố: " + (data.getExp() - expUp) + " >> " + data.getExp());
 			if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi lên bậc");
 			status.getInventory().setItem(RESULT_SLOT, icon);
 
@@ -256,7 +253,7 @@ public class ItemUpgrades {
 		lore.add("§f§o- Yêu cầu số lượng đá bằng số lượng bùa");
 		lore.add("§f§o  hoặc không có bùa");
 		for (Grade g : Grade.values()) {
-			lore.add("§6§o- Bậc " + g.name() + ": " + Configs.getExpRequires().get(g) + " exp");
+			lore.add("§6§o- Bậc " + g.name() + ": " + Configs.getExpRequires().get(g) + " điểm");
 		}
 		ItemStackUtils.setLore(is, lore);
 		
@@ -271,7 +268,7 @@ public class ItemUpgrades {
 		lore.add("§a§o- Tỉ lệ §l" + chance + "%");
 		lore.add("§f§o- Phí §l" + fee + "$");
 		for (Grade g : Grade.values()) {
-			lore.add("§6§o- Bậc " + g.name() + ": " + Configs.getExpRequires().get(g) + " exp");
+			lore.add("§6§o- Bậc " + g.name() + ": " + Configs.getExpRequires().get(g) + " điểm");
 		}
 		ItemStackUtils.setLore(is, lore);
 		

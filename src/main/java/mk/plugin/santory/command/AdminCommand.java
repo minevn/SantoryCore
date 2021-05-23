@@ -1,11 +1,12 @@
 package mk.plugin.santory.command;
 
+import com.destroystokyo.paper.Title;
 import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.ArtifactGUI;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.element.Element;
+import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.GUI;
 import mk.plugin.santory.gui.GUIs;
 import mk.plugin.santory.item.Item;
@@ -13,11 +14,11 @@ import mk.plugin.santory.item.ItemData;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.modifty.ItemEnhances;
-import mk.plugin.santory.item.modifty.ItemUpgrades;
 import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
-import mk.plugin.santory.slave.*;
+import mk.plugin.santory.slave.Slave;
+import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.slave.item.SlaveFood;
 import mk.plugin.santory.slave.item.SlaveStone;
@@ -28,6 +29,7 @@ import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
 import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -69,7 +71,22 @@ public class AdminCommand implements CommandExecutor {
 			 * Player commands
 			 */
 			if (args[0].equalsIgnoreCase("player")) {
-				if (args[1].equalsIgnoreCase("setlevel")) {
+
+				if (args[1].equalsIgnoreCase("tograde")) {
+					Player player = Bukkit.getPlayer(args[2]);
+					Grade g = Grade.valueOf(args[3]);
+					var t = Travelers.get(player.getName());
+					if (t.getData().getGrade().getValue() >= g.getValue()) return false;
+					t.getData().setGrade(g);
+					Travelers.save(player.getName());
+
+					// Show
+					player.sendTitle(new Title("§2§lTHĂNG BẬC " + g.name(), "§aGiới hạn cấp độ mới: " + g.getMaxLevel(), 10, 100, 10));
+					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+
+				}
+
+				else if (args[1].equalsIgnoreCase("setlevel")) {
 					Player player = Bukkit.getPlayer(args[2]);
 					int level = Integer.parseInt(args[3]);
 					boolean allowdesc = args.length == 4 || Boolean.valueOf(args[4]);

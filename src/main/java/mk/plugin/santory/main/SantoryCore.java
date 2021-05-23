@@ -24,6 +24,7 @@ public class SantoryCore extends JavaPlugin {
 		this.registerCommands();
 		this.registerTasks();
 		this.registerPlaceholders();
+		this.registerChannels();
 	}
 	
 	@Override
@@ -72,7 +73,11 @@ public class SantoryCore extends JavaPlugin {
 	public void registerPlaceholders() {
 		if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) new SantoryPlaceholder().register();
 	}
-	
+
+	private void registerChannels() {
+		Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "fs:minestrike");
+	}
+
 	public void registerCommands() {
 		var adminCmd = new AdminCommand();
 		var playerCmd = new PlayerCommand();

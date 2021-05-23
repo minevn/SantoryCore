@@ -73,6 +73,9 @@ public class Items {
 			c++;
 		}
 
+		var u = "§aTrang bị bậc " + item.getData().getGrade().toString();
+		var u2 = "§aThêm " + calNeedExpToNextGrade(data.getExp(), data.getGrade()) + " điểm n.tố để lên bậc";
+
 		model.getTexture().set(is);
 		
 		ItemStackUtils.setDisplayName(is, lvf + " " + namef);
@@ -81,6 +84,9 @@ public class Items {
 		lore.addAll(descf);
 		lore.add("");
 		lore.addAll(statf);
+		lore.add("");
+		lore.add(u);
+		lore.add(u2);
 		lore.add("");
 		lore.add(element);
 		ItemStackUtils.setLore(is, lore);
@@ -92,7 +98,16 @@ public class Items {
 		meta.setUnbreakable(true);
 		is.setItemMeta(meta);
 	}
-	
+
+	private static int calNeedExpToNextGrade(int exp, Grade grade) {
+		if (grade == Grade.V) return 0;
+		int to = grade.getValue() + 1;
+		for (Grade g : Grade.values()) {
+			if (g.getValue() == to) return Configs.getExpRequires().get(g) - exp;
+		}
+		return 0;
+	}
+
 	// Write data into item
 	public static void write(Player player, ItemStack is, Item item) {
 		Map<String, String> tags = Maps.newHashMap();
