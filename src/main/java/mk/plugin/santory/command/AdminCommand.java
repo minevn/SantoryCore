@@ -416,6 +416,7 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§c/santory player setexp <*player> <*exp>");
 		sender.sendMessage("§c/santory player addexp <*player> <*exp>");
 		sender.sendMessage("§c/santory player showstats <*player>");
+		sender.sendMessage("§c/santory player tograde <*player> <grade>");
 		sender.sendMessage("");
 		
 		// Item commands
