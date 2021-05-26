@@ -1,15 +1,5 @@
 package mk.plugin.santory.skills;
 
-import java.util.Map;
-import java.util.Random;
-
-import org.bukkit.Location;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
-
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.item.shooter.Shooter;
@@ -18,6 +8,15 @@ import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.Location;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.Map;
+import java.util.Random;
 
 public class WSMuaTen implements SkillExecutor {
 
@@ -39,9 +38,9 @@ public class WSMuaTen implements SkillExecutor {
 				if (i >= times * 2) this.cancel();
 				for (int i = 0 ; i < 8 ; i++) {
 					Location main = l.clone().add(0, 12, 0);
-					double y = main.getY() + (double) (new Random().nextInt(10000) - 5000) / 1000;
-					double x = main.getX() + (double) (new Random().nextInt(10000) - 5000) / 1500;
-					double z = main.getZ() + (double) (new Random().nextInt(10000) - 5000) / 1500;
+					double y = main.getY() + (double) (new Random().nextInt(15000) - 7500) / 1000;
+					double x = main.getX() + (double) (new Random().nextInt(15000) - 7500) / 1500;
+					double z = main.getZ() + (double) (new Random().nextInt(15000) - 7500) / 1500;
 					main.setX(x);
 					main.setZ(z);
 					main.setY(y);

@@ -24,7 +24,7 @@ public enum MobType {
 		public List<StatValue> getStats(int level) {
 			List<StatValue> stats = Lists.newArrayList();
 			stats.add(new StatValue(Stat.HEALTH, 30 + 25 * level / 10));
-			stats.add(new StatValue(Stat.DAMAGE, 10 + 5 * level / 10));
+			stats.add(new StatValue(Stat.DAMAGE, 10 + 10 * level / 10));
 			stats.add(new StatValue(Stat.DEFENSE, 10 + 3 * level / 10));
 			
 			return stats;
@@ -35,7 +35,7 @@ public enum MobType {
 		public List<StatValue> getStats(int level) {
 			List<StatValue> stats = Lists.newArrayList();
 			stats.add(new StatValue(Stat.HEALTH, 100 + 100 * level / 10));
-			stats.add(new StatValue(Stat.DAMAGE, 20 + 20 * level / 10));
+			stats.add(new StatValue(Stat.DAMAGE, 20 + 25 * level / 10));
 			stats.add(new StatValue(Stat.DEFENSE, 20 + 10 * level / 10));
 			
 			return stats;

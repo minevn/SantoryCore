@@ -63,13 +63,18 @@ public class GUIListener implements Listener {
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		if (e.getInventory().getHolder() instanceof GUIHolder == false) return;
+		if (!(e.getInventory().getHolder() instanceof GUIHolder)) return;
 		e.setCancelled(true);
 		
 		Player player = (Player) e.getWhoClicked();
 		int slot = e.getSlot();
 		GUI gui = ((GUIHolder) e.getInventory().getHolder()).getGUI();
 		GUIStatus status = GUIs.getStatus(gui);
+		if (status == null) {
+			player.sendMessage("§cCó lỗi gì đó xảy ra, thử lại lần nữa xem");
+			player.sendMessage("§cVẫn bị thì báo với admin/helper");
+			return;
+		}
 		GUISlot gs = gui.getSlots().get(slot);
 		
 		// Place
@@ -102,6 +107,13 @@ public class GUIListener implements Listener {
 
 		GUI gui = ((GUIHolder) e.getInventory().getHolder()).getGUI();
 		GUIStatus status = GUIs.getStatus(gui);
+
+		if (status == null) {
+			player.sendMessage("§cCó lỗi gì đó xảy ra, thử lại lần nữa xem");
+			player.sendMessage("§cVẫn bị thì báo với admin/helper");
+			return;
+		}
+
 		GUIs.beforeClose(player, status);
 	}
 	
