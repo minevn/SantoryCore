@@ -456,7 +456,7 @@ public class Utils {
 	}
 
 	public static ItemStack getColoredSlot(DyeColor color) {
-		var is = new ItemStack(Material.valueOf(color.name() + "_STANED_GLASS_PANE"));
+		var is = new ItemStack(Material.valueOf(color.name() + "_STAINED_GLASS_PANE"));
 		var meta = is.getItemMeta();
 		meta.setDisplayName("§c");
 		is.setItemMeta(meta);
