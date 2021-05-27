@@ -103,19 +103,24 @@ public class WeaponListener implements Listener {
 				player.sendMessage("§cVũ khí có độ bền bằng 0, cần phải sữa chữa");
 				return;
 			}
-			
-			// Check cool-down
-			if (isCooldownAttack(player)) return;
-			setCooldownAttack(player, Double.valueOf(Travelers.getStatValue(player, Stat.ATTACK_SPEED) * 1000).longValue(), is);
+
 			// Shoot
 			if (model.getType() == ItemType.WEAPON) {
 				Weapon w = Weapon.parse(model);
-				if (w.getType().isShooter()) w.getType().getShooter().shoot(player, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.ATTACK), player.getLocation().getDirection().multiply(3), player.getLocation().add(player.getLocation().getDirection().multiply(3)).add(0, 1.5, 0));
+				if (w.getType().isShooter()) {
+					// Check cool-down
+					if (isCooldownAttack(player)) return;
+					setCooldownAttack(player, Double.valueOf(Travelers.getStatValue(player, Stat.ATTACK_SPEED) * 1000).longValue(), is);
+					w.getType().getShooter().shoot(player, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.ATTACK), player.getLocation().getDirection().multiply(3), player.getLocation().add(player.getLocation().getDirection().multiply(3)).add(0, 1.5, 0));
+				}
 				// Attack
 				else {
 					double range = Utils.getRange(item);
 					LivingEntity target = Utils.getTarget(player, range);
 					if (target == null) return;
+					// Check cool-down
+					if (isCooldownAttack(player)) return;
+					setCooldownAttack(player, Double.valueOf(Travelers.getStatValue(player, Stat.ATTACK_SPEED) * 1000).longValue(), is);
 					double dv = Travelers.getStatValue(player, Stat.DAMAGE);
 					Damages.damage(player, target, new Damage(dv, DamageType.ATTACK), 0);
 				}

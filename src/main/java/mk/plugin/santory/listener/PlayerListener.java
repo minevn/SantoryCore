@@ -172,6 +172,7 @@ public class PlayerListener implements Listener {
 	public void onQuit(PlayerQuitEvent e) {
 		Travelers.saveAndClearCache(e.getPlayer().getName());
 		Masters.saveAndClearCache(e.getPlayer());
+		SantoryCore.get().getTargetTask().removePlayer(e.getPlayer());
 	}
 	
 	@EventHandler

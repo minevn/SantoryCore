@@ -24,5 +24,6 @@ public class Traveler {
 	public TravelerData getData() {
 		return this.data;
 	}
+
 	
 }

@@ -19,7 +19,6 @@ import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -65,21 +64,21 @@ public class Utils {
 	public static void circleParticles(Particle particle, Location location, double radius) {
 		int amount = new Double(radius * 20).intValue();
 		double increment = (2 * Math.PI) / amount;
-        ArrayList<Location> locations = new ArrayList<Location>();
-        
-        for (int i = 0 ; i < amount ; i++) {
-            double angle = i * increment;
-            double x = location.getX() + (radius * Math.cos(angle));
-            double z = location.getZ() + (radius * Math.sin(angle));
-            locations.add(new Location(location.getWorld(), x, location.getY(), z));
-        }
-        
-        for (Location l : locations) {
+		ArrayList<Location> locations = new ArrayList<Location>();
+
+		for (int i = 0; i < amount; i++) {
+			double angle = i * increment;
+			double x = location.getX() + (radius * Math.cos(angle));
+			double z = location.getZ() + (radius * Math.sin(angle));
+			locations.add(new Location(location.getWorld(), x, location.getY(), z));
+		}
+
+		for (Location l : locations) {
 //        	ParticleAPI.sendParticle(e, l, 0, 0, 0, 0, 1);
-        	location.getWorld().spawnParticle(particle, l, 1, 0, 0, 0, 0);
-        }
+			location.getWorld().spawnParticle(particle, l, 1, 0, 0, 0, 0);
+		}
 	}
-	
+
 	public static Location getLandedLocation(Location l) {
 		int j = 0;
 		Location temp = l.clone();
@@ -88,14 +87,14 @@ public class Utils {
 			if (j > 10) {
 				return l;
 			}
-			temp = temp.add(0,-1,0);
+			temp = temp.add(0, -1, 0);
 		}
 		while (temp.getBlock().getType() != Material.AIR) {
 			j++;
 			if (j > 10) {
 				return l;
 			}
-			temp = temp.add(0,1,0);
+			temp = temp.add(0, 1, 0);
 		}
 		return temp;
 	}
@@ -108,18 +107,23 @@ public class Utils {
 		other.setItemMeta(meta);
 		return other;
 	}
-	
+
 	public static ItemStack getTieredIcon(Tier tier) {
 		switch (tier) {
-			case COMMON: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 8);
-			case UNCOMMON: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 3);
-			case RARE: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 14);
-			case EPIC: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 4);
-			case LEGEND: return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 5);
+			case COMMON:
+				return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 8);
+			case UNCOMMON:
+				return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 3);
+			case RARE:
+				return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 14);
+			case EPIC:
+				return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 4);
+			case LEGEND:
+				return new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, 1, (short) 5);
 		}
 		return null;
 	}
-	
+
 	public static Color readColor(String s) {
 		if (s == null) return null;
 		String split = ";";
@@ -129,7 +133,7 @@ public class Utils {
 		int blue = Integer.valueOf(s.split(split)[2]);
 		return Color.fromRGB(red, green, blue);
 	}
-	
+
 	public static String getMD5(String input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -145,7 +149,7 @@ public class Utils {
 			throw new RuntimeException(var5);
 		}
 	}
-	
+
 	public static UUID getUUIDFromString(String s) {
 		String md5 = getMD5(s);
 		String uuid = md5.substring(0, 8) + "-" + md5.substring(8, 12) + "-" + md5.substring(12, 16) + "-"
@@ -196,27 +200,27 @@ public class Utils {
 
 		return is;
 	}
-	
+
 	public static long calPower(Player player) {
 		Traveler t = Travelers.get(player);
-		int power = 0; 
+		int power = 0;
 		if (t == null) return power;
 		for (Stat stat : Stat.values()) {
-			power += t.getState().getStat(player, stat) * 56; 
+			power += t.getState().getStat(player, stat) * 56;
 		}
-		
+
 		return power;
 	}
-	
+
 	public static List<LivingEntity> getLivingEntities(Player player, Location location, double x, double y, double z) {
 		List<LivingEntity> list = Lists.newArrayList();
 		location.getWorld().getNearbyEntities(location, 5, 5, 5).stream()
 				.filter(e -> e instanceof LivingEntity && e != player).collect(Collectors.toList()).forEach(e -> {
-					list.add((LivingEntity) e);
-				});
+			list.add((LivingEntity) e);
+		});
 		return list;
 	}
-	
+
 	public static double random(double min, double max) {
 		return (new Random().nextInt(new Double((max - min) * 1000).intValue()) + min * 1000) / 1000;
 	}
@@ -224,14 +228,14 @@ public class Utils {
 	public static int randomInt(int min, int max) {
 		return new Random().nextInt(max - min + 1) + min;
 	}
-	
+
 	public static int getStatOfItem(Item item, Stat stat) {
 		ItemData data = item.getData();
 		int base = data.getStat(stat);
 		if (base == 0) return base;
-		return Double.valueOf(base * (1 + Items.ASCENT_BONUS * (data.getAscent().getValue() - 1) )).intValue() + Items.ENHANCE_BONUS * data.getLevel();
+		return Double.valueOf(base * (1 + Items.ASCENT_BONUS * (data.getAscent().getValue() - 1))).intValue() + Items.ENHANCE_BONUS * data.getLevel();
 	}
-	
+
 	public static List<String> toList(String s, int length, String start) {
 		List<String> result = new ArrayList<String>();
 		if (s == null)
@@ -265,7 +269,7 @@ public class Utils {
 
 		return result;
 	}
-	
+
 	public static String toStars(Grade tier) {
 		String s = "";
 		String star = "⭒";
@@ -275,12 +279,12 @@ public class Utils {
 		}
 		return s;
 	}
-	
+
 	public static String toStars(Ascent tier) {
 		String s = "";
 		String star = "⭒";
-		for (int i = 0 ; i < tier.getValue() ; i++) s += "§a" + star;
-		for (int i = tier.getValue() ; i < Ascent.values().length ; i++) s += "§7" + star;
+		for (int i = 0; i < tier.getValue(); i++) s += "§a" + star;
+		for (int i = tier.getValue(); i < Ascent.values().length; i++) s += "§7" + star;
 
 		return s;
 	}
@@ -296,11 +300,11 @@ public class Utils {
 
 		return regen;
 	}
-	
+
 	public static void hologram(Location location, String message, int tick, Player player) {
 		Holograms.hologram(SantoryCore.get(), location, message, tick, player);
 	}
-	
+
 	public static Location ranLoc(Location loc, double max) {
 		Vector direct1 = loc.getDirection().clone().setY(0);
 		Vector direct2 = direct1.clone().setX(direct1.getZ()).setZ(direct1.getX() * -1f);
@@ -314,11 +318,11 @@ public class Utils {
 		return result;
 	}
 
-	
+
 	public static void setGod(Entity entity, long milis) {
 		entity.setMetadata("entity-God", new FixedMetadataValue(SantoryCore.get(), System.currentTimeMillis() + milis));
 	}
-	
+
 	public static boolean isGod(Entity entity) {
 		if (entity.hasMetadata("entity-God")) {
 			boolean god = entity.getMetadata("entity-God").get(0).asLong() > System.currentTimeMillis();
@@ -327,11 +331,11 @@ public class Utils {
 		}
 		return false;
 	}
-	
+
 	public static boolean canAttack(Entity e) {
 		return !e.hasMetadata("NPC");
 	}
-	
+
 	public static boolean rate(double chance) {
 		if (chance >= 100)
 			return true;
@@ -339,11 +343,11 @@ public class Utils {
 		int random = new Random().nextInt(10000);
 		return random < rate;
 	}
-	
+
 	public static double getRange(Item item) {
 		return WeaponType.valueOf(Configs.getModel(item.getModelID()).getMetadata().get("weapon-type")).getRange();
 	}
-	
+
 	public static double round(double i) {
 		return Double.valueOf(new DecimalFormat("#.##").format(i).replace(",", "."));
 	}
@@ -357,31 +361,65 @@ public class Utils {
 		return set;
 	}
 
-	public static LivingEntity getTarget(Player source, double range) {
-		List<Block> blocksInSight = source.getLineOfSight(getAttackable(), Double.valueOf(range).intValue());
-		List<Entity> nearEntities = source.getNearbyEntities(range, range, range);
-		Block b = null;
-		
-		if (blocksInSight != null && nearEntities != null) {
-			for (Block block : blocksInSight) {
-				int xBlock = block.getX();
-				int yBlock = block.getY();
-				int zBlock = block.getZ();
+	public static LivingEntity getTargetAsync(Player player, double range) {
+		List<Entity> nears = player.getWorld().getEntities().stream().filter(e -> e.getLocation().distanceSquared(player.getLocation()) <= range * range).collect(Collectors.toList());
 
-				for (Entity entity : nearEntities) {
-					if (!(entity instanceof LivingEntity)) continue;
-					Location entityLocation = entity.getLocation();
-					int xEntity = entityLocation.getBlockX();
-					int yEntity = entityLocation.getBlockY();
-					int zEntity = entityLocation.getBlockZ();
-					if (xEntity == xBlock && (Math.abs(yBlock - yEntity) < 2) && zEntity == zBlock) {
-						return (LivingEntity) entity;
-					}
-					
+		LivingEntity target = null;
+		double d = 999;
+		for (Entity near : nears) {
+			if (!(near instanceof LivingEntity) || near == player) continue;
+
+			var l1 = ((LivingEntity) near).getEyeLocation().add(0, -1, 0);
+			var l2 = player.getEyeLocation();
+
+			var checkVector = l1.subtract(l2).toVector();
+			var direction = player.getLocation().getDirection();
+
+			var distance = player.getLocation().distance(near.getLocation());
+			var requiredAngle = Math.abs(Math.atan(1.25 / distance));
+
+			// Check angle
+			if (Math.abs(direction.angle(checkVector)) < requiredAngle) {
+				var ed = near.getLocation().distanceSquared(player.getLocation());
+				if (ed < d) {
+					d = ed;
+					target = (LivingEntity) near;
 				}
 			}
 		}
-		return null;
+
+		return target;
+	}
+
+	private static int a(double x) {
+		return (16 + (Double.valueOf(x).intValue() % 16)) % 16;
+	}
+
+	public static LivingEntity getTarget(Player source, double range) {
+		var e = getTargetAsync(source, range);
+		return e;
+//		List<Block> blocksInSight = source.getLineOfSight(getAttackable(), Double.valueOf(range).intValue());
+//		List<Entity> nearEntities = source.getNearbyEntities(range, range, range);
+//
+//		for (Block block : blocksInSight) {
+//			int xBlock = block.getX();
+//			int yBlock = block.getY();
+//			int zBlock = block.getZ();
+//
+//			for (Entity entity : nearEntities) {
+//				if (!(entity instanceof LivingEntity)) continue;
+//				Location entityLocation = entity.getLocation();
+//				int xEntity = entityLocation.getBlockX();
+//				int yEntity = entityLocation.getBlockY();
+//				int zEntity = entityLocation.getBlockZ();
+//				if (xEntity == xBlock && (Math.abs(yBlock - yEntity) < 2) && zEntity == zBlock) {
+//					return (LivingEntity) entity;
+//				}
+//
+//			}
+//		}
+//
+//		return null;
 	}
 
 	public static void stunPlayer(Player player, int seconds) {
@@ -417,13 +455,12 @@ public class Utils {
 		}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 5);
 	}
 
-
 	public static ItemStack getColoredSlot(DyeColor color) {
-		ItemStack other = new ItemStack(Material.valueOf(color.name() + "_STAINED_GLASS_PANE"), 1);
-		ItemMeta meta = other.getItemMeta();
-		meta.setDisplayName(" ");
-		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		other.setItemMeta(meta);
-		return other;
+		var is = new ItemStack(Material.valueOf(color.name() + "_STANED_GLASS_PANE"));
+		var meta = is.getItemMeta();
+		meta.setDisplayName("§c");
+		is.setItemMeta(meta);
+		return is;
 	}
+
 }

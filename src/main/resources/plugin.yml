@@ -3,7 +3,7 @@ author: MankaiStep
 version: 1.0
 main: mk.plugin.santory.main.SantoryCore
 depend: [PlayerData, HolographicDisplays, MythicMobs]
-soft-depend: [PlaceholderAPI]
+soft-depend: [PlaceholderAPI, GlowAPI]
 api-version: 1.13
 commands:
     santory:

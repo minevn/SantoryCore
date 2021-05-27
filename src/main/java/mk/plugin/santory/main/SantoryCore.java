@@ -9,6 +9,7 @@ import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.slave.task.SlaveTask;
 import mk.plugin.santory.task.HealTask;
+import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,7 +17,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SantoryCore extends JavaPlugin {
-	
+
+	private TargetTask targetTask;
+
 	@Override
 	public void onEnable() {
 		this.reloadConfig();
@@ -65,7 +68,8 @@ public class SantoryCore extends JavaPlugin {
 	}
 	
 	public void registerTasks() {
-//		new TargetTask().runTaskTimer(this, 0, 2);
+		this.targetTask = new TargetTask();
+		this.targetTask.runTaskTimerAsynchronously(this, 0, 1);
 		new HealTask().runTaskTimer(this, 0, 20);
 		new SlaveTask().runTaskTimer(this, 0, 10);
 	}
@@ -96,10 +100,13 @@ public class SantoryCore extends JavaPlugin {
 			Masters.saveAndClearCache(player);
 		});
 	}
-	
-	public static SantoryCore get() { 
+
+	public TargetTask getTargetTask() {
+		return targetTask;
+	}
+
+	public static SantoryCore get() {
 		return JavaPlugin.getPlugin(SantoryCore.class); 
 	}
-	
 	
 }
