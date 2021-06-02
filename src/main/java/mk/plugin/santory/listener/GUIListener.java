@@ -68,8 +68,9 @@ public class GUIListener implements Listener {
 		
 		Player player = (Player) e.getWhoClicked();
 		int slot = e.getSlot();
-		GUI gui = ((GUIHolder) e.getInventory().getHolder()).getGUI();
-		GUIStatus status = GUIs.getStatus(gui);
+		var holder = (GUIHolder) e.getInventory().getHolder();
+		GUI gui = holder.getGUI();
+		GUIStatus status = holder.getStatus();
 		if (status == null) {
 			player.sendMessage("§cCó lỗi gì đó xảy ra, thử lại lần nữa xem");
 			player.sendMessage("§cVẫn bị thì báo với admin/helper");
@@ -105,8 +106,8 @@ public class GUIListener implements Listener {
 		if (!(e.getInventory().getHolder() instanceof GUIHolder)) return;
 		Player player = (Player) e.getPlayer();
 
-		GUI gui = ((GUIHolder) e.getInventory().getHolder()).getGUI();
-		GUIStatus status = GUIs.getStatus(gui);
+		var holder = (GUIHolder) e.getInventory().getHolder();
+		GUIStatus status = holder.getStatus();
 
 		if (status == null) {
 			player.sendMessage("§cCó lỗi gì đó xảy ra, thử lại lần nữa xem");

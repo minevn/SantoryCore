@@ -20,16 +20,12 @@ import java.util.Map;
 
 public class GUIs {
 	
-	private static final Map<GUI, GUIStatus> statuses = Maps.newHashMap();
-	
-	public static GUIStatus getStatus(GUI gui) {
-		return statuses.getOrDefault(gui, null);
-	}
-	
 	public static void open(Player player, GUI gui) {
-		Inventory inv = Bukkit.createInventory(new GUIHolder(gui), gui.getSize(), gui.getTitle());
+		var holder = new GUIHolder(gui);
+		Inventory inv = Bukkit.createInventory(holder, gui.getSize(), gui.getTitle());
 		GUIStatus status = new GUIStatus(inv, gui);
-		statuses.put(gui, status);
+		holder.setStatus(status);
+
 		player.openInventory(inv);
 		player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 		
@@ -95,7 +91,6 @@ public class GUIs {
 			player.getInventory().addItem(is);
 		}
 		status.clearPlacedItems();
-		statuses.remove(status.getGUI());
 	}
 	
 	public static ItemStack getItemSlot(ItemStack item, String desc) {
