@@ -29,7 +29,7 @@ public class Artifacts {
 	
 	public static void check(Item item, Artifact art) {
 		ItemData data = item.getData();
-		int amount = data.getGrade().getValue() + 1;
+		int amount = data.getAscent().getValue() + 1;
 		List<StatValue> stats = data.getStats();
 		if (stats.size() >= amount) return;
 	

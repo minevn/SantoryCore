@@ -3,6 +3,8 @@ package mk.plugin.santory.item.modifty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import mk.plugin.santory.amulet.Amulet;
+import mk.plugin.santory.artifact.Artifact;
+import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
@@ -10,6 +12,7 @@ import mk.plugin.santory.event.PlayerItemAscentEvent;
 import mk.plugin.santory.gui.*;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
+import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Icon;
@@ -117,13 +120,21 @@ public class ItemAscents {
 					Item i = Items.read(r);
 					ItemData data = i.getData();
 					data.setAscent(Ascent.from(data.getAscent().getValue() + 1));
-					Items.write(player, r, i);
-					Items.update(player, r, i);
-					
+
+					boolean isArt = i.getModel().getType() == ItemType.ARTIFACT;
+
 					// Icon result
 					ItemStack icon = r.clone();
 					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
-					
+					if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi đột phá");
+
+					if (isArt) {
+						Artifact art = Artifact.parse(i.getModel());
+						Artifacts.check(i, art);
+					}
+					Items.write(player, r, i);
+					Items.update(player, r, i);
+
 					status.getInventory().setItem(RESULT_SLOT, icon);
 					status.setData("result", r);
 					

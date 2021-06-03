@@ -1,6 +1,7 @@
 package mk.plugin.santory.utils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -10,6 +11,7 @@ import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.hologram.Holograms;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
+import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.main.SantoryCore;
@@ -231,9 +233,29 @@ public class Utils {
 
 	public static int getStatOfItem(Item item, Stat stat) {
 		ItemData data = item.getData();
+
+		// Base
 		int base = data.getStat(stat);
 		if (base == 0) return base;
-		return Double.valueOf(base * (1 + Items.ASCENT_BONUS * (data.getAscent().getValue() - 1))).intValue() + Items.ENHANCE_BONUS * data.getLevel();
+
+		// Enhance
+		int enhance = Items.ENHANCE_BONUS * data.getLevel();
+
+		// Ascent
+		int ascent = 0;
+		if (item.getModel().getType() == ItemType.ARMOR) {
+			if (item.getData().getStats().get(0).getStat() == stat) {
+				int buff = getGradeBuff(item);
+				ascent = buff * base / 100;
+			}
+		}
+
+		return base + enhance + ascent;
+	}
+
+	private static int getGradeBuff(Item item) {
+		List<Integer> l = Items.skillValues(item.getModel().getDesc());
+		return l.get(item.getData().getAscent().getValue() - 1);
 	}
 
 	public static List<String> toList(String s, int length, String start) {
@@ -275,7 +297,7 @@ public class Utils {
 		String star = "⭒";
 		for (Grade t : Grade.values()) {
 			if (t.getValue() > tier.getValue()) s += "§7" + star;
-			else s += "§e" + star;
+			else s += "§a" + star;
 		}
 		return s;
 	}
@@ -283,7 +305,7 @@ public class Utils {
 	public static String toStars(Ascent tier) {
 		String s = "";
 		String star = "⭒";
-		for (int i = 0; i < tier.getValue(); i++) s += "§a" + star;
+		for (int i = 0; i < tier.getValue(); i++) s += "§e" + star;
 		for (int i = tier.getValue(); i < Ascent.values().length; i++) s += "§7" + star;
 
 		return s;

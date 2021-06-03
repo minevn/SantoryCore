@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
+import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.stat.Stat;
@@ -21,9 +22,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Items {
-	
+
 	public static final int ENHANCE_BONUS = 1;
-	public static final float ASCENT_BONUS = 0.25f;
 	
 	private static final String DATA_TAG = "santory.itemdata";
 	private static final String MODEL_TAG = "santory.itemmodel";
@@ -54,19 +54,23 @@ public class Items {
 		if (model.getType() == ItemType.ARTIFACT) Artifacts.setDesc(item);
 		String lvf = "§7§l[§f§l" + model.getTier().getColor() + "§l+" + data.getLevel() + "§7§l]";
 		String namef = model.getTier().getColor() + "§l" + model.getName();
-		String gradef = "§e§l" + Utils.toStars(data.getGrade()) + " §f| §a§l" + Utils.toStars(data.getAscent());
+		String gradef = Utils.toStars(data.getGrade()) + " §f| " + Utils.toStars(data.getAscent());
 		String durf = "§aĐộ bền: §f" + data.getDurability() + "/" + Configs.MAX_DURABILITY;
 		String element = model.getElement().getColor() + "Nguyên tố: " + model.getElement().getName();
 		List<String> descf = Lists.newArrayList();
 		if (model.getDesc() != null) {
-			String desc = gradeCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getGrade());
+			String desc = ascentCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getAscent());
 			descf = Utils.toList(desc, 25, "§f§o");
 		}
 		List<String> statf = Lists.newArrayList();
 		
 		int c = 0;
+		Map<Stat, Integer> stats = Maps.newLinkedHashMap();
 		for (StatValue sv : data.getStats()) {
-			Stat stat = sv.getStat();
+			stats.put(sv.getStat(), stats.getOrDefault(sv.getStat(), 0) + sv.getValue());
+		}
+		for (Map.Entry<Stat, Integer> sv : stats.entrySet()) {
+			Stat stat = sv.getKey();
 			int value = sv.getValue();
 			String prefix = c == 0 ? "§6§l" : "§6";
 			statf.add(prefix + stat.getName() + ": §f" + value + " §7(+" + (Utils.getStatOfItem(item, stat) - value) + ")");
@@ -84,6 +88,16 @@ public class Items {
 		lore.addAll(descf);
 		lore.add("");
 		lore.addAll(statf);
+
+		// Artifact
+		if (model.getType() == ItemType.ARTIFACT) {
+			lore.add("");
+			var stat = Artifact.parse(model).getSetStat();
+			for (Map.Entry<Integer, Double> e : Configs.getArtSetUp().entrySet()) {
+				lore.add("§cBộ " + e.getKey() + " di vật: §f+" + Double.valueOf(e.getValue() * 100).intValue() + "% " + stat.getName());
+			}
+		}
+
 		lore.add("");
 		lore.add(u);
 		lore.add(u2);
@@ -143,7 +157,7 @@ public class Items {
 		return is;
 	}
 	
-	private static String gradeCheckDesc(String desc, Grade grade) {
+	private static String ascentCheckDesc(String desc, Ascent ascent) {
 		List<String> values = Lists.newArrayList();
 		String regex = "(?<value>\\d+)[](\\|)]";
 		Pattern p = Pattern.compile(regex);
@@ -164,8 +178,8 @@ public class Items {
 
 		String news = "";
 		for (int i = 0 ; i < values.size() ; i++) {
-			if (i + 1 != grade.getValue()) news += "§7§o" + values.get(i) + "/";
-			else news += "§f§o§l" + values.get(i) + "§7§o/";
+			if (i + 1 != ascent.getValue()) news += "§7§o" + values.get(i) + "/";
+			else news += "§e§o§l" + values.get(i) + "§7§o/";
 		}
 		news = news.substring(0, news.length() - 1);
 

@@ -5,6 +5,7 @@ import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.ArtifactGUI;
 import mk.plugin.santory.artifact.Artifacts;
+import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.GUI;
@@ -117,6 +118,13 @@ public class AdminCommand implements CommandExecutor {
 					TravelerData td = t.getData();
 					td.setExp(td.getExp() + exp);
 					Travelers.save(player);
+
+					var p = Bukkit.getPlayer(player);
+					if (p != null) {
+						p.sendMessage("§a§l§o+" + exp + " Exp");
+						p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+					}
+
 					sender.sendMessage("§aDone, Exp added!");
 				}
 				
@@ -192,7 +200,7 @@ public class AdminCommand implements CommandExecutor {
 					sender.sendMessage("§aDone!");
 				}
 				
-				else if (args[0].equalsIgnoreCase("setdur")) {
+				else if (args[1].equalsIgnoreCase("setdur")) {
 					int dur = Integer.valueOf(args[2]);
 					ItemStack is = player.getInventory().getItemInMainHand();
 					Item item = Items.read(is);
@@ -203,7 +211,31 @@ public class AdminCommand implements CommandExecutor {
 					player.updateInventory();
 					sender.sendMessage("§aDone!");
 				}
-				
+
+				else if (args[1].equalsIgnoreCase("setgrade")) {
+					Grade g = Grade.valueOf(args[2]);
+					ItemStack is = player.getInventory().getItemInMainHand();
+					Item item = Items.read(is);
+					ItemData data = item.getData();
+					data.setExp(Configs.getExpRequires().get(g));
+					Items.update(player, is, item);
+					Items.write(player, is, item);
+					player.updateInventory();
+					sender.sendMessage("§aDone!");
+				}
+
+				else if (args[1].equalsIgnoreCase("setascent")) {
+					Ascent g = Ascent.valueOf(args[2]);
+					ItemStack is = player.getInventory().getItemInMainHand();
+					Item item = Items.read(is);
+					ItemData data = item.getData();
+					data.setAscent(g);
+					Items.update(player, is, item);
+					Items.write(player, is, item);
+					player.updateInventory();
+					sender.sendMessage("§aDone!");
+				}
+
 			}
 			
 			
@@ -425,6 +457,8 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§6/santory item setexp <*value>");
 		sender.sendMessage("§6/santory item setdesc <*desc>");
 		sender.sendMessage("§6/santory item setdur <*desc>");
+		sender.sendMessage("§6/santory item setgrade <*grade>");
+		sender.sendMessage("§6/santory item setascent <*ascent>");
 		sender.sendMessage("");
 		
 		// Wish commands

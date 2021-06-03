@@ -81,7 +81,7 @@ public class WeaponListener implements Listener {
 		m.put("player", player);
 		List<Integer> l = Items.skillValues(item.getModel().getDesc());
 		if (l.size() == 5) {
-			m.put("scale", Double.valueOf(l.get(item.getData().getGrade().getValue() - 1)));
+			m.put("scale", Double.valueOf(l.get(item.getData().getAscent().getValue() - 1)));
 		}
 		
 		return m;

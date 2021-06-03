@@ -175,21 +175,21 @@ public class PlayerListener implements Listener {
 		SantoryCore.get().getTargetTask().removePlayer(e.getPlayer());
 	}
 	
-	@EventHandler
-	public void onHitMuaTen(EntityDamageByEntityEvent e) {
-		if (e.getDamager() instanceof Arrow) {
-			Arrow a = (Arrow) e.getDamager();
-			if (a.hasMetadata("arrow.MuaTen")) {
-				Player player = (Player) a.getShooter();
-				a.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, a.getLocation(), 1, 0, 0, 0, 0);
-				a.getWorld().playSound(a.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 0.5f);
-				double damage = a.getMetadata("arrow.MuaTen").get(0).asDouble();
-				Utils.getLivingEntities(player, a.getLocation(), 2, 2, 2).forEach(le -> {
-					if (!Utils.canAttack(le)) return;
-					Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
-				});
-			}
-		}
-	}
+//	@EventHandler
+//	public void onHitMuaTen(EntityDamageByEntityEvent e) {
+//		if (e.getDamager() instanceof Arrow) {
+//			Arrow a = (Arrow) e.getDamager();
+//			if (a.hasMetadata("arrow.MuaTen")) {
+//				Player player = (Player) a.getShooter();
+//				a.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, a.getLocation(), 1, 0, 0, 0, 0);
+//				a.getWorld().playSound(a.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 0.5f);
+//				double damage = a.getMetadata("arrow.MuaTen").get(0).asDouble();
+//				Utils.getLivingEntities(player, a.getLocation(), 2, 2, 2).forEach(le -> {
+//					if (!Utils.canAttack(le)) return;
+//					Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
+//				});
+//			}
+//		}
+//	}
 	
 }

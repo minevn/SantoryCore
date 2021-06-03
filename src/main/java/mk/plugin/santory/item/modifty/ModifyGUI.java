@@ -69,11 +69,11 @@ public class ModifyGUI {
         var is = Icon.ENHANCE.clone();
         List<String> desc = Lists.newArrayList();
         desc.add("§a§lCường hóa cho trang bị");
-        desc.add("§f§o- Để tăng cấp độ cho trang bị");
+        desc.add("§f§o- §a§oTăng chỉ số §f§ocho trang bị");
         desc.add("§f§o- Nguyên liệu bắt buộc: Đá cường hóa");
         desc.add("§f§o- Bùa may mắn giúp không làm giảm cấp khi cường hóa thất bại");
         desc.add("§f§o  đồng thời cũng làm tăng tỷ lệ thành công");
-        desc.add("§f§o- Khi bị giới hạn cấp cường hóa, bạn cần Nâng bậc cho trang bị");
+        desc.add("§f§o- Khi §c§obị giới hạn cấp cường hóa§f§o, bạn cần §a§oNâng bậc §f§ocho trang bị");
         desc.add("§f§o  để gia tăng giới hạn cường hóa");
 
         ItemStackUtils.setDisplayName(is, desc.get(0));
@@ -87,12 +87,10 @@ public class ModifyGUI {
         var is = Icon.UPGRADE.clone();
         List<String> desc = Lists.newArrayList();
         desc.add("§a§lNâng bậc cho trang bị");
-        desc.add("§f§o- Để tăng bậc cho trang bị");
+        desc.add("§f§o- Để §a§otăng giới hạn cấp cường hóa §f§ocho trang bị");
         desc.add("§f§o- Nguyên liệu bắt buộc: Đá nâng bậc");
         desc.add("§f§o- Yêu cầu số lượng đá đặt vào bằng số lượng bùa");
         desc.add("§f§o  hoặc không có bùa");
-        desc.add("§f§o- Đối với Di vật, mỗi khi nâng bậc sẽ được");
-        desc.add("§f§o  gia tăng ngẫu nhiên một loại chỉ số");
 
         ItemStackUtils.setDisplayName(is, desc.get(0));
         desc.remove(0);
@@ -105,11 +103,13 @@ public class ModifyGUI {
         var is = Icon.ASCENT.clone();
         List<String> desc = Lists.newArrayList();
         desc.add("§a§lĐột phá cho trang bị");
-        desc.add("§f§o- Để ghép những trang bị giống nhau thành 1");
+        desc.add("§f§o- Để §a§oghép những trang bị giống nhau §f§othành 1");
         desc.add("§f§o- Nguyên liệu bắt buộc: Trang bị cùng loại");
         desc.add("§f§o- Đột phá sẽ tăng cho trang bị chính, vì vậy");
-        desc.add("§f§o  PHẢI ĐẶT TRANG BỊ BẠN MUỐN ĐỘT PHÁT ĐẦU TIÊN");
+        desc.add("§f§o  §a§oPHẢI ĐẶT TRANG BỊ BẠN MUỐN ĐỘT PHÁT ĐẦU TIÊN");
         desc.add("§f§o  rồi mới đến nguyên liệu đột phát");
+        desc.add("§f§o- Đối với §a§oDi vật, mỗi khi đột phá sẽ được");
+        desc.add("§f§o  §a§ogia tăng ngẫu nhiên một loại chỉ số");
 
         ItemStackUtils.setDisplayName(is, desc.get(0));
         desc.remove(0);

@@ -45,16 +45,22 @@ public class ArtifactGUI implements InventoryHolder {
 
 	public static void eventClick(InventoryClickEvent e) {
 		if (!(e.getInventory().getHolder() instanceof ArtifactGUI)) return;
-		int slot = e.getSlot();
 		
-		if (e.getInventory() == e.getWhoClicked().getOpenInventory().getTopInventory()) {
+		if (e.getClickedInventory()== e.getWhoClicked().getOpenInventory().getTopInventory()) {
 			var player = (Player) e.getWhoClicked();
 			player.playSound(player.getLocation(), Sound.BLOCK_WOODEN_BUTTON_CLICK_ON, 1, 1);
 			e.setCancelled(true);
+
+			int slot = e.getSlot();
 			ItemStack current = e.getCurrentItem();
 			if (SLOTS.contains(slot) || Artifacts.is(current)) {
 				ItemStack cursor = e.getCursor();
 				if (Artifacts.is(cursor)) {
+					var item = Items.read(cursor);
+					if (hasTheSameIn(e.getClickedInventory(), item, player)) {
+						player.sendMessage("§c§l§oBạn đã có Di vật này trong kho rồi!");
+						return;
+					}
 					if (isBlankSlot(current)) {
 						e.setCursor(null);
 					} else 	e.setCursor(current);
@@ -71,10 +77,21 @@ public class ArtifactGUI implements InventoryHolder {
 		}
 				
 	}
-	
+
+	private static boolean hasTheSameIn(Inventory inv, Item item, Player player) {
+		var t = Travelers.get(player);
+		for (Integer i : SLOTS) {
+			var is = inv.getItem(i);
+			if (Items.is(is)) {
+				var art = Items.read(is);
+				if (art.getModelID().equals(item.getModelID())) return true;
+			}
+		}
+		return false;
+	}
 
 	public static void eventClose(InventoryCloseEvent e) {
-		if (e.getInventory().getHolder() instanceof ArtifactGUI == false) return;
+		if (!(e.getInventory().getHolder() instanceof ArtifactGUI)) return;
 		
 		List<Item> items = Lists.newArrayList();
 		Inventory inv = e.getInventory();

@@ -132,20 +132,13 @@ public class ItemUpgrades {
 			data.setExp(data.getExp() + expUp);
 			Items.update(player, r, i);
 
-			boolean isArt = i.getModel().getType() == ItemType.ARTIFACT;
-
 			// Icon result
 			ItemStack icon = r.clone();
 			ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
 			ItemStackUtils.addLoreLine(icon, "");
 			ItemStackUtils.addLoreLine(icon, "§a§oĐiểm nguyên tố: " + (data.getExp() - expUp) + " >> " + data.getExp());
-			if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi lên bậc");
 			status.getInventory().setItem(RESULT_SLOT, icon);
 
-			if (isArt) {
-				Artifact art = Artifact.parse(i.getModel());
-				Artifacts.check(i, art);
-			}
 			Items.write(player, r, i);
 			Items.update(player, r, i);
 			status.setData("result", r);
