@@ -36,6 +36,7 @@ public class SkillDaiMa implements SkillExecutor {
         z.setNoDamageTicks(1000);
         z.setCollidable(false);
         z.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+        z.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
 
         long start = System.currentTimeMillis();
         long delay = 1000 * 3;

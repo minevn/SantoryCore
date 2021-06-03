@@ -39,7 +39,7 @@ public class SkillHuyDiet implements SkillExecutor {
         g.setCollidable(false);
         g.setVelocity(new Vector(0, -1, 0));
         g.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
-
+        g.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
 
         new BukkitRunnable() {
             @Override

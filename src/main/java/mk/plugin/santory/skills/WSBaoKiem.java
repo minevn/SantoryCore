@@ -60,9 +60,8 @@ public class WSBaoKiem implements SkillExecutor {
 						&& entity instanceof LivingEntity)
 					{
 						Tasks.sync(() -> {
-							if (Damages.isDelayed((LivingEntity) entity)) return;
-							Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 20);
-							entity.setVelocity(d.clone().multiply(1.5).setY(1.2));
+							Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 40);
+							entity.setVelocity(d.clone().multiply(0.5).setY(0.7));
 						});
 					}
 				}

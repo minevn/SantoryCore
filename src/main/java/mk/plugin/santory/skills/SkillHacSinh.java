@@ -34,6 +34,7 @@ public class SkillHacSinh implements SkillExecutor {
         p.setAI(false);
         p.setNoDamageTicks(1000);
         p.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+        p.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_AMBIENT, 1, 1);
 
