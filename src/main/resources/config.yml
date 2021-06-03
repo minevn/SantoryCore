@@ -105,6 +105,7 @@ wish-key:
       flag:
         - HIDE_ATTRIBUTES
 
+die-exp-lost-percent: 25
 keep-stone:
   name: '&a&lĐá bảo hộ'
   type: IRON_INGOT

@@ -6,6 +6,8 @@ import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.slave.master.Masters;
+import mk.plugin.santory.traveler.Traveler;
+import mk.plugin.santory.traveler.TravelerOptions;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.Wish;
@@ -61,14 +63,14 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
+		e.setKeepInventory(true);
+		e.setKeepLevel(true);
+		e.getDrops().clear();
+		e.setDroppedExp(0);
 
 		Player player = e.getEntity();
 		if (player.hasPermission("dabaoho.bypass") || Configs.isPvPWorld(player.getWorld())) {
-			e.setKeepInventory(true);
-			e.setKeepLevel(true);
-			e.getDrops().clear();
-			e.setDroppedExp(0);
-			player.sendMessage("§a§o>> Bạn được giữ đồ khi chết tại đây (PvP)");
+			player.sendMessage("§a§o>> Bạn được giữ kinh nghiệm (Exp) khi chết tại đây (PvP)");
 			return;
 		}
 		ItemStack[] contents = player.getInventory().getContents();
@@ -78,22 +80,22 @@ public class PlayerListener implements Listener {
 			if (item != null) {
 				if (Configs.isKeepStone(item)) {
 					keep = true;
-					player.sendMessage("§a§o>> Giữ đồ khi chết, tiêu thụ 1 Đá bảo hộ");
-					e.setKeepInventory(true);
-					e.setKeepLevel(true);
-					e.getDrops().clear();
-					e.setDroppedExp(0);
 					if (item.getAmount() == 1) contents[i] = null;
 					else item.setAmount(item.getAmount() - 1);
 					player.getInventory().setContents(contents);
+
+					player.sendMessage("§a§o>> Giữ kinh nghiệm (Exp) khi chết, tiêu thụ 1 Đá bảo hộ");
+
 					break;
 				}
 			}
 		}
 		if (!keep) {
-			player.sendMessage("§c§o>> Không có Đá bảo hộ, rơi đồ khi chết");
-			e.setKeepInventory(false);
-			e.setKeepLevel(true);
+			long lvTotalExp = TravelerOptions.getExpOf(player.getLevel() + 1);
+			long expLost = lvTotalExp * Configs.DIE_EXP_LOST_PERCENT / 100;
+			var t = Travelers.get(player);
+			t.getData().setExp(Math.max(0, t.getData().getExp() - expLost));
+			player.sendMessage("§c§l§o>> Không có Đá bảo hộ, chết mất " + expLost + " Exp");
 		}
 	}
 
@@ -140,56 +142,12 @@ public class PlayerListener implements Listener {
 		}
 	}
 
-	// Tab tag
-//	@EventHandler
-//	public void onTabComplete(TabCompleteEvent e) {
-//		String s = e.getBuffer();
-//		if (s.contains("@")) {
-//			String regex = "@(?<preName>\\S+)";
-//			System.out.println("nani");
-//			Pattern pt = Pattern.compile(regex);
-//			Matcher m = pt.matcher(s);
-//
-//			String preName = null;
-//			while (m.find()) {
-//				preName = m.group("preName");
-//			}
-//			if (preName == null) return;
-//
-//			List<String> avl = Lists.newArrayList();
-//			for (Player p : Bukkit.getOnlinePlayers()) {
-//				if (p.getName().toLowerCase().startsWith(preName.toLowerCase())) {
-//					avl.add("@" + p.getName());
-//				}
-//			}
-//
-//			e.setCompletions(avl);
-//		}
-//	}
-
-
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		Travelers.saveAndClearCache(e.getPlayer().getName());
 		Masters.saveAndClearCache(e.getPlayer());
 		SantoryCore.get().getTargetTask().removePlayer(e.getPlayer());
 	}
-	
-//	@EventHandler
-//	public void onHitMuaTen(EntityDamageByEntityEvent e) {
-//		if (e.getDamager() instanceof Arrow) {
-//			Arrow a = (Arrow) e.getDamager();
-//			if (a.hasMetadata("arrow.MuaTen")) {
-//				Player player = (Player) a.getShooter();
-//				a.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, a.getLocation(), 1, 0, 0, 0, 0);
-//				a.getWorld().playSound(a.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 0.5f);
-//				double damage = a.getMetadata("arrow.MuaTen").get(0).asDouble();
-//				Utils.getLivingEntities(player, a.getLocation(), 2, 2, 2).forEach(le -> {
-//					if (!Utils.canAttack(le)) return;
-//					Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
-//				});
-//			}
-//		}
-//	}
+
 	
 }

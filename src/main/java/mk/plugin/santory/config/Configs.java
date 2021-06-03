@@ -61,6 +61,8 @@ public class Configs {
 	public static int ART_BASE_SUB_STAT = 5;
 	public static double ART_STAT_RANGE = 0.25;
 
+	public static long DIE_EXP_LOST_PERCENT = 25;
+
 	private static ItemStack KEEP_STONE;
 	private static ItemStack GLOBAL_SPEAKER;
 	
@@ -104,6 +106,7 @@ public class Configs {
 		ART_STAT_RANGE = ConfigGetter.from(config).getDouble("artifact.stat-range", ART_STAT_RANGE);
 		KEEP_STONE = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("keep-stone")));
 		GLOBAL_SPEAKER = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("global-speaker")));
+		DIE_EXP_LOST_PERCENT = config.getLong("die-exp-lost-percent", 25);
 
 		// Art tiers up
 		artTierUps.clear();
@@ -348,7 +351,11 @@ public class Configs {
 	public static Map<Grade, Integer> getExpRequires() {
 		return gradeExps;
 	}
-	
+
+	public static double getDieExpLostPercent() {
+		return DIE_EXP_LOST_PERCENT;
+	}
+
 	public static double getEnhanceRate(int level) {
 		return enhanceRates.getOrDefault(level, 0d);
 	}
