@@ -7,6 +7,8 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.weapon.Weapon;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,18 +35,8 @@ public class TargetTask extends BukkitRunnable {
 				Weapon w = Weapon.parse(item.getModel());
 				double range = w.getType().isShooter() ? 20 : w.getType().getRange();
 				LivingEntity target = Utils.getTargetAsync(player, range);
-
-				if (targets.containsKey(player)) {
-					var oldTarget = targets.get(player);
-					if (oldTarget == target) return;
-					GlowAPI.setGlowing(oldTarget, false, player);
-				}
-
-				if (target == null) targets.remove(player);
-				else {
-					targets.put(player, target);
-					GlowAPI.setGlowing(target, GlowAPI.Color.RED, player);
-				}
+				if (target == null) return;
+				player.spawnParticle(Particle.REDSTONE, target.getEyeLocation().add(0, 0.35, 0), 1, 0, 0, 0, new Particle.DustOptions(Color.RED, 1));
 			}
 		});
 	}

@@ -37,7 +37,7 @@ public class SkillHuyDiet implements SkillExecutor {
         g.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0);
         g.setNoDamageTicks(1000);
         g.setCollidable(false);
-        g.setVelocity(new Vector(0, -4.5, 0));
+        g.setVelocity(new Vector(0, -1, 0));
         g.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
 
 

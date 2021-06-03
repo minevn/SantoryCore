@@ -31,7 +31,6 @@ public class HealTask extends BukkitRunnable {
 				player.setFoodLevel(player.getFoodLevel() - 1);
 				String s = "§a+" + regen;
 				Location l = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
-				Holograms.hologram(SantoryCore.get(), s, 20, player, l, 2, true);
 			}
 		}
 
