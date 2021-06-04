@@ -67,8 +67,9 @@ public class StatListener implements Listener {
 	// Player get damaged by entity not player
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamagedByEntity(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player == false) return;
-		if (e.getDamager() instanceof Player || e.getDamager() instanceof LivingEntity == false) return;
+		if (!(e.getEntity() instanceof Player)) return;
+		if (e.getDamager() instanceof Player) return;
+		if (!(e.getDamager() instanceof LivingEntity)) return;
 		
 		Player player = (Player) e.getEntity();
 		LivingEntity entity = (LivingEntity) e.getDamager();
@@ -187,7 +188,7 @@ public class StatListener implements Listener {
 					// Suc thu, xuyen giap
 					if (!(entity instanceof Player)) {
 						double defenseValue = ENTITY_DEFAULT_DEFENSE;
-						Mob mob = Mobs.get(entity.getUniqueId());
+						Mob mob = Mobs.get(entity.getEntityId());
 						if (mob != null) {
 							defenseValue = Stat.DEFENSE.pointsToValue(mob.getStat(Stat.DEFENSE));
 						}

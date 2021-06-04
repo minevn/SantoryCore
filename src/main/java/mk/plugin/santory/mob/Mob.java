@@ -8,14 +8,14 @@ import java.util.UUID;
 
 public class Mob {
 
-	private final UUID id;
+	private final int id;
 	private final MobType type;
 	private final int level;
 	private final List<StatValue> stats;
 	
 	private float damageMulti;
 
-	public Mob(UUID id, MobType type, int level, List<StatValue> stats) {
+	public Mob(int id, MobType type, int level, List<StatValue> stats) {
 		this.id = id;
 		this.type = type;
 		this.level = level;
@@ -23,7 +23,7 @@ public class Mob {
 		this.damageMulti = 1;
 	}
 
-	public UUID getID() {
+	public int getID() {
 		return this.id;
 	}
 

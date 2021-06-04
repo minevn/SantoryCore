@@ -2,9 +2,11 @@ package mk.plugin.santory.listener;
 
 import java.util.UUID;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,6 +26,7 @@ public class MobListener implements Listener {
 	@EventHandler
 	public void onSpawn(MythicMobSpawnEvent e) {
 		String id = e.getMobType().getInternalName();
+
 		if (!Configs.isMob(id)) return;
 		
 		LivingEntity entity = (LivingEntity) e.getEntity();
@@ -37,18 +40,30 @@ public class MobListener implements Listener {
 	
 	@EventHandler
 	public void onDead(EntityDeathEvent e) {
-		UUID uuid = e.getEntity().getUniqueId();
-		Mobs.remove(uuid);
+		int id = e.getEntity().getEntityId();
+		Mobs.remove(id);
 	}
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onMobDamage(EntityDamageByEntityEvent e) {
-		if (e.getEntity().getType() != EntityType.PLAYER) return;
-		if (e.getDamager().getType() == EntityType.PLAYER) return;
-		
-		UUID id = e.getDamager().getUniqueId();
+		var damager = e.getDamager();
+
+		int id = e.getDamager().getEntityId();
+
 		Mob mob = Mobs.get(id);
-		if (mob == null) return;
+		if (mob == null) {
+			if (MythicMobs.inst().getAPIHelper().isMythicMob(damager)) {
+				var mmID = MythicMobs.inst().getAPIHelper().getMythicMobInstance(damager).getMobType();
+				if (!Configs.isMob(mmID)) return;
+
+				LivingEntity entity = (LivingEntity) damager;
+				int level = Configs.getLevel(mmID);
+				MobType type = Configs.getType(mmID);
+				Mobs.set(entity, type, level, false);
+				mob = Mobs.get(id);
+			}
+			else return;
+		}
 		
 		double d = Stat.DAMAGE.pointsToValue(mob.getStat(Stat.DAMAGE)) * mob.getDamageMulti();
 		mob.setDamageMulti(1);
