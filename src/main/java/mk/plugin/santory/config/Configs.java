@@ -108,6 +108,10 @@ public class Configs {
 		GLOBAL_SPEAKER = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("global-speaker")));
 		DIE_EXP_LOST_PERCENT = config.getLong("die-exp-lost-percent", 25);
 
+		// PvP Worlds
+		pvpWorlds.clear();
+		pvpWorlds.addAll(config.getStringList("pvp-worlds"));
+
 		// Art tiers up
 		artTierUps.clear();
 		ConfigGetter.from(config).getStringList("artifact.tier-up", Lists.newArrayList()).forEach(s -> {

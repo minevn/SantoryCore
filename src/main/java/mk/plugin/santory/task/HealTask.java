@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class HealTask extends BukkitRunnable {
 
-	private final int REGEN_FOOD_LEVEL = 12;
+	private final int REGEN_FOOD_LEVEL = 15;
 	
 	@Override
 	public void run() {
@@ -29,8 +29,8 @@ public class HealTask extends BukkitRunnable {
 
 			if (regen != 0) {
 				player.setFoodLevel(player.getFoodLevel() - 1);
-				String s = "§a+" + regen;
-				Location l = player.getEyeLocation().add(player.getLocation().getDirection().multiply(2));
+				String s = "§a§l+" + regen + " HP";
+				player.sendActionBar(s);
 			}
 		}
 

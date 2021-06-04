@@ -70,7 +70,7 @@ public class SantoryCore extends JavaPlugin {
 	public void registerTasks() {
 		this.targetTask = new TargetTask();
 		this.targetTask.runTaskTimerAsynchronously(this, 0, 1);
-		new HealTask().runTaskTimer(this, 0, 20);
+		new HealTask().runTaskTimer(this, 0, 30);
 		new SlaveTask().runTaskTimer(this, 0, 10);
 	}
 	

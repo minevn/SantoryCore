@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -46,9 +47,19 @@ public class MobListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onMobDamage(EntityDamageByEntityEvent e) {
-		var damager = e.getDamager();
+		LivingEntity damager = null;
 
-		int id = e.getDamager().getEntityId();
+		if (e.getDamager() instanceof Projectile) {
+			if (((Projectile) e.getDamager()).getShooter() instanceof LivingEntity) {
+				damager = (LivingEntity) ((Projectile) e.getDamager()).getShooter();
+			}
+		}
+		else if (e.getDamager() instanceof LivingEntity) {
+			damager = (LivingEntity) e.getDamager();
+ 		}
+		if (damager == null) return;
+
+		int id = damager.getEntityId();
 
 		Mob mob = Mobs.get(id);
 		if (mob == null) {
