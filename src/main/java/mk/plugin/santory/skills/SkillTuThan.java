@@ -76,16 +76,23 @@ public class SkillTuThan implements SkillExecutor {
                 }
 
                 for (Entity entity : center.getWorld().getEntities()) {
-                    if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(center) < r * r) {
-                        if (!Utils.canAttack(entity)) continue;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 15);
-                            }
-                        }.runTask(SantoryCore.get());
+                    if (entity == player) continue;
+                    if (!(entity instanceof LivingEntity)) continue;;
+                    boolean canDamage = false;
+                    for (Location loc : list) {
+                        if (entity.getLocation().distanceSquared(loc) <= 1) {
+                            canDamage = true;
+                            break;
+                        }
                     }
-
+                    if (!canDamage) continue;
+                    if (!Utils.canAttack(entity)) continue;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 1);
+                        }
+                    }.runTask(SantoryCore.get());
                 }
 
             }
