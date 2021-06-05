@@ -87,6 +87,19 @@ public class AdminCommand implements CommandExecutor {
 
 				}
 
+				if (args[1].equalsIgnoreCase("setgrade")) {
+					Player player = Bukkit.getPlayer(args[2]);
+					Grade g = Grade.valueOf(args[3]);
+					var t = Travelers.get(player.getName());
+					t.getData().setGrade(g);
+					Travelers.save(player.getName());
+
+					// Show
+					player.sendTitle(new Title("§2§lTHĂNG BẬC " + g.name(), "§aGiới hạn cấp độ mới: " + g.getMaxLevel(), 10, 100, 10));
+					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
+
+				}
+
 				else if (args[1].equalsIgnoreCase("setlevel")) {
 					Player player = Bukkit.getPlayer(args[2]);
 					int level = Integer.parseInt(args[3]);
@@ -97,6 +110,7 @@ public class AdminCommand implements CommandExecutor {
 					TravelerData td = t.getData();
 					td.setExp(TravelerOptions.getTotalExpTo(nextlv));
 					Travelers.save(player.getName());
+					Travelers.updateLevel(player);
 					
 					sender.sendMessage("§aDone, Level set!");
 				}
@@ -108,6 +122,7 @@ public class AdminCommand implements CommandExecutor {
 					TravelerData td = t.getData();
 					td.setExp(exp);
 					Travelers.save(player);
+					if (Bukkit.getPlayer(player) != null) Travelers.updateLevel(Bukkit.getPlayer(player));
 					sender.sendMessage("§aDone, Exp set!");
 				}
 				
@@ -123,6 +138,7 @@ public class AdminCommand implements CommandExecutor {
 					if (p != null) {
 						p.sendMessage("§a§l§o+" + exp + " Exp");
 						p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+						Travelers.updateLevel(p);
 					}
 
 					sender.sendMessage("§aDone, Exp added!");
@@ -449,6 +465,7 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§c/santory player addexp <*player> <*exp>");
 		sender.sendMessage("§c/santory player showstats <*player>");
 		sender.sendMessage("§c/santory player tograde <*player> <grade>");
+		sender.sendMessage("§c/santory player setgrade <*player> <grade>");
 		sender.sendMessage("");
 		
 		// Item commands

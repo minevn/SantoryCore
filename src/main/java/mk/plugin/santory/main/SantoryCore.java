@@ -18,10 +18,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SantoryCore extends JavaPlugin {
 
+	private static SantoryCore plugin;
+
 	private TargetTask targetTask;
 
 	@Override
 	public void onEnable() {
+		plugin = this;
 		this.reloadConfig();
 		this.registerListeners();
 		this.registerCommands();
@@ -106,7 +109,7 @@ public class SantoryCore extends JavaPlugin {
 	}
 
 	public static SantoryCore get() {
-		return JavaPlugin.getPlugin(SantoryCore.class); 
+		return plugin;
 	}
 	
 }
