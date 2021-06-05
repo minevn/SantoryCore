@@ -119,6 +119,7 @@ public class ItemEnhances {
 			data.setLevel(Math.min(data.getLevel() + lvUp, data.getGrade().getMaxEnhance()));
 			Items.write(player, r, i);
 			Items.update(player, r, i);
+
 			status.setData("level", data.getLevel());
 
 			// Icon result

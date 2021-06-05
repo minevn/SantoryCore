@@ -120,6 +120,8 @@ public class ItemAscents {
 					Item i = Items.read(r);
 					ItemData data = i.getData();
 					data.setAscent(Ascent.from(data.getAscent().getValue() + 1));
+					Items.write(player, r, i);
+					Items.update(player, r, i);
 
 					boolean isArt = i.getModel().getType() == ItemType.ARTIFACT;
 
@@ -132,8 +134,7 @@ public class ItemAscents {
 						Artifact art = Artifact.parse(i.getModel());
 						Artifacts.check(i, art);
 					}
-					Items.write(player, r, i);
-					Items.update(player, r, i);
+
 
 					status.getInventory().setItem(RESULT_SLOT, icon);
 					status.setData("result", r);

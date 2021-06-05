@@ -130,6 +130,7 @@ public class ItemUpgrades {
 			ItemData data = i.getData();
 			int expUp = Configs.UPGRADE_EXP * m.getAmount();
 			data.setExp(data.getExp() + expUp);
+			Items.write(player, r, i);
 			Items.update(player, r, i);
 
 			// Icon result
@@ -139,8 +140,6 @@ public class ItemUpgrades {
 			ItemStackUtils.addLoreLine(icon, "§a§oĐiểm nguyên tố: " + (data.getExp() - expUp) + " >> " + data.getExp());
 			status.getInventory().setItem(RESULT_SLOT, icon);
 
-			Items.write(player, r, i);
-			Items.update(player, r, i);
 			status.setData("result", r);
 
 			Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
