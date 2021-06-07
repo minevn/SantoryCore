@@ -77,33 +77,40 @@ public class ItemStackManager {
     // Tag
 
     public boolean hasTag(String key) {
-        if (isNull()) return false;
-        if (meta == null) return false;
-        NamespacedKey nk = new NamespacedKey(plugin, key);
-        return meta.getPersistentDataContainer().has(nk, PersistentDataType.STRING);
+        synchronized (is) {
+            if (isNull()) return false;
+            if (meta == null) return false;
+            NamespacedKey nk = new NamespacedKey(plugin, key);
+            return meta.getPersistentDataContainer().has(nk, PersistentDataType.STRING);
+        }
     }
 
     public String getTag(String key) {
-        if (!hasTag(key)) return null;
-        NamespacedKey nk = new NamespacedKey(plugin, key);
-        return meta.getPersistentDataContainer().get(nk, PersistentDataType.STRING);
+        synchronized (is) {
+            if (!hasTag(key)) return null;
+            NamespacedKey nk = new NamespacedKey(plugin, key);
+            return meta.getPersistentDataContainer().get(nk, PersistentDataType.STRING);
+        }
     }
 
     public Map<String, String> getTags() {
-        Map<String, String> m = Maps.newLinkedHashMap();
-        for (NamespacedKey nk : meta.getPersistentDataContainer().getKeys()) {
-            String v = meta.getPersistentDataContainer().get(nk, PersistentDataType.STRING);
-            if (v == null) continue;
-            m.put(nk.getKey(), v);
+        synchronized (is) {
+            Map<String, String> m = Maps.newLinkedHashMap();
+            for (NamespacedKey nk : meta.getPersistentDataContainer().getKeys()) {
+                String v = meta.getPersistentDataContainer().get(nk, PersistentDataType.STRING);
+                if (v == null) continue;
+                m.put(nk.getKey(), v);
+            }
+            return m;
         }
-
-        return m;
     }
 
     public void setTag(String key, String value) {
-        NamespacedKey nk = new NamespacedKey(plugin, key);
-        meta.getPersistentDataContainer().set(nk, PersistentDataType.STRING, value);
-        is.setItemMeta(meta);
+        synchronized (is) {
+            NamespacedKey nk = new NamespacedKey(plugin, key);
+            meta.getPersistentDataContainer().set(nk, PersistentDataType.STRING, value);
+            is.setItemMeta(meta);
+        }
     }
 
 
