@@ -98,7 +98,7 @@ public class GUIListener implements Listener {
 	
 	@EventHandler
 	public void onDrag(InventoryDragEvent e) {
-		if (!(e.getInventory().getHolder() instanceof GUIHolder)) e.setCancelled(true);
+		if (e.getInventory().getHolder() instanceof GUIHolder) e.setCancelled(true);
 	}
 	
 	@EventHandler

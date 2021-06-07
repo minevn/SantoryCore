@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class HealTask extends BukkitRunnable {
 
-	private final int REGEN_FOOD_LEVEL = 15;
+	private final int REGEN_FOOD_LEVEL = 12;
 	
 	@Override
 	public void run() {
