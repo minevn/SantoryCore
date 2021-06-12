@@ -384,6 +384,7 @@ public class Configs {
 	}
 
 	public static boolean isKeepStone(ItemStack is) {
+		if (is == null) return false;
 		return new ItemStackManager(SantoryCore.get(), is).compareSpecial(KEEP_STONE);
 	}
 
@@ -394,6 +395,7 @@ public class Configs {
 	}
 
 	public static boolean isGlobalSpeaker(ItemStack is) {
+		if (is == null) return false;
 		return new ItemStackManager(SantoryCore.get(), is).compareSpecial(GLOBAL_SPEAKER);
 	}
 
