@@ -85,6 +85,7 @@ public class Configs {
 
 	private static String chatPrefixDefault;
 	private static final Map<String, String> chatPrefixes = Maps.newHashMap();
+	private static final Map<String, String> chatSuffixes = Maps.newHashMap();
 
 	private static List<String> xmSuccess = Lists.newArrayList();
 	private static Map<String, SantoryPermission> permissions = Maps.newHashMap();
@@ -223,6 +224,14 @@ public class Configs {
 			String permision = s.split(":")[0];
 			String prefix = s.split(":")[1];
 			chatPrefixes.put(permision, prefix);
+		}
+
+		// Chat suffix
+		chatSuffixes.clear();
+		for (String s : config.getStringList("chat-suffix")) {
+			String permision = s.split(":")[0];
+			String prefix = s.split(":")[1];
+			chatSuffixes.put(permision, prefix);
 		}
 
 		// Permission
@@ -410,5 +419,9 @@ public class Configs {
 			return true;
 		}
 		return true;
+	}
+
+	public static Map<String, String> getChatSuffixes() {
+		return chatSuffixes;
 	}
 }

@@ -146,7 +146,7 @@ public class Travelers {
 	}
 
 	public static String getFormatChatWithName(Player player) {
-		String format = "%xacminh% &a[%level%/#%power%] %prefix% %name%: &f";
+		String format = "%xacminh% &a[%level%/#%power%] %prefix% %name%%suffix%: &f";
 
 		String xacminh;
 		if (isHackChecked(player.getName())) xacminh = "§a✔";
@@ -160,6 +160,14 @@ public class Travelers {
 			}
 		}
 
+		String suffix = "";
+		for (Map.Entry<String, String> e : Configs.getChatSuffixes().entrySet()) {
+			if (player.hasPermission(e.getKey())) {
+				suffix = e.getValue();
+				break;
+			}
+		}
+
 		String level = player.getLevel() + "";
 		String power;
 		long p = Utils.calPower(player);
@@ -167,7 +175,7 @@ public class Travelers {
 		else if (p > 10000) power = p / 1000 + "k";
 		else power = p + "";
 
-		format = format.replace("%xacminh%", xacminh).replace("%level%", level).replace("%power%", power).replace("%prefix%", prefix).replace("%name%", player.getName()).replace("&", "§");
+		format = format.replace("%xacminh%", xacminh).replace("%level%", level).replace("%power%", power).replace("%prefix%", prefix).replace("%suffix%", suffix).replace("%name%", player.getName()).replace("&", "§");
 		return format;
 	}
 	

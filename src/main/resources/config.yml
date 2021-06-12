@@ -20,6 +20,8 @@ chat-prefix:
   - 'santory.vip:&3[&bVIP&3]'
   - 'santory.hero:&5[&dHERO&5]'
   - 'santory.champion:&6[&eCHAMPION&6]'
+chat-suffix:
+  - 'santory.helper: &7(&dHelper&7)'
 
 pvp-worlds:
 - world_pvp
