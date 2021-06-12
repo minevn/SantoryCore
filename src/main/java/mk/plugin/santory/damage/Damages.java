@@ -21,7 +21,8 @@ public class Damages {
 	public static void damage(Player player, LivingEntity target, Damage damage, int tickDelay) {
 		// Check delay
 		if (isDelayed(target)) return;
-		
+		if (player.getWorld() != target.getWorld()) return;
+
 		// Add tag
 		target.setMetadata(DAMAGE_TAG, new FixedMetadataValue(SantoryCore.get(), damage));
 		target.damage(damage.getValue(), player);

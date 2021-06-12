@@ -50,6 +50,10 @@ public class TravelerInfoGUI {
     }
 
     public static void open(Player viewer, Player target) {
+        if (target == null) {
+            viewer.sendMessage("§cTên người chơi không đúng!");
+            return;
+        }
         boolean isOne = viewer == target;
         int bonus = isOne ? 0 : 45;
         int size = bonus + 9;
