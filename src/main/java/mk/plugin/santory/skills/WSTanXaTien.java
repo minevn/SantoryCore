@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Sound;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,8 +41,11 @@ public class WSTanXaTien implements  SkillExecutor {
 			Arrow arrow = player.launchProjectile(Arrow.class);
 			arrow.setShooter(player);
 			arrow.setVelocity(newDir.normalize().multiply(3f));
-			arrow.setFireTicks(1000);
+			arrow.setCritical(true);
+			arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+
 			as.add(arrow);
+
 			Damages.setProjectileDamage(arrow, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.SKILL));
 		}
 		player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
