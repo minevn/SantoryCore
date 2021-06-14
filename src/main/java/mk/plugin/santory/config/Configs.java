@@ -333,7 +333,11 @@ public class Configs {
 			insures.put(Tier.valueOf(s.split(":")[0]), Integer.valueOf(s.split(":")[1]));
 		});
 		List<LocationData> locations = config.getStringList("locations").stream().map(LocationData::parse).collect(Collectors.toList());
-		return new Wish(id, name, desc, locations, rewards, insures);
+
+		// first
+		List<WishRewardItem> firstTime = config.getStringList("first-time").stream().map(s -> WishRewardItem.parse(Tier.COMMON, s)).collect(Collectors.toList());
+
+		return new Wish(id, name, desc, locations, firstTime, rewards, insures);
 	}
 	
 	public static Map<Tier, Double> getArtTierUp() {

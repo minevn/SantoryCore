@@ -13,14 +13,16 @@ public class Wish {
 	private final String name;
 	private final String desc;
 	private final List<LocationData> locations;
+	private final List<WishRewardItem> firstTime;
 	private final Map<Tier, WishReward> rewards;
 	private final Map<Tier, Integer> insures;
 	
-	public Wish(String id, String name, String desc, List<LocationData> locations, Map<Tier, WishReward> rewards, Map<Tier, Integer> insures) {
+	public Wish(String id, String name, String desc, List<LocationData> locations, List<WishRewardItem> firstTime, Map<Tier, WishReward> rewards, Map<Tier, Integer> insures) {
 		this.id = id;
 		this.name = name;
 		this.desc = desc;
 		this.locations = locations;
+		this.firstTime = firstTime;
 		this.rewards = rewards;
 		this.insures = insures;
 	}
@@ -48,5 +50,8 @@ public class Wish {
 	public Map<Tier, Integer> getInsures() {
 		return this.insures;
 	}
-	
+
+	public List<WishRewardItem> getFirstTime() {
+		return firstTime;
+	}
 }

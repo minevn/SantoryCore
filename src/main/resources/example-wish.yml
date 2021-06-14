@@ -6,6 +6,9 @@ insures:
   - 'EPIC:100'
 locations:
   - world;0;0;0
+first-time:
+  - item item1
+  - item item2
 rewards:
   COMMON:
     chance: 125

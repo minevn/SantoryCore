@@ -36,7 +36,17 @@ public class WishRolls {
 	private static Set<String> rollings = Sets.newHashSet();
 
 	public static void roll(Wish wish, Player player) {
-		WishRewardItem wri = Wishes.finalRate(wish, player);
+		var t = Travelers.get(player.getName());
+		WishRewardItem wri = null;
+
+		// Check first time
+		if (t.getData().getWish(wish.getID()).getTimes() == 0) {
+			wri = wish.getFirstTime().get(Utils.randomInt(0, wish.getFirstTime().size() - 1));
+			player.sendMessage("§aÁ đù mở hòm lần đầu");
+		} else wri = Wishes.finalRate(wish, player);
+
+		t.getData().getWish(wish.getID()).addCount();
+
 		Tier tier = wri.getTier();
 		ItemStack ri = getIcon(tier);
 
@@ -46,6 +56,7 @@ public class WishRolls {
 		player.openInventory(inv);
 		rollings.add(player.getName());
 
+		WishRewardItem finalWri = wri;
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
 			for (int i = 0 ; i < 4 ; i++) inv.setItem(rollSlots.get(i * 4), Utils.getColoredSlot(DyeColor.LIME));
@@ -76,7 +87,7 @@ public class WishRolls {
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 								inv.setItem(RESULT_SLOT, icon);
 								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-								wri.give(player);
+								finalWri.give(player);
 								player.sendMessage("§aNhận quà thành công!");
 							}, 20);
 							rollings.remove(player.getName());

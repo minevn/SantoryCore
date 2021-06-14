@@ -10,7 +10,7 @@ import mk.plugin.santory.tier.Tier;
 public class WishData {
 
 	private final String wish;
-	private final int times;
+	private int times;
 	private final Map<Tier, Integer> insures;
 	
 	public WishData(String wish) {
@@ -32,6 +32,10 @@ public class WishData {
 	
 	public int getTimes() {
 		return this.times;
+	}
+
+	public void addCount() {
+		this.times += 1;
 	}
 	
 	public Map<Tier, Integer> getInsures() {
