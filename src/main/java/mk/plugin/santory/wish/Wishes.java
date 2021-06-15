@@ -25,9 +25,6 @@ public class Wishes {
 		// Check insures
 		Traveler t = Travelers.get(player);
 		WishData wd = t.getData().getWish(w.getID());
-		
-		// Add 1 to all
-		w.getInsures().keySet().forEach(ti -> wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1));
 
 		// Check insure
 		Tier it = null;
