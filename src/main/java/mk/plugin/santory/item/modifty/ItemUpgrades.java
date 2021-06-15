@@ -18,6 +18,7 @@ import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -188,14 +189,19 @@ public class ItemUpgrades {
 
 			// Do
 			ItemStack r = (ItemStack) status.getData("result");
-
+			var readR = Items.read(r);
 
 			// Get
 			int previous = Items.read(is).getData().getAscent().getValue();
 			int after = Items.read(is).getData().getAscent().getValue();
 
+			// Amulet
+			boolean amulet = GUIs.countPlaced("amulet", status) != 0;
+
 			// Success
+			boolean success = false;
 			if (Utils.rate(chance)) {
+				success = true;
 				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 				player.getInventory().addItem(r.clone());
@@ -212,6 +218,13 @@ public class ItemUpgrades {
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, false, previous, previous));
 			}
+
+
+			// History
+			boolean finalSuccess = success;
+			Tasks.async(() -> {
+				SantoryCore.get().getUpgradeHistory().write(player, readR.getData().getExp(), finalSuccess, amulet);
+			});
 
 			GUIs.clearItems("item", status);
 			GUIs.clearItems("amulet", status);

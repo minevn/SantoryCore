@@ -17,6 +17,7 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -178,12 +179,18 @@ public class ItemAscents {
 				ItemStack is = GUIs.getItem("item", status);
 				ItemStack r = (ItemStack) status.getData("result");
 
+				// Amulet
+				boolean amulet = GUIs.countPlaced("amulet", status) != 0;
+				var readR = Items.read(r);
+
 				// Get
 				int previous = Items.read(is).getData().getAscent().getValue();
 				int after = Items.read(r).getData().getAscent().getValue();
 
 				// Success
+				boolean success = false;
 				if (Utils.rate(chance)) {
+					success = true;
 					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
 					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 					player.getInventory().addItem(r.clone());
@@ -200,6 +207,13 @@ public class ItemAscents {
 					// Event
 					Bukkit.getPluginManager().callEvent(new PlayerItemAscentEvent(player, false, previous, previous));
 				}
+
+				// History
+				boolean finalSuccess = success;
+				Tasks.async(() -> {
+					SantoryCore.get().getAscentHistory().write(player, readR.getData().getAscent(), finalSuccess, amulet);
+				});
+
 				GUIs.clearItems("item", status);
 				GUIs.clearItems("amulet", status);
 				GUIs.clearItems("material", status);

@@ -45,7 +45,9 @@ public class WishRolls {
 			player.sendMessage("§aÁ đù mở hòm lần đầu");
 		} else wri = Wishes.finalRate(wish, player);
 
+		// Save data
 		t.getData().getWish(wish.getID()).addCount();
+		Travelers.save(player.getName());
 
 		Tier tier = wri.getTier();
 		ItemStack ri = getIcon(tier);
@@ -56,7 +58,28 @@ public class WishRolls {
 		player.openInventory(inv);
 		rollings.add(player.getName());
 
+
 		WishRewardItem finalWri = wri;
+
+		// History
+		Tasks.async(() -> {
+			if (wish.getID().contains("weapon")) {
+				boolean insure = player.hasMetadata("insure-weapon");
+				if (insure) {
+					player.removeMetadata("insure-weapon", SantoryCore.get());
+				}
+				SantoryCore.get().getWeaponWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
+			}
+			else if (wish.getID().contains("armor")) {
+				boolean insure = player.hasMetadata("insure-armor");
+				if (insure) {
+					player.removeMetadata("insure-armor", SantoryCore.get());
+				}
+				SantoryCore.get().getArmorWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
+			}
+		});
+
+		// Roll
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
 			for (int i = 0 ; i < 4 ; i++) inv.setItem(rollSlots.get(i * 4), Utils.getColoredSlot(DyeColor.LIME));
@@ -96,6 +119,13 @@ public class WishRolls {
 							Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 								Bukkit.getPluginManager().callEvent(new PlayerWishRollEvent(player, wish.getID()));
 							});
+
+							// Broadcast
+							if (finalWri.getTier() == Tier.RARE || finalWri.getTier() == Tier.EPIC) {
+								for (Player p : Bukkit.getOnlinePlayers()) {
+									p.sendMessage("§7§oNgười chơi " + player.getName() + " mở được đồ " + finalWri.getTier().getName() + " tại " + wish.getName());
+								}
+							}
 
 							return;
 						}

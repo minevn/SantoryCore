@@ -335,7 +335,7 @@ public class Configs {
 		List<LocationData> locations = config.getStringList("locations").stream().map(LocationData::parse).collect(Collectors.toList());
 
 		// first
-		List<WishRewardItem> firstTime = config.getStringList("first-time").stream().map(s -> WishRewardItem.parse(Tier.COMMON, s)).collect(Collectors.toList());
+		List<WishRewardItem> firstTime = config.getStringList("first-time").stream().map(s -> WishRewardItem.parse(Tier.UNCOMMON, s)).collect(Collectors.toList());
 
 		return new Wish(id, name, desc, locations, firstTime, rewards, insures);
 	}

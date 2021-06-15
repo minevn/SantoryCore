@@ -13,6 +13,7 @@ import mk.plugin.santory.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,9 @@ public class Wishes {
 		Tier it = null;
 		for (Tier ti : wd.getInsures().keySet()) {
 			int i = wd.getInsures().get(ti);
-			if (i > 0 && w.getInsures().containsKey(ti) && i >= w.getInsures().get(ti)) it = ti; 
+			if (i > 0 && w.getInsures().containsKey(ti) && i >= w.getInsures().get(ti)) {
+				it = ti;
+			}
 		}
 
 		// No insure
@@ -51,6 +54,7 @@ public class Wishes {
 		// Has insure
 		wd.setInsure(it, 0);
 		Travelers.save(player.getName());
+		player.setMetadata("insure-" + w.getID(), new FixedMetadataValue(SantoryCore.get(), ""));
 		
 		return rate(w, it);
 	}

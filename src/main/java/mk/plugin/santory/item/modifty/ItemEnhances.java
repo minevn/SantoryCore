@@ -15,6 +15,7 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -176,12 +177,19 @@ public class ItemEnhances {
 			ItemStack is = GUIs.getItem("item", status);
 			ItemStack r = (ItemStack) status.getData("result");
 
+			var readR = Items.read(r);
+
 			// Get
 			int previous = Items.read(is).getData().getAscent().getValue();
 			int after = Items.read(r).getData().getAscent().getValue();
 
+			// Amulet
+			boolean amulet = status.hasData("hasAmulet");
+
 			// Success
+			boolean success = false;
 			if (Utils.rate(chance)) {
+				success = true;
 				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 				player.getInventory().addItem(r.clone());
@@ -193,7 +201,6 @@ public class ItemEnhances {
 				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 
-				boolean amulet = status.hasData("hasAmulet");
 				if (amulet) player.sendTitle("§7§lTHẤT BẠI T_T", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 30, 0);
 				else {
 					Item i = Items.read(is);
@@ -208,6 +215,12 @@ public class ItemEnhances {
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false, previous, after));
 			}
+
+			// History
+			boolean finalSuccess = success;
+			Tasks.async(() -> {
+				SantoryCore.get().getEnhanceHistory().write(player, readR.getData().getLevel(), finalSuccess, amulet);
+			});
 
 			GUIs.clearItems("item", status);
 			GUIs.clearItems("amulet", status);

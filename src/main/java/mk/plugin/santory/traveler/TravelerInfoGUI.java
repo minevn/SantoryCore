@@ -2,15 +2,18 @@ package mk.plugin.santory.traveler;
 
 import com.google.common.collect.Lists;
 import mk.plugin.santory.artifact.ArtifactGUI;
+import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.modifty.ModifyGUI;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.stat.Stat;
+import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.utils.Icon;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
+import mk.plugin.santory.wish.WishData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -23,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 public class TravelerInfoGUI {
 
@@ -154,6 +158,16 @@ public class TravelerInfoGUI {
         lore.add("§eCấp độ: §f" + player.getLevel());
         lore.add("§eKinh nghiệm: §f" + td.getExp() + " (" + Utils.round(player.getExp()) + "%)");
         lore.add("§eCấp bậc: §f" + td.getGrade());
+
+        // Wish insure
+        for (Map.Entry<String, WishData> e : t.getData().getWishes().entrySet()) {
+            var id = e.getKey();
+            var wish = Configs.getWish(id);
+            var rareInsure = t.getData().getWish(id).getInsures().get(Tier.RARE);
+            var epicInsure = t.getData().getWish(id).getInsures().get(Tier.EPIC);
+            lore.add("§eBảo hiểm Đỏ " + wish.getName() + ": §f" + rareInsure);
+            lore.add("§eBảo hiểm Vàng " + wish.getName() + ": §f" + epicInsure);
+        }
 
         ItemStack is = Icon.SKILL.clone();
         ItemStackUtils.setDisplayName(is, "§6§lThông tin");

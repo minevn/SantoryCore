@@ -3,6 +3,7 @@ package mk.plugin.santory.main;
 import mk.plugin.santory.command.AdminCommand;
 import mk.plugin.santory.command.PlayerCommand;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.history.histories.*;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
 import mk.plugin.santory.slave.Slaves;
@@ -22,6 +23,13 @@ public class SantoryCore extends JavaPlugin {
 
 	private TargetTask targetTask;
 
+	private WeaponWishHistory weaponWishHistory;
+	private ArmorWishHistory armorWishHistory;
+	private EnhanceHistory enhanceHistory;
+	private UpgradeHistory upgradeHistory;
+	private AscentHistory ascentHistory;
+
+
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -31,6 +39,7 @@ public class SantoryCore extends JavaPlugin {
 		this.registerTasks();
 		this.registerPlaceholders();
 		this.registerChannels();
+		this.initHistories();
 	}
 	
 	@Override
@@ -96,7 +105,15 @@ public class SantoryCore extends JavaPlugin {
 		this.getCommand("artifact").setExecutor(playerCmd);
 		this.getCommand("globalspeaker").setExecutor(playerCmd);
 	}
-	
+
+	public void initHistories() {
+		this.weaponWishHistory = new WeaponWishHistory();
+		this.armorWishHistory = new ArmorWishHistory();
+		this.enhanceHistory = new EnhanceHistory();
+		this.upgradeHistory = new UpgradeHistory();
+		this.ascentHistory = new AscentHistory();
+	}
+
 	public void saveOninePlayers() {
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			Travelers.saveAndClearCache(player.getName());
@@ -106,6 +123,26 @@ public class SantoryCore extends JavaPlugin {
 
 	public TargetTask getTargetTask() {
 		return targetTask;
+	}
+
+	public WeaponWishHistory getWeaponWishHistory() {
+		return weaponWishHistory;
+	}
+
+	public ArmorWishHistory getArmorWishHistory() {
+		return armorWishHistory;
+	}
+
+	public EnhanceHistory getEnhanceHistory() {
+		return enhanceHistory;
+	}
+
+	public UpgradeHistory getUpgradeHistory() {
+		return upgradeHistory;
+	}
+
+	public AscentHistory getAscentHistory() {
+		return ascentHistory;
 	}
 
 	public static SantoryCore get() {
