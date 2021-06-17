@@ -38,9 +38,9 @@ public class SantoryPlaceholder extends PlaceholderExpansion {
 		}
 		
 		else if (s.equalsIgnoreCase("player_xacminh")) {
-			if (player.hasMetadata("santory-xacminh")) {
-				return "§b✔ ";
-			} else return "§7✘ ";
+			if (Travelers.isHackChecked(player.getName())) {
+				return "§a✔ ";
+			} else return "§8✔ ";
 		}
 		
 		else if (s.contains("random_int_")) {
