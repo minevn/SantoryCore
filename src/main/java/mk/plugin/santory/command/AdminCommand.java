@@ -25,6 +25,7 @@ import mk.plugin.santory.slave.item.SlaveFood;
 import mk.plugin.santory.slave.item.SlaveStone;
 import mk.plugin.santory.slave.master.Master;
 import mk.plugin.santory.slave.master.Masters;
+import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.traveler.*;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
@@ -262,18 +263,32 @@ public class AdminCommand implements CommandExecutor {
 				
 				Player player = null;
 				if (sender instanceof Player) player = (Player) sender;
-				
-				if (args[1].equalsIgnoreCase("roll")) {
-					String id = args[2];
-					if (args.length >= 4)	player = Bukkit.getPlayer(args[3]);
+				String id = args[2];
+
+				if (args[1].equalsIgnoreCase("roll")) { ;
+					if (args.length >= 4) player = Bukkit.getPlayer(args[3]);
 					Wish wish = Configs.getWish(id);
 					WishRolls.roll(wish, player);
 				}
 
 				else if (args[1].equalsIgnoreCase("getkey")) {
-					var id = args[2];
 					player.getInventory().addItem(Wishes.buildKey(id));
 				}
+
+				else if (args[1].equalsIgnoreCase("setinsure")) {
+					String pName = null;
+					Tier tier = Tier.valueOf(args[3].toUpperCase());
+					int amount = Integer.parseInt(args[4]);
+					if (args.length >= 6) pName = args[5];
+					else pName = sender.getName();
+
+					var t = Travelers.get(pName);
+					t.getData().getWish(id).setInsure(tier, amount);
+					Travelers.save(pName);
+
+					sender.sendMessage("§aDone!");
+				}
+
 			}
 			
 			/*
@@ -481,6 +496,7 @@ public class AdminCommand implements CommandExecutor {
 		// Wish commands
 		sender.sendMessage("§e/santory wish roll <*id> <player>");
 		sender.sendMessage("§e/santory wish getkey <*id> <player>");
+		sender.sendMessage("§e/santory wish setinsure <*id> <*tier> <*amount> <player>");
 		sender.sendMessage("");
 		
 		// GUI commands
