@@ -312,6 +312,8 @@ public class Utils {
 	}
 
 	public static double addHealth(LivingEntity le, double amount) {
+		if (le.isDead()) return 0;
+
 		double currentHealth = le.getHealth();
 		double maxHealth = le.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		if (le.isDead()) return 0;

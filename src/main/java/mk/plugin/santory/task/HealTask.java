@@ -39,7 +39,7 @@ public class HealTask extends BukkitRunnable {
 			if (Slaves.isDead(id)) continue;
 			LivingEntity le = Slaves.getSlaveEntity(id);
 			if (le == null) continue;
-			Utils.addHealth(le, Slaves.getHeal(id));
+ 			Utils.addHealth(le, Slaves.getHeal(id));
 		}
 	}
 	
