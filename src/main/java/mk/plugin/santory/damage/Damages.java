@@ -19,6 +19,9 @@ public class Damages {
 	private static final Map<LivingEntity, Long> damaged = new HashMap<LivingEntity, Long> ();
 	
 	public static void damage(Player player, LivingEntity target, Damage damage, int tickDelay) {
+		// Check target is dead
+		if (target.isDead() || target.getHealth() <= 0) return;
+
 		// Check delay
 		if (isDelayed(target)) return;
 		if (player.getWorld() != target.getWorld()) return;
