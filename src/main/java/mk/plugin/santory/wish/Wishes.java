@@ -47,11 +47,12 @@ public class Wishes {
 
 			return rate(w, tr);
 		}
-		
-		// Has insure
-		wd.setInsure(it, 0);
-		Travelers.save(player.getName());
-		player.setMetadata("insure-" + w.getID(), new FixedMetadataValue(SantoryCore.get(), ""));
+		else {
+			// Has insure
+			wd.setInsure(it, 0);
+			Travelers.save(player.getName());
+			player.setMetadata("insure-" + w.getID(), new FixedMetadataValue(SantoryCore.get(), ""));
+		}
 		
 		return rate(w, it);
 	}

@@ -43,7 +43,6 @@ public class WishRolls {
 		// Add 1 to all
 		WishData wd = t.getData().getWish(wish.getID());
 		wish.getInsures().keySet().forEach(ti -> wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1));
-
 		// Check first time
 		if (t.getData().getWish(wish.getID()).getTimes() == 0) {
 			wri = wish.getFirstTime().get(Utils.randomInt(0, wish.getFirstTime().size() - 1));
