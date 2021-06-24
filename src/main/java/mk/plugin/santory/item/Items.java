@@ -54,7 +54,7 @@ public class Items {
 		if (model.getType() == ItemType.ARTIFACT) Artifacts.setDesc(item);
 		String lvf = "§7§l[§f§l" + model.getTier().getColor() + "§l+" + data.getLevel() + "§7§l]";
 		String namef = model.getTier().getColor() + "§l" + model.getName();
-		String gradef = Utils.toStars(data.getGrade()) + " §f| " + Utils.toStars(data.getAscent());
+		String gradef = "§eĐột phá: " + Utils.toStars(data.getAscent());
 		String durf = "§aĐộ bền: §f" + data.getDurability() + "/" + Configs.MAX_DURABILITY;
 		String element = model.getElement().getColor() + "Nguyên tố: " + model.getElement().getName();
 		List<String> descf = Lists.newArrayList();
@@ -89,6 +89,7 @@ public class Items {
 		ItemStackUtils.setDisplayName(is, lvf + " " + namef);
 		List<String> lore = Lists.newArrayList();
 		lore.add(gradef);
+		lore.add("");
 		lore.addAll(descf);
 		lore.add("");
 		lore.addAll(statf);
