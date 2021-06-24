@@ -70,7 +70,7 @@ public class Travelers {
 			for (Stat stat : Stat.values()) {
 				int value = item.getData().getStat(stat);
 				if (value == 0) continue;
-				stats.put(stat, stats.getOrDefault(stat, 0) + Items.getStat(item, stat));
+				stats.put(stat, stats.getOrDefault(stat, 0) + Items.calStat(item, stat));
 			}
 		});
 		

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Items {
 
@@ -75,7 +76,12 @@ public class Items {
 			String prefix = c == 0 ? "§6§l" : "§6";
 
 			var t = item.getModel().getTier();
-			var enhanceUp = " §7(§f+" + (Items.getStat(item, stat) - item.getModel().getBaseStats().getOrDefault(stat, 0)) + "§7)" + t.getColor() + " (+" + (t.getEnhanceUp() * data.getLevel()) + "%)";
+			int statCount = data.getStats().stream().filter(statv -> statv.getStat() == stat).collect(Collectors.toList()).size();
+			int percentUp = t.getEnhanceUp() * data.getLevel() * statCount;
+
+			int statUp = (Items.calStat(item, stat) - item.getData().getStat(stat));
+
+			var enhanceUp = " §7(§f+" + statUp + "§7)" + t.getColor() + " (+" + percentUp + "%)";
 			statf.add(prefix + stat.getName() + ": §f" + value + enhanceUp);
 
 			c++;
@@ -89,8 +95,10 @@ public class Items {
 		ItemStackUtils.setDisplayName(is, lvf + " " + namef);
 		List<String> lore = Lists.newArrayList();
 		lore.add(gradef);
-		lore.add("");
-		lore.addAll(descf);
+		if (descf.size() != 0) {
+			lore.add("");
+			lore.addAll(descf);
+		}
 		lore.add("");
 		lore.addAll(statf);
 
@@ -203,7 +211,7 @@ public class Items {
 		return values;
 	}
 
-	public static int getStat(Item item, Stat stat) {
+	public static int calStat(Item item, Stat stat) {
 		ItemData data = item.getData();
 
 		// Base
@@ -212,7 +220,8 @@ public class Items {
 
 		// Enhance
 		int elv = data.getLevel();
-		double enhanceD = base * elv * item.getModel().getTier().getEnhanceUp() / 100;
+		int statCount = data.getStats().stream().filter(statv -> statv.getStat() == stat).collect(Collectors.toList()).size();
+		double enhanceD = base * elv * item.getModel().getTier().getEnhanceUp() * statCount / 100;
 		if (enhanceD > 0 && enhanceD < 1) enhanceD = 1;
 		int enhance = Long.valueOf(Math.round(enhanceD)).intValue();
 
