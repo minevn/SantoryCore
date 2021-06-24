@@ -20,9 +20,9 @@ public class HealTask extends BukkitRunnable {
 	public void run() {
 		// Players
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (player.isDead()) return;
+			if (player.isDead()) continue;
 			double value = Travelers.getStatValue(player, Stat.HEAL);
-			if (player.getFoodLevel() < REGEN_FOOD_LEVEL) return;
+			if (player.getFoodLevel() < REGEN_FOOD_LEVEL) continue;
 
 			player.setHealthScale(20);
 			int regen = Double.valueOf(Utils.addHealth(player, value)).intValue();
