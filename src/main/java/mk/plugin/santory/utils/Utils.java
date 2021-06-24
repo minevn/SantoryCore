@@ -231,33 +231,6 @@ public class Utils {
 		return new Random().nextInt(max - min + 1) + min;
 	}
 
-	public static int getStatOfItem(Item item, Stat stat) {
-		ItemData data = item.getData();
-
-		// Base
-		int base = data.getStat(stat);
-		if (base == 0) return base;
-
-		// Enhance
-		int enhance = Items.ENHANCE_BONUS * data.getLevel();
-
-		// Ascent
-		int ascent = 0;
-		if (item.getModel().getType() == ItemType.ARMOR) {
-			if (item.getData().getStats().get(0).getStat() == stat) {
-				int buff = getGradeBuff(item);
-				ascent = buff * base / 100;
-			}
-		}
-
-		return base + enhance + ascent;
-	}
-
-	private static int getGradeBuff(Item item) {
-		List<Integer> l = Items.skillValues(item.getModel().getDesc());
-		return l.get(item.getData().getAscent().getValue() - 1);
-	}
-
 	public static List<String> toList(String s, int length, String start) {
 		List<String> result = new ArrayList<String>();
 		if (s == null)

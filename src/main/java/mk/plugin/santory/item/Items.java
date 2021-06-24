@@ -73,7 +73,11 @@ public class Items {
 			Stat stat = sv.getKey();
 			int value = sv.getValue();
 			String prefix = c == 0 ? "§6§l" : "§6";
-			statf.add(prefix + stat.getName() + ": §f" + value + " §7(+" + (Utils.getStatOfItem(item, stat) - value) + ")");
+
+			var t = item.getModel().getTier();
+			var enhanceUp = " §7(§f+" + (Items.getStat(item, stat) - item.getModel().getBaseStats().getOrDefault(stat, 0)) + "§7)" + t.getColor() + " (+" + (t.getEnhanceUp() * data.getLevel()) + "%)";
+			statf.add(prefix + stat.getName() + ": §f" + value + enhanceUp);
+
 			c++;
 		}
 
@@ -196,6 +200,36 @@ public class Items {
 			values.add(Integer.valueOf(m.group("value")));
 		}
 		return values;
+	}
+
+	public static int getStat(Item item, Stat stat) {
+		ItemData data = item.getData();
+
+		// Base
+		int base = data.getStat(stat);
+		if (base == 0) return base;
+
+		// Enhance
+		int elv = data.getLevel();
+		double enhanceD = base * elv * item.getModel().getTier().getEnhanceUp() / 100;
+		if (enhanceD > 0 && enhanceD < 1) enhanceD = 1;
+		int enhance = Long.valueOf(Math.round(enhanceD)).intValue();
+
+		// Ascent
+		int ascent = 0;
+		if (item.getModel().getType() == ItemType.ARMOR) {
+			if (item.getData().getStats().get(0).getStat() == stat) {
+				int buff = getArmorAscentBuff(item);
+				ascent = buff * base / 100;
+			}
+		}
+
+		return base + enhance + ascent;
+	}
+
+	private static int getArmorAscentBuff(Item item) {
+		List<Integer> l = Items.skillValues(item.getModel().getDesc());
+		return l.get(item.getData().getAscent().getValue() - 1);
 	}
 
 }

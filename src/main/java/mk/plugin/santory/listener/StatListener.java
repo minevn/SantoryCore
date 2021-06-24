@@ -229,13 +229,17 @@ public class StatListener implements Listener {
 				// After damage
 				double lastDamage = damage;
 				double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
+				Damage finalD = d;
 				new BukkitRunnable() {
 					@Override
 					public void run() {
 						entity.setNoDamageTicks(dtick);
-						// Hut mau
-						double value = Travelers.getStatValue(player, Stat.LIFE_STEAL);
-						Utils.addHealth(player, lastDamage * value / 100);
+
+						// Life steal for attack only
+						if (finalD.getType() == DamageType.ATTACK) {
+							double value = Travelers.getStatValue(player, Stat.LIFE_STEAL);
+							Utils.addHealth(player, lastDamage * value / 100);
+						}
 						
 						// Holograms
 						Holograms.hologram(SantoryCore.get(), holos, 15, player, entity, 1);

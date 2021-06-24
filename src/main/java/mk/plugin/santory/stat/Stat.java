@@ -26,7 +26,7 @@ public enum Stat{
 		@Override
 		public double pointsToValue(int point) {
 			if (point < getMinValue()) point = getMinValue();
-			return point * 3;
+			return point * 2.5;
 		}
 		
 		@Override
@@ -106,7 +106,7 @@ public enum Stat{
 	CRIT_CHANCE("Chí mạng", 5, "§e") {
 		@Override
 		public double pointsToValue(int point) {
-			return Utils.round(((double) point / (point + 50))) * 100;
+			return Utils.round(((double) point / (point + 100))) * 100;
 		} 
 		
 		@Override
@@ -121,7 +121,7 @@ public enum Stat{
 	ATTACK_SPEED("Tốc đánh", 0, "§3") {
 		@Override
 		public double pointsToValue(int point) {
-			return 1.5 - ((double) point / (point + 30) * 1.5) * 1.2;
+			return 1.4 - (double) point / (point + 70) * 1.8;
 		}
 		
 		@Override
