@@ -16,7 +16,7 @@ public class Damages {
 	
 	public static final String DAMAGE_TAG = "satory.damage";
 	
-	private static final Map<LivingEntity, Long> damaged = new HashMap<LivingEntity, Long> ();
+	private static final Map<LivingEntity, Long> damaged = new HashMap<> ();
 	
 	public static void damage(Player player, LivingEntity target, Damage damage, int tickDelay) {
 		// Check target is dead
@@ -24,6 +24,9 @@ public class Damages {
 
 		// Check delay
 		if (isDelayed(target)) return;
+		damaged.remove(target);
+
+		// Check world
 		if (player.getWorld() != target.getWorld()) return;
 
 		// Add tag
@@ -31,10 +34,7 @@ public class Damages {
 		target.damage(damage.getValue(), player);
 		
 		if (tickDelay > 0) {
-			if (damaged.containsKey(target)) {
-				if (damaged.get(target) > System.currentTimeMillis()) return;
-			}
-			damaged.put(target, System.currentTimeMillis() + (tickDelay * 1000 / 20));
+			damaged.put(target, System.currentTimeMillis() + (tickDelay * 1000L / 20));
 		}
 
 		// Event

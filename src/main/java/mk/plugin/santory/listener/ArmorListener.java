@@ -21,21 +21,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
+/*
+DONT TOUCH ANYTHING, IT'S A PART OF AN API
+ */
+
 public class ArmorListener implements Listener {
-	
-	@EventHandler
-	public void onArmor(ArmorEquipEvent e) {
-		ItemStack ni = e.getNewArmorPiece();
-		ItemStack oi = e.getOldArmorPiece();
-		boolean can = Items.isType(ni, ItemType.ARMOR) || ni == null || ni.getType() == Material.AIR;
-		if (!can) e.setCancelled(true);
-	}
-
-
-
-
-
-
 
 	/*
 	DONT TOUCH

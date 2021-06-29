@@ -2,6 +2,7 @@ package mk.plugin.santory.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import mk.plugin.santory.effect.Effect;
 import mk.plugin.santory.element.Element;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.item.ItemModel;
@@ -12,6 +13,8 @@ import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.MobType;
 import mk.plugin.santory.permission.SantoryPermission;
 import mk.plugin.santory.skill.Skill;
+import mk.plugin.santory.skin.Skin;
+import mk.plugin.santory.skin.SkinType;
 import mk.plugin.santory.slave.SlaveModel;
 import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
@@ -89,6 +92,8 @@ public class Configs {
 
 	private static List<String> xmSuccess = Lists.newArrayList();
 	private static Map<String, SantoryPermission> permissions = Maps.newHashMap();
+
+	private static Map<String, Skin> skins = Maps.newHashMap();
 
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
@@ -174,6 +179,25 @@ public class Configs {
 			FileConfiguration ic = YamlConfiguration.loadConfiguration(f);
 			String id = f.getName().replace(".yml", "");
 			slaves.put(id, readSlave(ic));
+		}
+
+		// Skins
+		skins.clear();
+		iF = new File(plugin.getDataFolder() + "//skins");
+		if (!iF.exists()) {
+			InputStream is = plugin.getResource("example-skin.yml");
+			File file = new File(plugin.getDataFolder() + "//skins//example-skin.yml");
+			try {
+				FileUtils.copyInputStreamToFile(is, file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		iF.mkdirs();
+		for (File f : iF.listFiles()) {
+			FileConfiguration ic = YamlConfiguration.loadConfiguration(f);
+			String id = f.getName().replace(".yml", "");
+			skins.put(id, readSkin(id, ic));
 		}
 
 		// Grade exp
@@ -339,6 +363,18 @@ public class Configs {
 
 		return new Wish(id, name, desc, locations, firstTime, rewards, insures);
 	}
+
+	private static Skin readSkin(String id, FileConfiguration config) {
+		var m = Material.valueOf(config.getString("material"));
+		var model = config.getInt("model");
+		var effect = Effect.valueOf(config.getString("effect"));
+		var tier = Tier.valueOf(config.getString("tier").toUpperCase());
+		var type = SkinType.valueOf(config.getString("type").toUpperCase());
+		var name = config.getString("name");
+		var desc = config.getString("desc", "");
+
+		return new Skin(id, m, model, effect, tier, type, name, desc);
+	}
 	
 	public static Map<Tier, Double> getArtTierUp() {
 		return artTierUps;
@@ -430,4 +466,9 @@ public class Configs {
 	public static Map<String, String> getChatSuffixes() {
 		return chatSuffixes;
 	}
+
+	public static Skin getSkin(String id) {
+		return skins.getOrDefault(id, null);
+	}
+
 }

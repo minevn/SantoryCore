@@ -124,11 +124,6 @@ public class ItemAscents {
 
 					boolean isArt = i.getModel().getType() == ItemType.ARTIFACT;
 
-					// Icon result
-					ItemStack icon = r.clone();
-					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
-					if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi đột phá");
-
 					if (isArt) {
 						Artifact art = Artifact.parse(i.getModel());
 						Artifacts.check(i, art);
@@ -136,6 +131,10 @@ public class ItemAscents {
 					Items.write(player, r, i);
 					Items.update(player, r, i);
 
+					// Icon result
+					ItemStack icon = r.clone();
+					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
+					if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi đột phá");
 
 					status.getInventory().setItem(RESULT_SLOT, icon);
 					status.setData("result", r);

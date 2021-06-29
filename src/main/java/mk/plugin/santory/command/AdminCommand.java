@@ -7,6 +7,9 @@ import mk.plugin.santory.artifact.ArtifactGUI;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
+import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.gui.GUI;
 import mk.plugin.santory.gui.GUIs;
@@ -18,6 +21,7 @@ import mk.plugin.santory.item.modifty.ItemEnhances;
 import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
+import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.slave.Slave;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
@@ -36,8 +40,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.UUID;
 
@@ -456,6 +462,17 @@ public class AdminCommand implements CommandExecutor {
 				}
 
 			}
+
+			/*
+			Skin
+			 */
+			else if (args[0].equalsIgnoreCase("skin")) {
+				if (args[1].equalsIgnoreCase("build")) {
+					var id = args[2];
+					var player = (Player) sender;
+					player.getInventory().addItem(Skins.build(id));
+				}
+			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -525,6 +542,9 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§a/santory slave addexp <*exp>");
 		sender.sendMessage("§a/santory slave getstone <*I/II/III/IV/V>");
 		sender.sendMessage("§a/santory slave gui <player>");
+
+		// Skins
+		sender.sendMessage("§a/santory skin build <id>");
 
 		sender.sendMessage("§2§l=================================================");
 		
