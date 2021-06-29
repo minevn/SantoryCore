@@ -76,8 +76,7 @@ public class Items {
 			String prefix = c == 0 ? "§6§l" : "§6";
 
 			var t = item.getModel().getTier();
-			int statCount = data.getStats().stream().filter(statv -> statv.getStat() == stat).collect(Collectors.toList()).size();
-			int percentUp = t.getEnhanceUp() * data.getLevel() * statCount;
+			int percentUp = t.getEnhanceUp() * data.getLevel();
 
 			int statUp = (Items.calStat(item, stat) - item.getData().getStat(stat));
 
@@ -220,8 +219,7 @@ public class Items {
 
 		// Enhance
 		int elv = data.getLevel();
-		int statCount = data.getStats().stream().filter(statv -> statv.getStat() == stat).collect(Collectors.toList()).size();
-		double enhanceD = base * elv * item.getModel().getTier().getEnhanceUp() * statCount / 100;
+		double enhanceD = base * elv * item.getModel().getTier().getEnhanceUp() / 100;
 		if (enhanceD > 0 && enhanceD < 1) enhanceD = 1;
 		int enhance = Long.valueOf(Math.round(enhanceD)).intValue();
 
