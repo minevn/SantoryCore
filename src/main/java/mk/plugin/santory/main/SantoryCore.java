@@ -42,6 +42,7 @@ public class SantoryCore extends JavaPlugin {
 		this.registerPlaceholders();
 		this.registerChannels();
 		this.initHistories();
+		this.updateOnlinePlayers();
 	}
 	
 	@Override
@@ -123,6 +124,12 @@ public class SantoryCore extends JavaPlugin {
 			Travelers.saveAndClearCache(player.getName());
 			Masters.saveAndClearCache(player);
 		});
+	}
+
+	public void updateOnlinePlayers() {
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			Travelers.updateState(p);
+		}
 	}
 
 	public TargetTask getTargetTask() {

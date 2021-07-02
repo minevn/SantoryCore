@@ -121,20 +121,21 @@ public class ItemAscents {
 					Item i = Items.read(r);
 					ItemData data = i.getData();
 					data.setAscent(Ascent.from(data.getAscent().getValue() + 1));
+					Items.write(player, r, i);
+					Items.update(player, r, i);
 
 					boolean isArt = i.getModel().getType() == ItemType.ARTIFACT;
 
+					// Icon result
+					ItemStack icon = r.clone();
+					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
 					if (isArt) {
+						ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi đột phá");
 						Artifact art = Artifact.parse(i.getModel());
 						Artifacts.check(i, art);
 					}
 					Items.write(player, r, i);
 					Items.update(player, r, i);
-
-					// Icon result
-					ItemStack icon = r.clone();
-					ItemStackUtils.setDisplayName(icon, ItemStackUtils.getName(icon) + " §7§o(Sản phẩm)");
-					if (isArt) ItemStackUtils.addLoreLine(icon, "§a§oTăng ngẫu nhiên một chỉ số khi đột phá");
 
 					status.getInventory().setItem(RESULT_SLOT, icon);
 					status.setData("result", r);

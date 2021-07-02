@@ -2,6 +2,7 @@ package mk.plugin.santory.item;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.math.Stats;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.ascent.Ascent;
@@ -55,7 +56,7 @@ public class Items {
 		if (model.getType() == ItemType.ARTIFACT) Artifacts.setDesc(item);
 		String lvf = "§7§l[§f§l" + model.getTier().getColor() + "§l+" + data.getLevel() + "§7§l]";
 		String namef = model.getTier().getColor() + "§l" + model.getName();
-		String gradef = "§eĐột phá: " + Utils.toStars(data.getAscent());
+		String gradef = "§eĐ.phá: " + Utils.toStars(data.getAscent()) + " | §eL.chiến: §f" + calPower(item);
 		String durf = "§aĐộ bền: §f" + data.getDurability() + "/" + Configs.MAX_DURABILITY;
 		String element = model.getElement().getColor() + "Nguyên tố: " + model.getElement().getName();
 		List<String> descf = Lists.newArrayList();
@@ -208,6 +209,15 @@ public class Items {
 			values.add(Integer.valueOf(m.group("value")));
 		}
 		return values;
+	}
+
+	public static int calPower(Item item) {
+		int p = 0;
+		for (Stat stat : Stat.values()) {
+			p += Utils.calPower(calStat(item, stat));
+		}
+
+		return p;
 	}
 
 	public static int calStat(Item item, Stat stat) {

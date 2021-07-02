@@ -214,6 +214,10 @@ public class Utils {
 		return power;
 	}
 
+	public static long calPower(int stat) {
+		return stat * 56;
+	}
+
 	public static List<LivingEntity> getLivingEntities(Player player, Location location, double x, double y, double z) {
 		List<LivingEntity> list = Lists.newArrayList();
 		location.getWorld().getNearbyEntities(location, 5, 5, 5).stream()
