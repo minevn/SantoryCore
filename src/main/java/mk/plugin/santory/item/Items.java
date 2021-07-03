@@ -2,7 +2,6 @@ package mk.plugin.santory.item;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.math.Stats;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.ascent.Ascent;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class Items {
 
@@ -237,7 +235,7 @@ public class Items {
 		int ascent = 0;
 		if (item.getModel().getType() == ItemType.ARMOR) {
 			if (item.getData().getStats().get(0).getStat() == stat) {
-				int buff = getArmorAscentBuff(item);
+				int buff = getAscentValue(item);
 				ascent = buff * base / 100;
 			}
 		}
@@ -245,7 +243,7 @@ public class Items {
 		return base + enhance + ascent;
 	}
 
-	private static int getArmorAscentBuff(Item item) {
+	public static int getAscentValue(Item item) {
 		List<Integer> l = Items.skillValues(item.getModel().getDesc());
 		return l.get(item.getData().getAscent().getValue() - 1);
 	}

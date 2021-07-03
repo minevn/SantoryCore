@@ -462,17 +462,6 @@ public class AdminCommand implements CommandExecutor {
 				}
 
 			}
-
-			/*
-			Skin
-			 */
-			else if (args[0].equalsIgnoreCase("skin")) {
-				if (args[1].equalsIgnoreCase("build")) {
-					var id = args[2];
-					var player = (Player) sender;
-					player.getInventory().addItem(Skins.build(id));
-				}
-			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -542,9 +531,7 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§a/santory slave addexp <*exp>");
 		sender.sendMessage("§a/santory slave getstone <*I/II/III/IV/V>");
 		sender.sendMessage("§a/santory slave gui <player>");
-
-		// Skins
-		sender.sendMessage("§a/santory skin build <id>");
+		sender.sendMessage("");
 
 		sender.sendMessage("§2§l=================================================");
 		

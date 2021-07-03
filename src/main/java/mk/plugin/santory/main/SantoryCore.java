@@ -9,7 +9,6 @@ import mk.plugin.santory.placeholder.SantoryPlaceholder;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.slave.task.SlaveTask;
-import mk.plugin.santory.task.EffectTask;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
@@ -23,7 +22,6 @@ public class SantoryCore extends JavaPlugin {
 	private static SantoryCore plugin;
 
 	private TargetTask targetTask;
-	private EffectTask effectTask;
 
 	private WeaponWishHistory weaponWishHistory;
 	private ArmorWishHistory armorWishHistory;
@@ -86,7 +84,6 @@ public class SantoryCore extends JavaPlugin {
 	public void registerTasks() {
 		this.targetTask = new TargetTask();
 		this.targetTask.runTaskTimerAsynchronously(this, 0, 1);
-		this.effectTask = EffectTask.start();
 		new HealTask().runTaskTimer(this, 0, 30);
 		new SlaveTask().runTaskTimer(this, 0, 10);
 	}
@@ -154,10 +151,6 @@ public class SantoryCore extends JavaPlugin {
 
 	public AscentHistory getAscentHistory() {
 		return ascentHistory;
-	}
-
-	public EffectTask getEffectTask() {
-		return effectTask;
 	}
 
 	public static SantoryCore get() {

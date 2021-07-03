@@ -1,14 +1,11 @@
 package mk.plugin.santory.listener;
 
 import mk.plugin.santory.event.ArmorEquipEvent;
-import mk.plugin.santory.event.SkinEquipEvent;
-import mk.plugin.santory.event.SkinUnequipEvent;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.armor.ArmorType;
 import mk.plugin.santory.skin.SkinType;
 import mk.plugin.santory.skin.Skins;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -108,21 +105,11 @@ public class ItemEquipListener implements Listener {
             // Skin offhand
             if (slot == 40) {
                 if (skin.getType() != SkinType.OFFHAND) e.setCancelled(true);
-                else {
-                    Bukkit.getPluginManager().callEvent(new SkinEquipEvent(p, skin.getId()));
-                    var outSkin = Skins.read(e.getCurrentItem());
-                    if (outSkin != null) Bukkit.getPluginManager().callEvent(new SkinUnequipEvent(p, skin.getId()));
-                }
             }
 
             // Skin hat
             if (slot == 39) {
                 if (skin.getType() != SkinType.HEAD) e.setCancelled(true);
-                else {
-                    Bukkit.getPluginManager().callEvent(new SkinEquipEvent(p, skin.getId()));
-                    var outSkin = Skins.read(e.getCurrentItem());
-                    if (outSkin != null) Bukkit.getPluginManager().callEvent(new SkinUnequipEvent(p, skin.getId()));
-                }
             }
         }
     }

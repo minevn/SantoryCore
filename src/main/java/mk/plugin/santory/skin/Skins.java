@@ -1,8 +1,8 @@
 package mk.plugin.santory.skin;
 
-import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.utils.ItemStackManager;
+import mk.plugin.santory.item.ItemType;
+import mk.plugin.santory.item.Items;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Skins {
@@ -11,13 +11,31 @@ public class Skins {
 
     public static Skin read(ItemStack is) {
         if (is == null) return null;
-        var ism = new ItemStackManager(SantoryCore.get(), is);
-        if (!ism.hasTag(TAG)) return null;
-        return Configs.getSkin(ism.getTag(TAG));
+        var item = Items.read(is);
+        if (item == null) return null;
+        if (item.getModel().getType() != ItemType.SKIN) return null;
+        return new Skin(SkinType.valueOf(item.getModel().getMetadata().get("skin-type")));
     }
 
-    public static ItemStack build(String id) {
-        return Configs.getSkin(id).build();
+    public static int getBuff(Player player) {
+        int b = 0;
+        // Head
+        var is = player.getInventory().getHelmet();
+        var skin = read(is);
+        if (skin != null) {
+            var item = Items.read(is);
+            b += Items.getAscentValue(item);
+        }
+
+        // Offhand
+        is = player.getInventory().getItemInOffHand();
+        skin = read(is);
+        if (skin != null) {
+            var item = Items.read(is);
+            b += Items.getAscentValue(item);
+        }
+
+        return b;
     }
 
 }

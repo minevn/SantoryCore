@@ -1,6 +1,13 @@
-material: OAK_SAPLING
-model: 0
-effect: SLOW_I
+texture:
+  material: OAK_SAPLING
+  data: 1
+type: SKIN
+element: FLAME
 tier: UNCOMMON
-type: HEAD
-name: Cặp sừng đỏ
+name: Sừng đỏ
+desc: Trang bị mũ, gia tăng [1|2|3|4|5]% toàn bộ chỉ số
+stats:
+  - DAMAGE 5
+  - ATTACK_SPEED 5
+metadata:
+  skin-type: HEAD

@@ -3,10 +3,12 @@ package mk.plugin.santory.traveler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.math.Stats;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
+import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.entity.Player;
@@ -78,14 +80,15 @@ public class Travelers {
 		Artifacts.getBuff(player).forEach((stat, value) -> {
 			stats.put(stat, Double.valueOf(stats.getOrDefault(stat, 0) * (1 + value)).intValue());
 		});
-//		Map<Stat, Double> arUp = Maps.newHashMap();
-//		Artifacts.getBuff(player).forEach((stat, value) -> {
-//			arUp.put(stat, stats.getOrDefault(stat, 0) + Math.max(value, arUp.getOrDefault(stat, 0d)));
-//		});
-//		arUp.forEach((stat, up) -> {
-//			stats.put(stat, stats.getOrDefault(stat, 0) + Double.valueOf(stats.getOrDefault(stat, 0) * (1 + up)).intValue());
-//		});
-		
+
+		// Skin
+		int skinBuff = Skins.getBuff(player);
+		if (skinBuff > 0) {
+			for (Stat stat : Stat.values()) {
+				stats.put(stat, Double.valueOf(stats.getOrDefault(stat, 0) * (1 + (double) skinBuff / 100)).intValue());
+			}
+		}
+
 		// Write
 		Traveler t = get(player);
 		TravelerState st = t.getState();
