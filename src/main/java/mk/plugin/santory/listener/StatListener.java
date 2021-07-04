@@ -12,6 +12,7 @@ import mk.plugin.santory.mob.Mobs;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
@@ -31,38 +32,38 @@ public class StatListener implements Listener {
 	private final int ENTITY_DEFAULT_DEFENSE = 0;
 	
 	// Player damaged armor
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerDamaged(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player == false) return;
-		Player player = (Player) e.getEntity();
-		
-		// No break in world pvp
-		if (Configs.isPvPWorld(player.getWorld())) return;
-		
-		// Durability
-//		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
-//		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-//			double realDamage = lastHealth - player.getHealth();
-//			if (e.getEntity() instanceof Player) {
-//				ItemStack[] armors =  player.getInventory().getArmorContents();
-//				for (int i = 0 ; i < armors.length ; i++) {
-//					ItemStack is = armors[i];
-//					if (Items.is(is) && realDamage > 5) {
-//						Item item = Items.read(is);
-//						ItemData data = item.getData();
-//						if (data.getDurability() == 0) {
-//							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
-//							continue;
-//						}
-//						data.setDurability(Math.max(0, data.getDurability() - 1));
-//						armors[i] = Items.write(player, is, item);
+//	@EventHandler(priority = EventPriority.HIGHEST)
+//	public void onPlayerDamaged(EntityDamageByEntityEvent e) {
+//		if (e.getEntity() instanceof Player == false) return;
+//		Player player = (Player) e.getEntity();
 //
-//					}
-//				}
-//				player.getInventory().setArmorContents(armors);
-//			}
-//		});
-	}
+//		// No break in world pvp
+//		if (Configs.isPvPWorld(player.getWorld())) return;
+//
+//		// Durability
+////		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
+////		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
+////			double realDamage = lastHealth - player.getHealth();
+////			if (e.getEntity() instanceof Player) {
+////				ItemStack[] armors =  player.getInventory().getArmorContents();
+////				for (int i = 0 ; i < armors.length ; i++) {
+////					ItemStack is = armors[i];
+////					if (Items.is(is) && realDamage > 5) {
+////						Item item = Items.read(is);
+////						ItemData data = item.getData();
+////						if (data.getDurability() == 0) {
+////							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
+////							continue;
+////						}
+////						data.setDurability(Math.max(0, data.getDurability() - 1));
+////						armors[i] = Items.write(player, is, item);
+////
+////					}
+////				}
+////				player.getInventory().setArmorContents(armors);
+////			}
+////		});
+//	}
 	
 	// Player get damaged by entity not player
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -86,7 +87,7 @@ public class StatListener implements Listener {
 	}
 	
 	// Player damage entity
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerDamageEntity(EntityDamageByEntityEvent e) {
 		// Player Damage entity
 		if (e.getDamager() instanceof Player || e.getDamager() instanceof Projectile) {
@@ -221,14 +222,23 @@ public class StatListener implements Listener {
 				// End attack
 				int dtick = entity.getNoDamageTicks();
 				entity.setNoDamageTicks(0);
+
+				// FINAL damage
 				e.setDamage(damage);
+
+				// Check dead bug
+				if (entity.getHealth() < damage) {
+					Tasks.sync(() -> {
+						if (!entity.isDead()) entity.remove();
+ 					}, 20);
+				}
 				
 				// Holograms
 				holos.add(0, crit ? "§6§l§o-" + Utils.round(damage) : "§c§l§o-" + Utils.round(damage));
 
 				// After damage
 				double lastDamage = damage;
-				double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
+				double lastHealth = entity.getHealth();
 				Damage finalD = d;
 				new BukkitRunnable() {
 					@Override
@@ -240,10 +250,10 @@ public class StatListener implements Listener {
 							double value = Travelers.getStatValue(player, Stat.LIFE_STEAL);
 							Utils.addHealth(player, lastDamage * value / 100);
 						}
-						
+
 						// Holograms
 						Holograms.hologram(SantoryCore.get(), holos, 15, player, entity, 1);
-						
+
 						// Armor damage
 						double realDamage = lastHealth - entity.getHealth();
 
