@@ -40,7 +40,19 @@ public enum MobType {
 
 			return stats;
 		}
-	};
+	},
+	WORLD_BOSS {
+		@Override
+		public List<StatValue> getStats(int level) {
+			List<StatValue> stats = Lists.newArrayList();
+			stats.add(new StatValue(Stat.HEALTH, 50 + 3 * Double.valueOf(Math.pow(level / 10, 2)).intValue() * 250));
+			stats.add(new StatValue(Stat.DAMAGE, 15 + level * 12 / 10));
+			stats.add(new StatValue(Stat.DEFENSE, 10 + level * 7 / 10));
+
+			return stats;
+		}
+	},
+	;
 	
 	public abstract List<StatValue> getStats(int level);
 	
