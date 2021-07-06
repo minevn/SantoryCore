@@ -33,6 +33,7 @@ import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.traveler.*;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
+import mk.plugin.santory.wish.WishRolls10;
 import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -277,6 +278,11 @@ public class AdminCommand implements CommandExecutor {
 					WishRolls.roll(wish, player);
 				}
 
+				else if (args[1].equalsIgnoreCase("roll10")) { ;
+					if (args.length >= 4) player = Bukkit.getPlayer(args[3]);
+					Wish wish = Configs.getWish(id);
+					WishRolls10.roll(wish, player);
+				}
 				else if (args[1].equalsIgnoreCase("getkey")) {
 					player.getInventory().addItem(Wishes.buildKey(id));
 				}
@@ -501,6 +507,7 @@ public class AdminCommand implements CommandExecutor {
 		
 		// Wish commands
 		sender.sendMessage("§e/santory wish roll <*id> <player>");
+		sender.sendMessage("§e/santory wish roll10 <*id> <player>");
 		sender.sendMessage("§e/santory wish getkey <*id> <player>");
 		sender.sendMessage("§e/santory wish setinsure <*id> <*tier> <*amount> <player>");
 		sender.sendMessage("");

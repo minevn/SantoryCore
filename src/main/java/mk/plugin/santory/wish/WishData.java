@@ -35,7 +35,7 @@ public class WishData {
 	}
 
 	public void addCount() {
-		this.times += 1;
+		this.times = this.times + 1;
 	}
 	
 	public Map<Tier, Integer> getInsures() {
@@ -57,7 +57,7 @@ public class WishData {
 	
 	public static WishData parse(String s) {
 		String w = s.split(";")[0];
-		int t = Integer.valueOf(s.split(";")[1]);
+		int t = Integer.parseInt(s.split(";")[1]);
 		Map<Tier, Integer> m = Maps.newHashMap();
 		for (String l : s.split(";")[2].split(":")) {
 			m.put(Tier.valueOf(l.split("-")[0]), Integer.valueOf(l.split("-")[1]));

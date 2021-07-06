@@ -12,6 +12,7 @@ import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.Wish;
 import mk.plugin.santory.wish.WishRolls;
+import mk.plugin.santory.wish.WishRolls10;
 import mk.plugin.santory.wish.Wishes;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -22,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -130,9 +132,24 @@ public class PlayerListener implements Listener {
 					// Match create + key
 					var wk = Configs.getWishKey(keyID);
 					if (wk.getWishes().contains(id)) {
-						is.setAmount(is.getAmount() - 1);
-						player.updateInventory();
-						WishRolls.roll(entry.getValue(), player);
+						// x1
+						if (!player.isSneaking()) {
+							is.setAmount(is.getAmount() - 1);
+							player.updateInventory();
+							WishRolls.roll(entry.getValue(), player);
+						}
+						// x10
+						else {
+							if (is.getAmount() < 10) {
+								player.sendMessage("§cCầm ít nhất x10 Chìa để có thể quay nhanh 10 lần");
+								return;
+							}
+							else {
+								is.setAmount(is.getAmount() - 10);
+								player.updateInventory();
+								WishRolls10.roll(entry.getValue(), player);
+							}
+						}
 					}
 					else {
 						player.sendMessage("§cChìa không khớp với hòm!");

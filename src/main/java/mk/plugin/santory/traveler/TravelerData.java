@@ -64,7 +64,8 @@ public class TravelerData {
 	}
 	
 	public WishData getWish(String id) {
-		return this.wishes.getOrDefault(id, new WishData(id));
+		if (!this.wishes.containsKey(id)) this.wishes.put(id, new WishData(id));
+		return this.wishes.get(id);
 	}
 	
 	public void setWish(String id, WishData wd) {

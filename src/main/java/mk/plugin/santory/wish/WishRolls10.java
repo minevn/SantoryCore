@@ -27,70 +27,76 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class WishRolls {
+public class WishRolls10 {
 	
-	private static final int RESULT_SLOT = 22;
+	private static final List<Integer> resultSlots = List.of(11, 12, 13, 14, 15, 20, 21, 22, 23, 24);
 	
-	private static final List<Integer> rollSlots = Lists.newArrayList(2, 3, 4, 5, 6, 15, 24, 33, 42, 41, 40, 39, 38, 29, 20, 11);
+	private static final List<Integer> rollSlots = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 16, 25, 34, 33, 32, 31, 30, 29, 28, 19, 10);
 
 	private static Set<String> rollings = Sets.newHashSet();
 
 	public static void roll(Wish wish, Player player) {
 		var t = Travelers.get(player.getName());
-		WishRewardItem wri = null;
+		List<WishRewardItem> rewards = Lists.newArrayList();
 
-		// Insure
-		// Add 1 to all
-		WishData wd = t.getData().getWish(wish.getID());
-		wish.getInsures().keySet().forEach(ti -> wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1));
-		// Check first time
-		if (t.getData().getWish(wish.getID()).getTimes() == 0) {
-			wri = wish.getFirstTime().get(Utils.randomInt(0, wish.getFirstTime().size() - 1));
-			player.sendMessage("§aÁ đù mở hòm lần đầu");
-		} else wri = Wishes.finalRate(wish, player);
+		Tier tier = Tier.RARE;
+		for (int i = 0 ; i < 10 ; i++) {
+			WishRewardItem wri = null;
+			// Insure
+			// Add 1 to all
+			WishData wd = t.getData().getWish(wish.getID());
+			wish.getInsures().keySet().forEach(ti -> wd.setInsure(ti, wd.getInsures().getOrDefault(ti, 0) + 1));
+			// Check first time
+			if (t.getData().getWish(wish.getID()).getTimes() == 0) {
+				wri = wish.getFirstTime().get(Utils.randomInt(0, wish.getFirstTime().size() - 1));
+				player.sendMessage("§aÁ đù mở hòm lần đầu");
+			} else wri = Wishes.finalRate(wish, player);
 
-		// Save data
-		t.getData().getWish(wish.getID()).addCount();
+			// Check tier
+			if (wri.getTier().getNumber() > tier.getNumber()) tier = wri.getTier();
+
+			// Add to list
+			rewards.add(wri);
+
+			// Save data
+			t.getData().getWish(wish.getID()).addCount();
+		}
+
 		Travelers.save(player.getName());
-
-		Tier tier = wri.getTier();
 		ItemStack ri = getIcon(tier);
-
-		ItemStack icon = wri.getIcon();
-		
-		Inventory inv = Bukkit.createInventory(new WishGUIHolder(), 45, "§0§lQUAY ĐỀU, QUAY ĐỀU,...");
+		Inventory inv = Bukkit.createInventory(new WishGUIHolder(), 36, "§0§lQUAY ĐỀU, QUAY ĐỀU,...");
 		player.openInventory(inv);
 		rollings.add(player.getName());
 
-
-		WishRewardItem finalWri = wri;
-
 		// History
 		Tasks.async(() -> {
-			if (wish.getID().contains("weapon")) {
-				boolean insure = player.hasMetadata("insure-weapon");
-				if (insure) {
-					player.removeMetadata("insure-weapon", SantoryCore.get());
+			for (WishRewardItem finalWri : rewards) {
+				if (wish.getID().contains("weapon")) {
+					boolean insure = player.hasMetadata("insure-weapon");
+					if (insure) {
+						player.removeMetadata("insure-weapon", SantoryCore.get());
+					}
+					SantoryCore.get().getWeaponWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
 				}
-				SantoryCore.get().getWeaponWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
-			}
-			else if (wish.getID().contains("armor")) {
-				boolean insure = player.hasMetadata("insure-armor");
-				if (insure) {
-					player.removeMetadata("insure-armor", SantoryCore.get());
+				else if (wish.getID().contains("armor")) {
+					boolean insure = player.hasMetadata("insure-armor");
+					if (insure) {
+						player.removeMetadata("insure-armor", SantoryCore.get());
+					}
+					SantoryCore.get().getArmorWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
 				}
-				SantoryCore.get().getArmorWishHistory().write(player, finalWri.getTier(), finalWri.getValue(), insure);
 			}
 		});
 
 		// Roll
+		Tier finalTier = tier;
 		Bukkit.getScheduler().runTaskAsynchronously(SantoryCore.get(), () -> {
 			for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
 			for (int i = 0 ; i < 4 ; i++) inv.setItem(rollSlots.get(i * 4), Utils.getColoredSlot(DyeColor.LIME));
 
 			// Roll
 			long current = System.currentTimeMillis();
-			long mili = Utils.randomInt(4000, 6000);
+			long mili = Utils.randomInt(8000, 10000);
 			new BukkitRunnable() {
 				
 				final long buff = 15;
@@ -108,12 +114,24 @@ public class WishRolls {
 						if (System.currentTimeMillis() - current >= mili) {
 							this.cancel();
 
-							inv.setItem(RESULT_SLOT, ri);
+							// Pre
+							for (int i = 0; i < resultSlots.size(); i++) {
+								inv.setItem(resultSlots.get(i), getIcon(rewards.get(i).getTier()));
+							}
 							player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
+
+							// Shows
 							Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
-								inv.setItem(RESULT_SLOT, icon);
+								for (int i = 0 ; i < rewards.size() ; i++) {
+									var wri = rewards.get(i);
+									var slot = resultSlots.get(i);
+									var icon = wri.getIcon();
+									inv.setItem(slot, icon);
+
+									// Give
+									wri.give(player);
+								}
 								player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-								finalWri.give(player);
 								player.sendMessage("§aNhận quà thành công!");
 							}, 20);
 							rollings.remove(player.getName());
@@ -124,9 +142,9 @@ public class WishRolls {
 							});
 
 							// Broadcast
-							if (finalWri.getTier() == Tier.RARE || finalWri.getTier() == Tier.EPIC) {
+							if (finalTier == Tier.RARE || finalTier == Tier.EPIC) {
 								for (Player p : Bukkit.getOnlinePlayers()) {
-									p.sendMessage("§7§oNgười chơi " + player.getName() + " mở được đồ " + finalWri.getTier().getName() + " tại " + wish.getName());
+									p.sendMessage("§7§o>> Người chơi " + player.getName() + " mở được đồ " + finalTier.getName() + " tại " + wish.getName());
 								}
 							}
 
@@ -134,23 +152,20 @@ public class WishRolls {
 						}
 						
 						// Continue
-						for (int i = 0 ; i < 4 ; i++) {
-							int slid = (i * 4) + (c % 4);
-							int sl = rollSlots.get(slid);
-							int prv = rollSlots.get((16 + slid - 1) % 16);
-							int prv2 = rollSlots.get((16 + slid - 2) % 16);
+						for (int i = 0 ; i < rollSlots.size() ; i++) {
+							int slot = rollSlots.get(i);
+							var isColorSlot = i % 3 == c % 3;
+
 							// Change color
 							if (System.currentTimeMillis() - current >= mili / 2) {
-								inv.setItem(sl, ri);
-								inv.setItem(prv, ri);
 //								inv.setItem(inv.getSize() - 1, getInfo(wish.getID(), player));
+								if (isColorSlot) inv.setItem(slot, ri);
+								else inv.setItem(slot, Utils.getColoredSlot(DyeColor.BLACK));
 							}
 							else {
-								inv.setItem(sl, Utils.getColoredSlot(DyeColor.WHITE));
-								inv.setItem(prv, Utils.getColoredSlot(DyeColor.WHITE));
+								if (isColorSlot) inv.setItem(slot, Utils.getColoredSlot(DyeColor.WHITE));
+								else inv.setItem(slot, Utils.getColoredSlot(DyeColor.BLACK));
 							}
-							
-							inv.setItem(prv2, Utils.getColoredSlot(DyeColor.BLACK));
 						}
 						
 						lastCheck = System.currentTimeMillis();
@@ -202,11 +217,3 @@ public class WishRolls {
 	
 }
 
-class WishGUIHolder implements InventoryHolder {
-
-	@Override
-	public Inventory getInventory() {
-		return null;
-	}
-	
-}
