@@ -26,13 +26,13 @@ public class ItemEquipListener implements Listener {
      */
     @EventHandler
     public void onSkinEquip(PlayerInteractEvent e) {
-        if (e.getHand() != EquipmentSlot.HAND || !e.getAction().name().contains("RIGHT")) return;
-
         var is = e.getItem();
         var skin = Skins.read(is);
         if (skin == null) return;
 
         e.setCancelled(true);
+
+        if (e.getHand() != EquipmentSlot.HAND || !e.getAction().name().contains("RIGHT")) return;
 
         var player = e.getPlayer();
         var inv = player.getInventory();
@@ -82,6 +82,16 @@ public class ItemEquipListener implements Listener {
     @EventHandler
     public void onOffHandEquip(PlayerSwapHandItemsEvent e) {
         e.setCancelled(true);
+
+        var mainHand = e.getPlayer().getInventory().getItemInMainHand();
+        if (mainHand.getType() != Material.AIR) {
+            var skin = Skins.read(mainHand);
+            if (skin != null && skin.getType() == SkinType.OFFHAND) {
+                e.setCancelled(false);
+                return;
+            }
+        }
+
         e.getPlayer().sendMessage("§cChỉ để trang bị skin");
     }
 
