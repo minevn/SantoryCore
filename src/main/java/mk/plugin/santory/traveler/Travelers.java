@@ -137,7 +137,11 @@ public class Travelers {
 		if (Items.is(hand)) {
 			items.add(Items.read(hand));
 		}
-		
+
+		// Off hand skin
+		var offhand = player.getInventory().getItemInOffHand();
+		if (Skins.read(offhand) != null && Items.is(offhand)) items.add(Items.read(offhand));
+
 		// Armor
 		for (ItemStack armor : player.getInventory().getArmorContents()) {
 			if (Items.is(armor)) {

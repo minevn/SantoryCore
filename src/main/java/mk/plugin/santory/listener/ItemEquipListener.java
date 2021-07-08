@@ -90,6 +90,9 @@ public class ItemEquipListener implements Listener {
                 e.setCancelled(false);
                 return;
             }
+        } else {
+            e.setCancelled(false);
+            return;
         }
 
         e.getPlayer().sendMessage("§cChỉ để trang bị skin");
