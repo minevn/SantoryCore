@@ -61,7 +61,7 @@ public class PlayerCommand implements CommandExecutor {
                     message = ChatColor.stripColor(message);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     DataOutputStream out = new DataOutputStream(stream);
-                    String prefix = "§f ;§6§l❖ §a§l[SoraSky] §f§l"+ player.getName() + " §7§l>> §e" ;
+                    String prefix = "§f ;§6§l❖ §a§l[SoraSky] §f§l"+ player.getName() + " §7§l> §e" ;
                     String suffix = ";§f ";
                     String action = "fsbc";
                     String data2 = "";
