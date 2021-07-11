@@ -9,6 +9,7 @@ import mk.plugin.santory.event.ItemToggleEvent;
 import mk.plugin.santory.event.PlayerSkillExecuteEvent;
 import mk.plugin.santory.item.*;
 import mk.plugin.santory.item.weapon.Weapon;
+import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.Travelers;
@@ -120,10 +121,20 @@ public class WeaponListener implements Listener {
 					double range = Utils.getRange(item);
 					LivingEntity target = Utils.getTarget(player, range);
 					if (target == null) return;
+
 					// Check cool-down
 					if (isCooldownAttack(player)) return;
 					setCooldownAttack(player, Double.valueOf(Travelers.getStatValue(player, Stat.ATTACK_SPEED) * 1000).longValue(), is);
 					double dv = Travelers.getStatValue(player, Stat.DAMAGE);
+
+					// Check ranged
+					if (w.getType() == WeaponType.RANGED) {
+						var distance = player.getLocation().distance(target.getLocation());
+						if (distance / range <= 0.3333) dv *= 0.5;
+						else if (distance / range <= 0.6667) dv *= 0.7;
+					}
+
+
 					Damages.damage(player, target, new Damage(dv, DamageType.ATTACK), 0);
 				}
 			}
