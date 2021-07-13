@@ -23,6 +23,10 @@ public class ItemData {
 	private int durability;
 	private Ascent ascent;
 	private List<StatValue> stats;
+
+	// Timed
+	private long timedStart;
+	private long timed;
 	
 	public ItemData(ItemModel model) {
 		this.uid = UUID.randomUUID();
@@ -33,9 +37,12 @@ public class ItemData {
 		this.ascent = Ascent.I;
 		this.stats = Lists.newArrayList();
 		model.getBaseStats().forEach((s, v) -> stats.add(new StatValue(s, v)));
+
+		this.timed = 0;
+		this.timedStart = 0;
 	}
 	
-	public ItemData(String desc, int exp, int level, int durability, Ascent ascent, List<StatValue> stats) {
+	public ItemData(String desc, int exp, int level, int durability, Ascent ascent, List<StatValue> stats, long timed, long timedStart) {
 		this.uid = UUID.randomUUID();
 		this.desc = desc;
 		this.exp = exp;
@@ -43,6 +50,8 @@ public class ItemData {
 		this.durability = durability;
 		this.ascent = ascent;
 		this.stats = stats;
+		this.timed = timed;
+		this.timedStart = timedStart;
 	}
 	
 	public String getDesc() {
@@ -125,7 +134,22 @@ public class ItemData {
 		}
 		return s.substring(0, Math.max(0, s.length() - 1));
 	}
-	
+
+	public boolean isTimed() {
+		return timed != 0;
+	}
+
+	public boolean timedTrigger() {
+		if (isTimed()) return false;
+		if (this.timedStart != 0) return false;
+		this.timedStart = System.currentTimeMillis();
+		return true;
+	}
+
+	public boolean isExpired() {
+		if (!isTimed()) return false;
+		return System.currentTimeMillis() - timed >= this.timed;
+	}
 
 	
 	@SuppressWarnings("unchecked")
@@ -139,6 +163,8 @@ public class ItemData {
 		jo.put("durability", this.durability);
 		jo.put("ascent", this.ascent.toString());
 		jo.put("stats", toStatString());
+		jo.put("timed", timed);
+		jo.put("timedStart", timedStart);
 		
 		return jo.toJSONString();
 	}
@@ -153,8 +179,11 @@ public class ItemData {
 		int durability = Long.valueOf((Long) jo.get("durability")).intValue();
 		Ascent asc = Ascent.valueOf(jo.getOrDefault("ascent", "I").toString());
 		List<StatValue> stats = jo.containsKey("stats") ? parseStats(jo.get("stats").toString()) : Lists.newArrayList();
-		
-		return new ItemData(desc, gradeExp, level, durability, asc, stats);
+
+		long timed = Long.parseLong(jo.getOrDefault("timed", 0).toString());
+		long timedStart = Long.parseLong(jo.getOrDefault("timedStart", 0).toString());
+
+		return new ItemData(desc, gradeExp, level, durability, asc, stats, timed, timedStart);
 	}
 	
 	private static List<StatValue> parseStats(String s) {
