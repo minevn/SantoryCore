@@ -135,12 +135,20 @@ public class ItemData {
 		return s.substring(0, Math.max(0, s.length() - 1));
 	}
 
+	public long getTimed() {
+		return timed;
+	}
+
+	public void setTimed(long value) {
+		this.timed = value;
+	}
+
 	public boolean isTimed() {
 		return timed != 0;
 	}
 
 	public boolean timedTrigger() {
-		if (isTimed()) return false;
+		if (!isTimed()) return false;
 		if (this.timedStart != 0) return false;
 		this.timedStart = System.currentTimeMillis();
 		return true;
@@ -148,7 +156,16 @@ public class ItemData {
 
 	public boolean isExpired() {
 		if (!isTimed()) return false;
-		return System.currentTimeMillis() - timed >= this.timed;
+		if (this.timedStart == 0) return false;
+		return System.currentTimeMillis() - timedStart >= this.timed;
+	}
+
+	public long getExpiredTime() {
+		return this.timedStart + this.timed;
+	}
+
+	public boolean isTriggered() {
+		return this.timedStart != 0;
 	}
 
 	

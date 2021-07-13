@@ -69,6 +69,7 @@ public class Travelers {
 		
 		// Items
 		getItemsOn(player).forEach(item -> {
+			if (item.getData().isExpired()) return;
 			for (Stat stat : Stat.values()) {
 				int value = item.getData().getStat(stat);
 				if (value == 0) continue;

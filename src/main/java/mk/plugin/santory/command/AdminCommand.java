@@ -260,6 +260,20 @@ public class AdminCommand implements CommandExecutor {
 					sender.sendMessage("§aDone!");
 				}
 
+				else if (args[1].equalsIgnoreCase("settimed")) {
+					var seconds = Long.parseLong(args[2]);
+					var milis = seconds * 1000L;
+					ItemStack is = player.getInventory().getItemInMainHand();
+					Item item = Items.read(is);
+					ItemData data = item.getData();
+
+					data.setTimed(milis);
+
+					Items.update(player, is, item);
+					Items.write(player, is, item);
+					player.updateInventory();
+					sender.sendMessage("§aDone!");
+				}
 			}
 			
 			
@@ -503,6 +517,7 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§6/santory item setdur <*desc>");
 		sender.sendMessage("§6/santory item setgrade <*grade>");
 		sender.sendMessage("§6/santory item setascent <*ascent>");
+		sender.sendMessage("§6/santory item settimed <*seconds>");
 		sender.sendMessage("");
 		
 		// Wish commands

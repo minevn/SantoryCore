@@ -86,7 +86,7 @@ public class ItemListener implements Listener {
 			List<ItemStack> list = Lists.newArrayList(pi.getArmorContents());
 			list.add(pi.getItemInMainHand());
 			for (ItemStack is : list) {
-				if (is != null && Items.is(is)) {
+				if (Items.is(is)) {
 					Item item = Items.read(is);
 					Items.update(player, is, item);
 				}

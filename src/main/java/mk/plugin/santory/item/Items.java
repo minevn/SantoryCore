@@ -16,6 +16,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,8 +26,6 @@ import java.util.regex.Pattern;
 
 public class Items {
 
-	public static final int ENHANCE_BONUS = 1;
-	
 	private static final String DATA_TAG = "santory.itemdata";
 	private static final String MODEL_TAG = "santory.itemmodel";
 	
@@ -50,6 +51,15 @@ public class Items {
 	// Update type, damage, name, lore
 	public static void update(Player player, ItemStack is, Item item) {
 		ItemData data = item.getData();
+
+		// Timed trigger
+		if (!player.hasPermission("timed.bypass")) {
+			if (data.timedTrigger()) {
+				write(player, is, item);
+			}
+		}
+
+		// ...
 		ItemModel model = item.getModel();
 		if (model.getType() == ItemType.ARTIFACT) Artifacts.setDesc(item);
 		String lvf = "§7§l[§f§l" + model.getTier().getColor() + "§l+" + data.getLevel() + "§7§l]";
@@ -88,6 +98,11 @@ public class Items {
 		var u = "§aTrang bị bậc " + item.getData().getGrade().toString();
 		var u2 = "§aThêm " + calNeedExpToNextGrade(data.getExp(), data.getGrade()) + " điểm n.tố để lên bậc";
 
+		// Timed
+		var isTimed = data.isTimed();
+		var expireTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(data.getExpiredTime()), ZoneId.systemDefault());
+		var timed = !data.isTriggered() ? "§6Trang bị có hạn §c" + (data.getTimed() / 86400000) + " ngày" : "§6Trang bị hết hạn vào §c" + Utils.twoNumbers(expireTime.getDayOfMonth()) + "/" + Utils.twoNumbers(expireTime.getMonth().getValue()) + "/" + expireTime.getYear();
+
 		model.getTexture().set(is);
 		
 		ItemStackUtils.setDisplayName(is, lvf + " " + namef);
@@ -114,6 +129,10 @@ public class Items {
 		lore.add(u2);
 		lore.add("");
 		lore.add(element);
+		if (isTimed) {
+			lore.add("");
+			lore.add(timed);
+		}
 		ItemStackUtils.setLore(is, lore);
 		
 		ItemMeta meta = is.getItemMeta();

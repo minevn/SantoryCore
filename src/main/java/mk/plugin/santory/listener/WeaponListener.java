@@ -51,8 +51,13 @@ public class WeaponListener implements Listener {
 		if (!player.isSneaking()) return;
 		
 		Item item = e.getItem();
+		// Expired
+		if (item.getData().isExpired()) {
+			player.sendMessage("§cTrang bị đã hết hạn!");
+			return;
+		}
+
 		ItemModel model = Configs.getModel(item.getModelID());
-		
 		if (model.getType() == ItemType.WEAPON) {
 			Weapon w = Weapon.parse(model);
 			Skill skill = w.getSkill();
@@ -93,11 +98,17 @@ public class WeaponListener implements Listener {
 		Player player = e.getPlayer();
 		ItemStack is = e.getItemStack();
 		Item item = e.getItem();
+
+		// Expired
+		if (item.getData().isExpired()) {
+			player.sendMessage("§cTrang bị đã hết hạn!");
+			return;
+		}
+
 		ItemModel model = Configs.getModel(item.getModelID());
 		if (player.isSneaking()) return;
 		
 		if (model.getType() == ItemType.WEAPON) {
-			
 			// Check durability
 			ItemData data = item.getData();
 			if (data.getDurability() <= 0) {

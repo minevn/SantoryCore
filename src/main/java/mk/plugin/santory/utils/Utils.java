@@ -45,6 +45,11 @@ import java.util.stream.Collectors;
 
 public class Utils {
 
+	public static String twoNumbers(int value) {
+		if (value / 10 != 0) return value + "";
+		return "0" + value;
+	}
+
 	public static void circleParticles(Particle.DustOptions doo, Location location, double radius) {
 		int amount = new Double(radius * 20).intValue();
 		double increment = (2 * Math.PI) / amount;
