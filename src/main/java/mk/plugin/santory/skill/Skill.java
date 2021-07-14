@@ -26,6 +26,7 @@ public enum Skill {
 	DOC_TO("Độc tố", new SkillDocTo(), 5),
 	DAI_MA("Đại ma", new SkillDaiMa(), 5),
 	BAO_TEN("Bão tên", new SkillBaoTen(), 5),
+	TRUONG_TRONG_LUC("Trường trọng lực", new SkillTruongTrongLuc(), 7);
 
 	;
 	
