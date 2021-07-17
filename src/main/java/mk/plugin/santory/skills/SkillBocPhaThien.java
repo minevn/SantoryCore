@@ -41,17 +41,17 @@ public class SkillBocPhaThien implements SkillExecutor {
 
         File file = new File(SantoryCore.get().getDataFolder() + "//particles//skill-bocphathien.png");
         List<Float> list = Lists.newArrayList(1.3f, 0.7f, 1.1f, 1f, 0.6f, 0.5f, 0.3f);
-        var targetBlock = player.getTargetBlock(Sets.newHashSet(Material.AIR), 100);
-        Location center = targetBlock.getLocation().add(0.5, 1, 0.5);
+        var targetBlock = player.getTargetBlock(Sets.newHashSet(Material.AIR), 200);
+        Location center = targetBlock.getLocation().add(0.5, 0, 0.5);
 
         // Sound
-        center.getWorld().playSound(center, Sound.ENTITY_WITHER_DEATH, 1, 1);
+        center.getWorld().playSound(center, Sound.ENTITY_WITHER_DEATH, 10, 1);
 
         // Check players
         List<Player> players = Lists.newArrayList(player);
         Tasks.sync(() -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p != player && p.getWorld() == player.getWorld() && p.getLocation().distanceSquared(center) <= 50 * 50) {
+                if (p != player && p.getWorld() == player.getWorld() && p.getLocation().distance(center) <= 50) {
                     players.add(p);
                     p.playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 1, 1);
                 }
@@ -95,9 +95,12 @@ public class SkillBocPhaThien implements SkillExecutor {
         Tasks.async(() -> {
             // Damage
             Tasks.sync(() -> {
+                int max = 13;
                 for (Entity entity : center.getWorld().getEntities()) {
-                    if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(center) < 25) {
-                        Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 5);
+                    var d = entity.getLocation().distance(center);
+                    if (entity != player && entity instanceof LivingEntity && d <= max) {
+                        var dmg = damage * d / max;
+                        Damages.damage(player, (LivingEntity) entity, new Damage(dmg, DamageType.SKILL), 5);
                     }
                 }
             }, 5);
@@ -112,12 +115,12 @@ public class SkillBocPhaThien implements SkillExecutor {
                         this.cancel();
                         return;
                     }
-                    if (i % 3 == 1) center.getWorld().playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+                    if (i % 3 == 1) center.getWorld().playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 10, 1);
                     if (i == 1) {
-                        center.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, center, 1, 0, 0, 0);
+                        center.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, center.clone().add(0, 1.2, 0), 1, 0, 0, 0);
                         return;
                     }
-                    Utils.circleParticles(Particle.EXPLOSION_LARGE, center, i * 1.5);
+                    Utils.circleParticles(Particle.EXPLOSION_LARGE, center.clone().add(0, 1.2, 0), i * 1.5);
                 }
             }.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);
         }, allTime * 20);

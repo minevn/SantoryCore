@@ -20,7 +20,7 @@ public class SkillTruongTrongLuc implements SkillExecutor {
 
     @Override
     public void start(Map<String, Object> components) {
-        final long time = 5000;
+        final long time = 7500;
 
         Player player = (Player) components.get("player");
         double scale = ((double) components.get("scale")) * 0.01;
@@ -64,7 +64,7 @@ public class SkillTruongTrongLuc implements SkillExecutor {
                     else le.setVelocity(l.clone().subtract(le.getLocation().add(0, 1, 0)).toVector().normalize().multiply(vmulti / 2));
                 }
             }
-        }, 0, 2, time);
+        }, 20, 2, time);
 
     }
 

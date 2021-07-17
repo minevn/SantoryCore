@@ -62,7 +62,7 @@ public class WSMuaTen implements SkillExecutor {
 				}
 
 				for (Location l : locations) {
-					Arrow a = Shooter.BOW.shoot(player, new Damage(damage, DamageType.SKILL), new Vector(0, -1, 0), l);
+					Arrow a = (Arrow) Shooter.BOW.shoot(player, new Damage(damage, DamageType.SKILL), new Vector(0, -1, 0), l);
 					a.setCritical(true);
 				}
 			}

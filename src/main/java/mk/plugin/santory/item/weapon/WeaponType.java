@@ -7,7 +7,8 @@ public enum WeaponType {
 	LIGHT("Vũ khí ngắn", 3),
 	HEAVY("Vũ khí nặng", 3),
 	SHOOTER("Vũ khí tầm xa", Shooter.BOW),
-	RANGED("Vũ khí dài", 5);
+	RANGED("Vũ khí dài", 5),
+	WAND("Trượng", Shooter.WAND);
 	
 	private final String name;
 	private final double range;

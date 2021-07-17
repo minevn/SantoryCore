@@ -54,7 +54,7 @@ public class SkillBaoTen implements SkillExecutor {
                 Location sl = Utils.ranLoc(rl, 8);
                 Vector v = l.clone().subtract(sl).toVector().normalize().multiply(2.1f);
 
-                Arrow a = Shooter.BOW.shoot(player, new Damage(damage, DamageType.SKILL), v, sl);
+                Arrow a = (Arrow) Shooter.BOW.shoot(player, new Damage(damage, DamageType.SKILL), v, sl);
                 a.setCritical(true);
                 a.setGlowing(true);
             }
