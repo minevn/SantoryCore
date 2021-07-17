@@ -227,7 +227,7 @@ public class StatListener implements Listener {
 				e.setDamage(damage);
 
 				// Check dead bug
-				if (entity.getHealth() < damage) {
+				if (!(entity instanceof Player) && entity.getHealth() < damage) {
 					Tasks.sync(() -> {
 						if (!entity.isDead()) entity.remove();
  					}, 20);

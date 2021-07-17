@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +21,7 @@ public enum Shooter {
 			Arrow arrow = player.getWorld().spawnArrow(location, v, 0, 0);
 			arrow.setShooter(player);
 			arrow.setVelocity(v);
+			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 			Damages.setProjectileDamage(arrow, damage);
 			player.playSound(location, Sound.ENTITY_ARROW_SHOOT, 1, 1);
 			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 10);

@@ -21,6 +21,7 @@ import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -339,6 +340,7 @@ public class Utils {
 	}
 
 	public static boolean canAttack(Entity e) {
+		if (e instanceof ArmorStand) return false;
 		return !e.hasMetadata("NPC");
 	}
 
