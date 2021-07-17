@@ -17,11 +17,12 @@ public class AscentHistory implements IHistory {
         return "ascents";
     }
 
-    public void write(Player player, Ascent toAscent, boolean success, boolean hasAmulet) {
+    public void write(Player player, String itemId, Ascent toAscent, boolean success, boolean hasAmulet) {
         var file = Histories.getFile(this);
 
         var line = "[" + Histories.getCurrentTime()
                 + "] " + player.getName() + " | "
+                + itemId + " | "
                 + (success ? "THANH_CONG" : "THAT_BAI") + " | "
                 + "ASCENT_" + toAscent.name() + " | "
                 + (hasAmulet ? "CO_BUA" : "KHONG_BUA");

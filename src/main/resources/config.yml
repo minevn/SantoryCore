@@ -40,6 +40,9 @@ item:
     IV: 450
     V: 600
 
+timed:
+  fee: 10000
+
 ascent:
   base-chance: 50
   fee: 5000

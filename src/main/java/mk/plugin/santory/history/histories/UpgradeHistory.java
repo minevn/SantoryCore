@@ -17,11 +17,12 @@ public class UpgradeHistory implements IHistory {
         return "upgrades";
     }
 
-    public void write(Player player, int toExp, boolean success, boolean hasAmulet) {
+    public void write(Player player, String itemId, int toExp, boolean success, boolean hasAmulet) {
         var file = Histories.getFile(this);
 
         var line = "[" + Histories.getCurrentTime()
                 + "] " + player.getName() + " | "
+                + itemId + " | "
                 + (success ? "THANH_CONG" : "THAT_BAI") + " | "
                 + "EXP_" + toExp + " | "
                 + (hasAmulet ? "CO_BUA" : "KHONG_BUA");

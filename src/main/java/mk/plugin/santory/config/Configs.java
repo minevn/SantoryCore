@@ -58,7 +58,8 @@ public class Configs {
 	public static int UPGRADE_FEE = 10000;
 	public static int UPGRADE_EXP = 100;
 	public static int ENHANCE_FEE = 10000;
-	
+	public static int TIMED_FEE = 10000;
+
 	public static int ART_BASE_MAIN_STAT = 15;
 	public static int ART_BASE_SUB_STAT = 5;
 	public static double ART_STAT_RANGE = 0.25;
@@ -110,6 +111,7 @@ public class Configs {
 		KEEP_STONE = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("keep-stone")));
 		GLOBAL_SPEAKER = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("global-speaker")));
 		DIE_EXP_LOST_PERCENT = config.getLong("die-exp-lost-percent", 25);
+		TIMED_FEE = config.getInt("timed.fee", 10000);
 
 		// PvP Worlds
 		pvpWorlds.clear();

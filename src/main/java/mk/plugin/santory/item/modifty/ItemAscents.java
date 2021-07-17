@@ -211,7 +211,7 @@ public class ItemAscents {
 				// History
 				boolean finalSuccess = success;
 				Tasks.async(() -> {
-					SantoryCore.get().getAscentHistory().write(player, readR.getData().getAscent(), finalSuccess, amulet);
+					SantoryCore.get().getAscentHistory().write(player, readR.getModelID(), readR.getData().getAscent(), finalSuccess, amulet);
 				});
 
 				GUIs.clearItems("item", status);

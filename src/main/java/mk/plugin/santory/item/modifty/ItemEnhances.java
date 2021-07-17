@@ -219,7 +219,7 @@ public class ItemEnhances {
 			// History
 			boolean finalSuccess = success;
 			Tasks.async(() -> {
-				SantoryCore.get().getEnhanceHistory().write(player, readR.getData().getLevel(), finalSuccess, amulet);
+				SantoryCore.get().getEnhanceHistory().write(player, readR.getModelID(), readR.getData().getLevel(), finalSuccess, amulet);
 			});
 
 			GUIs.clearItems("item", status);

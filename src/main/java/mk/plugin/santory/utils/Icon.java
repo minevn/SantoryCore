@@ -19,5 +19,6 @@ public class Icon {
     public static final ItemStack SKILL = ItemStackUtils.create(Material.GLASS_PANE, 9);
     public static final ItemStack ASCENT = ItemStackUtils.create(Material.GLASS_PANE, 10);
     public static final ItemStack SUBITEM = ItemStackUtils.create(Material.GLASS_PANE, 14);
+    public static final ItemStack TIMED = ItemStackUtils.create(Material.GLASS_PANE, 44);
 
 }

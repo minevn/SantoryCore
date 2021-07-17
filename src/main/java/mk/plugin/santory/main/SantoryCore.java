@@ -28,6 +28,7 @@ public class SantoryCore extends JavaPlugin {
 	private EnhanceHistory enhanceHistory;
 	private UpgradeHistory upgradeHistory;
 	private AscentHistory ascentHistory;
+	private TimedHistory timedHistory;
 
 
 	@Override
@@ -114,6 +115,7 @@ public class SantoryCore extends JavaPlugin {
 		this.enhanceHistory = new EnhanceHistory();
 		this.upgradeHistory = new UpgradeHistory();
 		this.ascentHistory = new AscentHistory();
+		this.timedHistory = new TimedHistory();
 	}
 
 	public void saveOninePlayers() {
@@ -151,6 +153,10 @@ public class SantoryCore extends JavaPlugin {
 
 	public AscentHistory getAscentHistory() {
 		return ascentHistory;
+	}
+
+	public TimedHistory getTimedHistory() {
+		return timedHistory;
 	}
 
 	public static SantoryCore get() {

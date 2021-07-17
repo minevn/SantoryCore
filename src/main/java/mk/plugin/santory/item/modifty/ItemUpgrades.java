@@ -223,7 +223,7 @@ public class ItemUpgrades {
 			// History
 			boolean finalSuccess = success;
 			Tasks.async(() -> {
-				SantoryCore.get().getUpgradeHistory().write(player, readR.getData().getExp(), finalSuccess, amulet);
+				SantoryCore.get().getUpgradeHistory().write(player, readR.getModelID(), readR.getData().getExp(), finalSuccess, amulet);
 			});
 
 			GUIs.clearItems("item", status);

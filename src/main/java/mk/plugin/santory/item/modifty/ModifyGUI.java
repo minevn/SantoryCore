@@ -22,9 +22,10 @@ import java.util.List;
 
 public class ModifyGUI {
 
-    private static final int ENHANCE_SLOT = 2;
-    private static final int UPGRADE_SLOT = 4;
-    private static final int ASCENT_SLOT = 6;
+    private static final int ENHANCE_SLOT = 1;
+    private static final int UPGRADE_SLOT = 3;
+    private static final int ASCENT_SLOT = 5;
+    private static final int TIMED_SLOT = 7;
 
     public static void open(Player player) {
         var inv = Bukkit.createInventory(new Holder(), 9, "§0§lFAP SƯ SORASKY");
@@ -35,6 +36,7 @@ public class ModifyGUI {
             inv.setItem(ENHANCE_SLOT, getEnhanceIcon());
             inv.setItem(UPGRADE_SLOT, getUpgradeIcon());
             inv.setItem(ASCENT_SLOT, getAscentIcon());
+            inv.setItem(TIMED_SLOT, getTimedIcon());
         });
     }
 
@@ -62,6 +64,10 @@ public class ModifyGUI {
                 if (!Configs.checkPermission(player, "ascent")) return;
                 GUIs.open(player, GUI.ASCENT);
                 break;
+            case TIMED_SLOT:
+                GUIs.open(player, GUI.TIMED);
+                break;
+
         }
     }
 
@@ -110,6 +116,19 @@ public class ModifyGUI {
         desc.add("§f§o  rồi mới đến nguyên liệu đột phát");
         desc.add("§f§o- Đối với §a§oDi vật, mỗi khi đột phá sẽ được");
         desc.add("§f§o  §a§ogia tăng ngẫu nhiên một loại chỉ số");
+
+        ItemStackUtils.setDisplayName(is, desc.get(0));
+        desc.remove(0);
+        ItemStackUtils.setLore(is, desc);
+        return is;
+    }
+
+    private static ItemStack getTimedIcon() {
+        var is = Icon.TIMED.clone();
+        List<String> desc = Lists.newArrayList();
+        desc.add("§a§lGhép trang bị vĩnh viễn");
+        desc.add("§f§o- Để §a§ochuyển trang bị có hạn §f§othành §a§otrang bị vĩnh viễn");
+        desc.add("§f§o- Nguyên liệu bắt buộc: Trang bị cùng loại (1 có hạn, 1 vĩnh viễn)");
 
         ItemStackUtils.setDisplayName(is, desc.get(0));
         desc.remove(0);

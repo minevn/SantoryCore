@@ -1,8 +1,8 @@
 package mk.plugin.santory.history.histories;
 
+import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.history.Histories;
 import mk.plugin.santory.history.IHistory;
-import mk.plugin.santory.tier.Tier;
 import org.bukkit.entity.Player;
 
 import java.io.BufferedWriter;
@@ -10,23 +10,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class EnhanceHistory implements IHistory {
+public class TimedHistory implements IHistory {
 
     @Override
     public String getName() {
-        return "enhances";
+        return "timeds";
     }
 
-    public void write(Player player, String itemId, int toLevel, boolean success, boolean hasAmulet) {
+    public void write(Player player, String itemId) {
         var file = Histories.getFile(this);
 
         var line = "[" + Histories.getCurrentTime()
                 + "] " + player.getName() + " | "
-                + itemId + " | "
-                + (success ? "THANH_CONG" : "THAT_BAI") + " | "
-                + "LEVEL_" + toLevel + " | "
-                + (hasAmulet ? "CO_BUA" : "KHONG_BUA");
-
+                + itemId;
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
             out.println(line);

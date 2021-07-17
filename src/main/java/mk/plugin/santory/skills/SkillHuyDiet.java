@@ -101,6 +101,8 @@ public class SkillHuyDiet implements SkillExecutor {
         is.setItemMeta(meta);
 
         var a = (ArmorStand) l.getWorld().spawnEntity(l, EntityType.ARMOR_STAND);
+        a.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+        a.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
         a.setInvisible(true);
         a.getEquipment().setHelmet(is);
         a.setBasePlate(false);

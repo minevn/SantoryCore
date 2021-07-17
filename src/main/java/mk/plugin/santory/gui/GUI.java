@@ -4,13 +4,15 @@ import java.util.Map;
 
 import mk.plugin.santory.item.modifty.ItemAscents;
 import mk.plugin.santory.item.modifty.ItemEnhances;
+import mk.plugin.santory.item.modifty.ItemTimeds;
 import mk.plugin.santory.item.modifty.ItemUpgrades;
 
 public enum GUI {
 	
 	ASCENT(9, "§0§lĐỘT PHÁ TRANG BỊ", ItemAscents.getSlots(), ItemAscents.getInputChecker(), ItemAscents.getAmountChecker()),
 	UPGRADE(9, "§0§lNÂNG BẬC TRANG BỊ", ItemUpgrades.getSlots(), ItemUpgrades.getInputChecker(), ItemUpgrades.getAmountChecker()),
-	ENHANCE(9, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker());
+	ENHANCE(9, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker()),
+	TIMED(9, "§0§lGHÉP TRANG BỊ VĨNH VIỄN", ItemTimeds.getSlots(), ItemTimeds.getInputChecker(), ItemTimeds.getAmountChecker());
 
     private final int size;
 	private final String title;
