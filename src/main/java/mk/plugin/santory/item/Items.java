@@ -53,7 +53,7 @@ public class Items {
 		ItemData data = item.getData();
 
 		// Timed trigger
-		if (!player.hasPermission("timed.bypass")) {
+		if (player != null && !player.hasPermission("timed.bypass")) {
 			if (data.timedTrigger()) {
 				write(player, is, item);
 			}
