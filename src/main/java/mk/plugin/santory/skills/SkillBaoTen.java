@@ -25,15 +25,11 @@ public class SkillBaoTen implements SkillExecutor {
         double scale = ((double) components.get("scale")) * 0.01;
         double damage = Travelers.getStatValue(player, Stat.DAMAGE) * scale;
 
-        final LivingEntity[] target = {Utils.getTarget(player, 30)};
-        if (target[0] == null) {
-            player.sendMessage("§cKhông có mục tiêu trong tầm!");
-            return;
-        }
-
         new BukkitRunnable() {
             int i = 0;
-            Location lastsub;
+
+            LivingEntity target = null;
+
             @Override
             public void run() {
                 i++;
@@ -41,18 +37,16 @@ public class SkillBaoTen implements SkillExecutor {
                     this.cancel();
                     return;
                 }
-                if (target[0] == null || target[0].isDead()) target[0] = Utils.getTarget(player, 30);
+
+                if (target == null || target.isDead() || target.getWorld() != player.getWorld()) target = Utils.getTarget(player, 30);
+
+                Location targetL;
+                if (target != null) targetL = target.getLocation().clone().add(0, 1.5, 0);
+                else targetL = player.getLocation().clone().add(player.getLocation().getDirection().multiply(8));
+
                 Location rl = player.getLocation().add(0, 10, 0);
-                Location l = null;
-                if (target[0] == null) {
-                    l = rl.clone().add(lastsub);
-                }
-                else {
-                    l = target[0].getLocation().add(0, 1.5, 0);
-                    lastsub = l.clone().subtract(rl);
-                }
                 Location sl = Utils.ranLoc(rl, 8);
-                Vector v = l.clone().subtract(sl).toVector().normalize().multiply(2.1f);
+                Vector v = targetL.clone().subtract(sl).toVector().normalize().multiply(2.1f);
 
                 Arrow a = (Arrow) Shooter.BOW.shoot(player, new Damage(damage, DamageType.SKILL), v, sl);
                 a.setCritical(true);

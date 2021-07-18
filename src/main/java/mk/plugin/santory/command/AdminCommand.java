@@ -1,6 +1,7 @@
 package mk.plugin.santory.command;
 
 import com.destroystokyo.paper.Title;
+import com.google.common.collect.Lists;
 import mk.plugin.santory.amulet.Amulet;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.ArtifactGUI;
@@ -46,6 +47,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.List;
 import java.util.UUID;
 
 public class AdminCommand implements CommandExecutor {
@@ -161,6 +163,24 @@ public class AdminCommand implements CommandExecutor {
 						player.sendMessage("§c" + stat.getName() + ": §7" + value);
 					});
 					player.sendMessage("");
+				}
+
+				else if (args[1].equalsIgnoreCase("reset")) {
+					List<Player> players = Lists.newArrayList();
+					var pname = args[2];
+					if (pname.equalsIgnoreCase("*")) players.addAll(Bukkit.getOnlinePlayers());
+					else players.add(Bukkit.getPlayer(pname));
+
+					for (Player p : players) {
+						p.getInventory().clear();
+						var t = Travelers.get(p);
+						t.getData().setExp(0);
+						t.getData().getArtifacts().clear();
+						Travelers.save(p.getName());
+						Travelers.updateState(p);
+					}
+
+					sender.sendMessage("§aDone! Reset " + players.size() + " player's data");
 				}
 			}
 			

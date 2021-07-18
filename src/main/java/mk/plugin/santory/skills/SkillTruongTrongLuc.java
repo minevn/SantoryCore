@@ -58,7 +58,7 @@ public class SkillTruongTrongLuc implements SkillExecutor {
 
         Tasks.sync(() -> {
             for (Entity e : l.getWorld().getEntities()) {
-                if (e instanceof LivingEntity && e != player && e.getLocation().distanceSquared(l) <= 25) {
+                if (e instanceof LivingEntity && e != player && e.getLocation().distanceSquared(l) <= 34) {
                     var le = (LivingEntity) e;
                     if (!(le instanceof Player)) le.setVelocity(l.clone().subtract(le.getLocation().add(0, 1, 0)).toVector().normalize().multiply(vmulti));
                     else le.setVelocity(l.clone().subtract(le.getLocation().add(0, 1, 0)).toVector().normalize().multiply(vmulti / 2));
@@ -71,7 +71,7 @@ public class SkillTruongTrongLuc implements SkillExecutor {
     public static List<Location> show(Location l, double angleX, double angleY, double angleZ) {
         Location pl = l;
         Location c = l;
-        List<Location> list = createCircle(pl, 3.2);
+        List<Location> list = createCircle(pl, 4.2);
         List<Vector> list2 = Lists.newArrayList();
         for (Location location : list) {
             list2.add(location.clone().subtract(c.clone()).toVector().clone());
