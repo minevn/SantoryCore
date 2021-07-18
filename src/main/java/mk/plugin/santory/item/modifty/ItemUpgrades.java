@@ -162,6 +162,14 @@ public class ItemUpgrades {
 	
 	public static ClickExecutor getButtonExecutor() {
 		return (player, status) -> {
+			// Check inventory empty slot
+			if (player.getInventory().firstEmpty() == -1) {
+				if (!Configs.FULL_DROP) {
+					player.sendMessage("§c§lCần chỗ trống trong kho để tránh mất đồ!");
+					return;
+				}
+			}
+
 			// Check can execute
 			if (!status.hasData("canDo")) {
 				player.sendMessage("§cChưa thể nâng bậc");
@@ -202,18 +210,30 @@ public class ItemUpgrades {
 			boolean success = false;
 			if (Utils.rate(chance)) {
 				success = true;
-				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
+				player.sendTitle("§a§lTHÀNH CÔNG UwU", "", 0, 30, 0);
+				player.sendMessage("§a§lThành công UwU");
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-				player.getInventory().addItem(r.clone());
+
+				// Give
+				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+				else if (Configs.FULL_DROP) {
+					player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+				}
 
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, true, previous, after));
 			}
 			// Fail
 			else {
-				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 30, 0);
+				player.sendTitle("§c§lTHẤT BẠI >_<", "§fMất nguyên liệu", 0, 30, 0);
+				player.sendMessage("§c§lThất bại >_<");
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
-				player.getInventory().addItem(is.clone());
+
+				// Give
+				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+				else if (Configs.FULL_DROP) {
+					player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+				}
 
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemUpgradeEvent(player, false, previous, previous));
@@ -231,9 +251,10 @@ public class ItemUpgrades {
 			GUIs.clearItems("material", status);
 			player.closeInventory();
 
-			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+			if (!Configs.FAST_TIEMREN) Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 				GUIs.open(player, GUI.UPGRADE);
 			}, 30);
+			else GUIs.open(player, GUI.UPGRADE);
 		};
 	}
 	
@@ -279,23 +300,6 @@ public class ItemUpgrades {
 		
 		return is;
 	}
-	
-//	private static final String NAME = "§a§lĐá nâng bậc";
-//
-//	public static ItemStack get() {
-//		ItemStack item = ItemStackUtils.create(Material.IRON_NUGGET, 2);
-//		ItemStackUtils.setDisplayName(item, NAME);
-//		ItemStackUtils.addLoreLine(item, "§7§oCó tác dụng nâng bậc cho trang bị");
-//		ItemStackUtils.addEnchantEffect(item);
-//		return item;
-//	}
-//
-//	public static boolean is(ItemStack item) {
-//		if (item == null) return false;
-//		if (!item.hasItemMeta()) return false;
-//		return ItemStackUtils.getName(item).contains(NAME);
-//	}
-//
 
 	public static boolean is(ItemStack is) {
 		return UpgradeStone.read(is) != null;

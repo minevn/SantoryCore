@@ -45,7 +45,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Configs {
-	
+
+	public static boolean FAST_TIEMREN = false;
+	public static boolean FULL_DROP = false;
+
 	public static boolean LEVEL_VALLINA_UPDATE = true;
 	public static long LEVEL_BASE_EXP = 350;
 	public static long LEVEL_PLUS_EXP = 150;
@@ -112,6 +115,8 @@ public class Configs {
 		GLOBAL_SPEAKER = ItemStackUtils.buildItem(Objects.requireNonNull(config.getConfigurationSection("global-speaker")));
 		DIE_EXP_LOST_PERCENT = config.getLong("die-exp-lost-percent", 25);
 		TIMED_FEE = config.getInt("timed.fee", 10000);
+		FAST_TIEMREN = config.getBoolean("fast-tiemren", false);
+		FULL_DROP = config.getBoolean("full-drop", false);
 
 		// PvP Worlds
 		pvpWorlds.clear();

@@ -1,3 +1,6 @@
+fast-tiemren: false
+full-drop: true
+
 permissions:
   wish:
     permission: 'santory.wish'

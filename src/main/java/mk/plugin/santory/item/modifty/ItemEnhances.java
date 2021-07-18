@@ -158,6 +158,14 @@ public class ItemEnhances {
 	
 	public static ClickExecutor getButtonExecutor() {
 		return (player, status) -> {
+			// Check inventory empty slot
+			if (player.getInventory().firstEmpty() == -1) {
+				if (!Configs.FULL_DROP) {
+					player.sendMessage("§c§lCần chỗ trống trong kho để tránh mất đồ!");
+					return;
+				}
+			}
+
 			// Check can execute
 			if (!status.hasData("canDo")) {
 				player.sendMessage("§cChưa thể cường hóa");
@@ -190,27 +198,39 @@ public class ItemEnhances {
 			boolean success = false;
 			if (Utils.rate(chance)) {
 				success = true;
-				player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 30, 0);
+				player.sendTitle("§a§lTHÀNH CÔNG UwU", "", 0, 30, 0);
+				player.sendMessage("§a§lThành công UwU");
 				player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-				player.getInventory().addItem(r.clone());
+
+				// Give
+				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+				else if (Configs.FULL_DROP) {
+					player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+				}
+
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, true, previous, after));
 			}
 			// Fail
 			else {
-				player.sendTitle("§7§lTHẤT BẠI T_T", "", 0, 15, 0);
+				player.sendMessage("§c§lThất bại >_<");
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 
-				if (amulet) player.sendTitle("§7§lTHẤT BẠI T_T", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 30, 0);
+				if (amulet) player.sendTitle("§c§lTHẤT BẠI >_<", "§aKhông bị trừ cấp vì có Bùa may mắn", 0, 30, 0);
 				else {
 					Item i = Items.read(is);
 					i.getData().setLevel(Math.max(0, i.getData().getLevel() - 1));
 					after = i.getData().getLevel();
 					Items.write(player, is, i);
 					Items.update(player, is, i);
-					player.sendTitle("§7§lTHẤT BẠI T_T", "§aBị trừ cấp vì không có Bùa may mắn", 0, 30, 0);
+					player.sendTitle("§c§lTHẤT BẠI >_<", "§aBị trừ cấp vì không có Bùa may mắn", 0, 30, 0);
 				}
-				player.getInventory().addItem(is.clone());
+
+				// Give
+				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+				else if (Configs.FULL_DROP) {
+					player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+				}
 
 				// Event
 				Bukkit.getPluginManager().callEvent(new PlayerItemEnhanceEvent(player, false, previous, after));
@@ -227,9 +247,10 @@ public class ItemEnhances {
 			GUIs.clearItems("material", status);
 			player.closeInventory();
 
-			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+			if (!Configs.FAST_TIEMREN) Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 				GUIs.open(player, GUI.ENHANCE);
 			}, 30);
+			else GUIs.open(player, GUI.ENHANCE);
 		};
 	}
 	

@@ -160,6 +160,14 @@ public class ItemAscents {
 		return new ClickExecutor() {	
 			@Override
 			public void execute(Player player, GUIStatus status) {
+				// Check inventory empty slot
+				if (player.getInventory().firstEmpty() == -1) {
+					if (!Configs.FULL_DROP) {
+						player.sendMessage("§c§lCần chỗ trống trong kho để tránh mất đồ!");
+						return;
+					}
+				}
+
 				// Check can execute
 				if (!status.hasData("canDo")) {
 					player.sendMessage("§cChưa thể đột phá");
@@ -191,18 +199,30 @@ public class ItemAscents {
 				boolean success = false;
 				if (Utils.rate(chance)) {
 					success = true;
-					player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
+					player.sendTitle("§a§lTHÀNH CÔNG UwU", "", 0, 30, 0);
+					player.sendMessage("§a§lThành công UwU");
 					player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-					player.getInventory().addItem(r.clone());
+
+					// Give
+					if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+					else if (Configs.FULL_DROP) {
+						player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+					}
 
 					// Event
 					Bukkit.getPluginManager().callEvent(new PlayerItemAscentEvent(player, true, previous, after));
 				}
 				// Fail
 				else {
-					player.sendTitle("§7§lTHẤT BẠI T_T", "§fMất nguyên liệu", 0, 15, 0);
+					player.sendTitle("§c§lTHẤT BẠI >_<", "§fMất nguyên liệu", 0, 30, 0);
+					player.sendMessage("§c§lThất bại >_<");
 					player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
-					player.getInventory().addItem(is.clone());
+
+					// Give
+					if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+					else if (Configs.FULL_DROP) {
+						player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+					}
 
 					// Event
 					Bukkit.getPluginManager().callEvent(new PlayerItemAscentEvent(player, false, previous, previous));
@@ -217,11 +237,13 @@ public class ItemAscents {
 				GUIs.clearItems("item", status);
 				GUIs.clearItems("amulet", status);
 				GUIs.clearItems("material", status);
+
 				player.closeInventory();
-				
-				Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+
+				if (!Configs.FAST_TIEMREN) Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
 					GUIs.open(player, GUI.ASCENT);
 				}, 30);
+				else GUIs.open(player, GUI.ASCENT);
 
 			}
 		};

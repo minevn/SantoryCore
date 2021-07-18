@@ -149,6 +149,14 @@ public class ItemTimeds {
         return new ClickExecutor() {
             @Override
             public void execute(Player player, GUIStatus status) {
+                // Check inventory empty slot
+                if (player.getInventory().firstEmpty() == -1) {
+                    if (!Configs.FULL_DROP) {
+                        player.sendMessage("§c§lCần chỗ trống trong kho để tránh mất đồ!");
+                        return;
+                    }
+                }
+
                 // Check can execute
                 if (!status.hasData("canDo")) {
                     player.sendMessage("§cChưa thể ghép");
@@ -171,9 +179,15 @@ public class ItemTimeds {
                 var readR = Items.read(r);
 
                 // Success
-                player.sendTitle("§a§lTHÀNH CÔNG ^_^", "", 0, 15, 0);
+                player.sendTitle("§a§lTHÀNH CÔNG UwU", "", 0, 15, 0);
+                player.sendMessage("§a§lThành công UwU");
                 player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
-                player.getInventory().addItem(r.clone());
+
+                // Give
+                if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+                else if (Configs.FULL_DROP) {
+                    player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+                }
 
                 // History
                 Tasks.async(() -> {
@@ -184,9 +198,10 @@ public class ItemTimeds {
                 GUIs.clearItems("material", status);
                 player.closeInventory();
 
-                Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
+                if (!Configs.FAST_TIEMREN) Bukkit.getScheduler().runTaskLater(SantoryCore.get(), () -> {
                     GUIs.open(player, GUI.TIMED);
                 }, 30);
+                else GUIs.open(player, GUI.TIMED);
             }
         };
     }
