@@ -68,12 +68,18 @@ public class ItemAscents {
 					status.place(player, GUIs.getEmptySlot("amulet", status), is);
 					return true;
 				}
-				
-				
+
 				// ITEM
 				if (!Items.is(is)) {
 					player.sendMessage("§cVật phẩm không hợp lệ!");
 					return false;
+				}
+				else {
+					var item = Items.read(is);
+					if (item.getData().isTimed()) {
+						player.sendMessage("§cKhông thể đột phá đồ có hạn");
+						return false;
+					}
 				}
 				
 				// Check base item if placed
