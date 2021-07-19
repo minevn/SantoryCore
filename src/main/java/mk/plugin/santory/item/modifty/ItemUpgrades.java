@@ -230,9 +230,9 @@ public class ItemUpgrades {
 				player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 1, 1);
 
 				// Give
-				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(r.clone());
+				if (player.getInventory().firstEmpty() != -1) player.getInventory().addItem(is);
 				else if (Configs.FULL_DROP) {
-					player.getWorld().dropItemNaturally(player.getLocation(), r.clone());
+					player.getWorld().dropItemNaturally(player.getLocation(), is);
 				}
 
 				// Event

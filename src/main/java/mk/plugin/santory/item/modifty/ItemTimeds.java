@@ -175,7 +175,6 @@ public class ItemTimeds {
                 ItemStack r = (ItemStack) status.getData("result");
 
                 // Amulet
-                boolean amulet = GUIs.countPlaced("amulet", status) != 0;
                 var readR = Items.read(r);
 
                 // Success

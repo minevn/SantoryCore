@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skill.SkillExecutor;
 import mk.plugin.santory.utils.Tasks;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -58,7 +59,7 @@ public class SkillTruongTrongLuc implements SkillExecutor {
 
         Tasks.sync(() -> {
             for (Entity e : l.getWorld().getEntities()) {
-                if (e instanceof LivingEntity && e != player && e.getLocation().distanceSquared(l) <= 34) {
+                if (e instanceof LivingEntity && Utils.canAttack(e) && e != player && e.getLocation().distanceSquared(l) <= 34) {
                     var le = (LivingEntity) e;
                     if (!(le instanceof Player)) le.setVelocity(l.clone().subtract(le.getLocation().add(0, 1, 0)).toVector().normalize().multiply(vmulti));
                     else le.setVelocity(l.clone().subtract(le.getLocation().add(0, 1, 0)).toVector().normalize().multiply(vmulti / 2));

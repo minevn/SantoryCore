@@ -7,22 +7,26 @@ soft-depend: [PlaceholderAPI, GlowAPI]
 api-version: 1.13
 commands:
     santory:
+        permission: santory.admin
         descripton: Santory's command
         aliases: [str]
-        permission: santory.admin
     artifact:
+        permission: santory.command.player
         description: Artifacts
         aliases: [divat]
     forge:
-        permission: dumaconcac
+        permission: santory.command.player
         description: Forges
         aliases: [tiemren, fapsu]
     see:
+        permission: santory.command.player
         description: Sees
         aliases: [xem]
     player:
+        permission: santory.command.player
         description: Info
         aliases: [me, ditme]
     globalspeaker:
+        permission: santory.command.player
         description: Loa the gioi
         aliases: [loa, loathegioi]

@@ -98,7 +98,7 @@ public class SkillBocPhaThien implements SkillExecutor {
                 int max = 13;
                 for (Entity entity : center.getWorld().getEntities()) {
                     var d = entity.getLocation().distance(center);
-                    if (entity != player && entity instanceof LivingEntity && d <= max) {
+                    if (entity != player && Utils.canAttack(entity) && entity instanceof LivingEntity && d <= max) {
                         var dmg = damage * d / max;
                         Damages.damage(player, (LivingEntity) entity, new Damage(dmg, DamageType.SKILL), 5);
                     }
