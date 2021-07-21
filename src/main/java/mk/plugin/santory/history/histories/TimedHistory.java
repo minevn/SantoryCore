@@ -30,8 +30,6 @@ public class TimedHistory implements IHistory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(line);
     }
 
 }

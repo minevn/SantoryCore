@@ -34,8 +34,6 @@ public class UpgradeHistory implements IHistory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(line);
     }
 
 }

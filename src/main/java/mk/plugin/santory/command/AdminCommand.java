@@ -150,8 +150,6 @@ public class AdminCommand implements CommandExecutor {
 						p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 						Travelers.updateLevel(p);
 					}
-
-					sender.sendMessage("§aDone, Exp added!");
 				}
 				
 				else if (args[1].equalsIgnoreCase("showstats")) {
