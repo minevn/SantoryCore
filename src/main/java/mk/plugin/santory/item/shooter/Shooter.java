@@ -4,6 +4,7 @@ import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
@@ -84,6 +85,7 @@ public enum Shooter {
 						Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 							// Damage
 							for (Entity entity : l.getWorld().getEntities()) {
+								if (!Utils.canAttack(entity)) return;
 								if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(l) < 9) {
 									Damages.damage(player, (LivingEntity) entity, damage, 5);
 								}

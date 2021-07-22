@@ -340,6 +340,7 @@ public class Utils {
 	}
 
 	public static boolean canAttack(Entity e) {
+		if (e instanceof Player && ((Player) e).getGameMode() == GameMode.SPECTATOR) return false;
 		if (e instanceof ArmorStand) return false;
 		return !e.hasMetadata("NPC");
 	}
@@ -376,6 +377,9 @@ public class Utils {
 		double d = 999;
 		for (Entity near : nears) {
 			if (!(near instanceof LivingEntity) || near == player) continue;
+			if (near instanceof Player) {
+				if (((Player) near).getGameMode() == GameMode.SPECTATOR) continue;
+			}
 
 			var l1 = ((LivingEntity) near).getEyeLocation().add(0, -1, 0);
 			var l2 = player.getEyeLocation();
