@@ -39,7 +39,13 @@ public class WSDapRiu implements SkillExecutor {
 
 			player.spawnParticle(Particle.CRIT_MAGIC, le.getLocation(), 10, 0.2, 0.2, 0.2, 1);
 			player.spawnParticle(Particle.CRIT, le.getLocation(), 10, 0.2, 0.2, 0.2, 1);
-			le.setVelocity(le.getLocation().subtract(player.getLocation()).toVector().normalize().multiply(1.2).setY(1));
+
+			try {
+				le.setVelocity(le.getLocation().subtract(player.getLocation()).toVector().normalize().multiply(1.2).setY(1));
+			}
+			catch (IllegalArgumentException e) {
+				player.sendMessage("§cKhông biết bạn làm gì những lỗi kỹ năng rồi :|");
+			}
 		});
 	}
 

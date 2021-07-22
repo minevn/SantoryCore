@@ -76,6 +76,8 @@ public class Configs {
 	private static final Map<Integer, Double> artStatSetUp = Maps.newLinkedHashMap();
 	
 	private static final Map<Grade, Integer> gradeExps = Maps.newHashMap();
+	private static final Map<Grade, Integer> gradeEnhanceLevels = Maps.newHashMap();
+
 	private static final Map<Integer, Double> enhanceRates = Maps.newHashMap();
 	
 	private static final Map<String, ItemModel> models = Maps.newHashMap();
@@ -192,7 +194,15 @@ public class Configs {
 			int exp = config.getInt("item.grade-exp." + gs);
 			gradeExps.put(g, exp);
 		});
-		
+
+		// Grade enhance
+		gradeEnhanceLevels.clear();
+		config.getConfigurationSection("item.grade-enhance").getKeys(false).forEach(gs -> {
+			Grade g = Grade.valueOf(gs);
+			int level = config.getInt("item.grade-enhance." + gs);
+			gradeEnhanceLevels.put(g, level);
+		});
+
 		// Enhance rates
 		enhanceRates.clear();
 		config.getStringList("enhance.chance").forEach(s -> {
@@ -388,6 +398,10 @@ public class Configs {
 	
 	public static Map<Integer, Double> getArtSetUp() {
 		return artStatSetUp;
+	}
+
+	public static Map<Grade, Integer> getGradeEnhanceLevels() {
+		return gradeEnhanceLevels;
 	}
 
 	public static ItemStack getKeepStone() {

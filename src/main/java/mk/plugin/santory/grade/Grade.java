@@ -1,5 +1,7 @@
 package mk.plugin.santory.grade;
 
+import mk.plugin.santory.config.Configs;
+
 public enum Grade {
 	
 	I(1, 10, 20),
@@ -25,7 +27,8 @@ public enum Grade {
 	}
 	
 	public int getMaxEnhance() {
-		return this.maxEnhance;
+		return Configs.getGradeEnhanceLevels().getOrDefault(this, this.maxEnhance);
+//		return this.maxEnhance;
 	}
 	
 	public int getMaxLevel() {

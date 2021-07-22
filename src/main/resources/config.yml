@@ -42,6 +42,12 @@ item:
     III: 300
     IV: 450
     V: 600
+  grade-enhance:
+    I: 4
+    II: 8
+    III: 12
+    IV: 16
+    V: 20
 
 timed:
   fee: 10000

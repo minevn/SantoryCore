@@ -78,6 +78,15 @@ public class ItemEnhances {
 
 			// Check base item if placed
 			if (GUIs.countPlaced("item", status) == 0) {
+				// Check level
+				var item = Items.read(is);
+				int lv = item.getData().getLevel();
+				var grade = item.getData().getGrade();
+				if (lv >= grade.getMaxEnhance()) {
+					player.sendMessage("§cNâng bậc để cường hóa cao hơn!");
+					return false;
+				}
+
 				status.place(player, GUIs.getEmptySlot("item", status), is);
 				return true;
 			}
