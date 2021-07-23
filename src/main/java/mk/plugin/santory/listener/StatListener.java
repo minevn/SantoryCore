@@ -186,16 +186,6 @@ public class StatListener implements Listener {
 						});
 					}
 					
-					// Suc thu, xuyen giap
-					if (!(entity instanceof Player)) {
-						double defenseValue = ENTITY_DEFAULT_DEFENSE;
-						Mob mob = Mobs.get(entity.getEntityId());
-						if (mob != null) {
-							defenseValue = Stat.DEFENSE.pointsToValue(mob.getStat(Stat.DEFENSE));
-						}
-						damage = damage * (1 - (defenseValue / 100));
-					}
-					
 					// If target is player
 					if (e.getEntity() instanceof Player) {
 						Player target = (Player) e.getEntity();
@@ -212,13 +202,24 @@ public class StatListener implements Listener {
 						
 					}					
 				}
+				// End attack
 
-				// Check world pvp
-				if (Configs.isPvPWorld(player.getWorld())) {
+				// Check if PvP
+				if (entity instanceof Player) {
 					// only 25% damage
 					damage *= 0.25;
 				}
-				
+
+				// Suc thu, xuyen giap
+				if (!(entity instanceof Player)) {
+					double defenseValue = ENTITY_DEFAULT_DEFENSE;
+					Mob mob = Mobs.get(entity.getEntityId());
+					if (mob != null) {
+						defenseValue = Stat.DEFENSE.pointsToValue(mob.getStat(Stat.DEFENSE));
+					}
+					damage = damage * (1 - (defenseValue / 100));
+				}
+
 				// End attack
 				int dtick = entity.getNoDamageTicks();
 				entity.setNoDamageTicks(0);
