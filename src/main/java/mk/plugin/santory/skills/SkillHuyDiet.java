@@ -108,8 +108,8 @@ public class SkillHuyDiet implements SkillExecutor {
         a.setBasePlate(false);
         a.setRotation(Utils.randomInt(0, 180), 0);
         a.setCollidable(false);
-        a.setMaximumNoDamageTicks(10000);
-        a.setNoDamageTicks(10000);
+        a.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10000);
+        a.setHealth(9000);
 
         return a;
     }

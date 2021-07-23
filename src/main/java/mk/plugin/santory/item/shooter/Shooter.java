@@ -16,13 +16,12 @@ public enum Shooter {
 	BOW {
 		@Override
 		public Object shoot(Player player, Damage damage, Vector v, Location location) {
-			Arrow arrow = player.getWorld().spawnArrow(location, v, 0, 0);
+			Arrow arrow = player.launchProjectile(Arrow.class, v);
 			arrow.setShooter(player);
-			arrow.setVelocity(v);
 			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 			Damages.setProjectileDamage(arrow, damage);
 			player.playSound(location, Sound.ENTITY_ARROW_SHOOT, 1, 1);
-			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 10);
+			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 20);
 
 			return arrow;
 		}
@@ -63,7 +62,7 @@ public enum Shooter {
 				public void run() {
 					i++;
 
-					var l = main.clone().add(v.clone().multiply((double) i / 2)).add(0, -0.05 * Math.pow((double) i / 3, 2), 0);
+					var l = main.clone().add(v.clone().multiply((double) i / 3)).add(0, -0.06 * Math.pow((double) i / 3, 2), 0);
 					l.getWorld().spawnParticle(Particle.ASH, l, 5, 0.1f, 0.1f, 0.1f, 0f);
 					l.getWorld().spawnParticle(Particle.CRIT, l, 5, 0.1f, 0.1f, 0.1f, 0f);
 					l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l, 5, 0.1f, 0.1f, 0.1f, 0f);
@@ -78,7 +77,7 @@ public enum Shooter {
 					}
 
 					// Boom
-					if (i == 30 || collideEntity || isBlock) {
+					if (i == 25 || collideEntity || isBlock) {
 						l.getWorld().spawnParticle(Particle.ASH, l, 20, 1f, 1f, 1f, 0f);
 						l.getWorld().spawnParticle(Particle.CRIT, l, 20, 1f, 1f, 1f, 0f);
 						l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l, 20, 1f, 1f, 1f, 0f);
