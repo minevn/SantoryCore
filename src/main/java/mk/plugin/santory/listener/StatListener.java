@@ -206,8 +206,8 @@ public class StatListener implements Listener {
 
 				// Check if PvP
 				if (entity instanceof Player) {
-					// only 25% damage
-					damage *= 0.25;
+					// only 50% damage
+					damage *= 0.5;
 				}
 
 				// Suc thu, xuyen giap

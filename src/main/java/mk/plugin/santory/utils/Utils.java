@@ -340,6 +340,7 @@ public class Utils {
 	}
 
 	public static boolean canAttack(Entity e) {
+		if (!(e instanceof LivingEntity)) return false;
 		if (e instanceof Player && ((Player) e).getGameMode() == GameMode.SPECTATOR) return false;
 		if (e instanceof ArmorStand) return false;
 		return !e.hasMetadata("NPC");

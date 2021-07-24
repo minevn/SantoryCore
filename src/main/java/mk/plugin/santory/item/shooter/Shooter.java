@@ -21,7 +21,6 @@ public enum Shooter {
 			if (location == null) arrow = player.launchProjectile(Arrow.class, v);
 			else {
 				arrow = player.getWorld().spawnArrow(location, v, 1, 0);
-				System.out.println("du me");
 			}
 
 			arrow.setShooter(player);
@@ -95,7 +94,7 @@ public enum Shooter {
 						Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 							// Damage
 							for (Entity entity : l.getWorld().getEntities()) {
-								if (!Utils.canAttack(entity)) return;
+								if (!Utils.canAttack(entity)) continue;
 								if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(l) < 9) {
 									Damages.damage(player, (LivingEntity) entity, damage, 5);
 								}
