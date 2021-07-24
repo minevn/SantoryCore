@@ -16,9 +16,17 @@ public enum Shooter {
 	BOW {
 		@Override
 		public Object shoot(Player player, Damage damage, Vector v, Location location) {
-			Arrow arrow = player.launchProjectile(Arrow.class, v);
+			Arrow arrow = null;
+
+			if (location == null) arrow = player.launchProjectile(Arrow.class, v);
+			else {
+				arrow = player.getWorld().spawnArrow(location, v, 1, 0);
+				System.out.println("du me");
+			}
+
 			arrow.setShooter(player);
 			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+
 			Damages.setProjectileDamage(arrow, damage);
 			player.playSound(location, Sound.ENTITY_ARROW_SHOOT, 1, 1);
 			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 20);
@@ -53,16 +61,19 @@ public enum Shooter {
 	WAND {
 		@Override
 		public Object shoot(Player player, Damage damage, Vector v, Location location) {
-			var main = location.clone();
+			Location main = null;
+			if (location == null) main = player.getLocation().add(0, 1.7, 0).add(player.getLocation().getDirection().multiply(3));
+			else main = location;
 
 			main.getWorld().playSound(player.getLocation(), Sound.ENTITY_CREEPER_HURT, 1, 1);
+			Location finalMain = main;
 			new BukkitRunnable() {
 				int i = 0;
 				@Override
 				public void run() {
 					i++;
 
-					var l = main.clone().add(v.clone().multiply((double) i / 3)).add(0, -0.06 * Math.pow((double) i / 3, 2), 0);
+					var l = finalMain.clone().add(v.clone().multiply((double) i / 3)).add(0, -0.06 * Math.pow((double) i / 3, 2), 0);
 					l.getWorld().spawnParticle(Particle.ASH, l, 5, 0.1f, 0.1f, 0.1f, 0f);
 					l.getWorld().spawnParticle(Particle.CRIT, l, 5, 0.1f, 0.1f, 0.1f, 0f);
 					l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l, 5, 0.1f, 0.1f, 0.1f, 0f);

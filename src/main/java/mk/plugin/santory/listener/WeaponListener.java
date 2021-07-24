@@ -125,7 +125,7 @@ public class WeaponListener implements Listener {
 					setCooldownAttack(player, Double.valueOf(Travelers.getStatValue(player, Stat.ATTACK_SPEED) * 1000).longValue(), is);
 
 					if (!w.getType().getShooter().checkRequirements(player)) return;
-					w.getType().getShooter().shoot(player, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.ATTACK), player.getLocation().getDirection().multiply(3), player.getLocation().add(player.getLocation().getDirection().multiply(3)).add(0, 1.5, 0));
+					w.getType().getShooter().shoot(player, new Damage(Travelers.getStatValue(player, Stat.DAMAGE), DamageType.ATTACK), player.getLocation().getDirection().multiply(3), null);
 				}
 				// Attack
 				else {

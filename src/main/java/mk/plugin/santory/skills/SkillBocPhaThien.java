@@ -51,7 +51,7 @@ public class SkillBocPhaThien implements SkillExecutor {
         List<Player> players = Lists.newArrayList(player);
         Tasks.sync(() -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p != player && p.getWorld() == player.getWorld() && p.getLocation().distance(center) <= 50) {
+                if (p != player && p.getWorld() == center.getWorld() && p.getLocation().distance(center) <= 50) {
                     players.add(p);
                     p.playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 1, 1);
                 }
