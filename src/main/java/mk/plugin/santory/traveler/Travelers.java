@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.math.Stats;
+import manaki.plugin.skybattleclient.gui.room.BattleType;
+import manaki.plugin.skybattleclient.rank.RankData;
+import manaki.plugin.skybattleclient.rank.player.RankedPlayers;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
@@ -11,6 +14,7 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -154,7 +158,7 @@ public class Travelers {
 	}
 
 	public static String getFormatChatWithName(Player player) {
-		String format = "%xacminh% &a[%level%/#%power%] %prefix% %name%%suffix%: &f";
+		String format = "%xacminh% §f(§r%rank%§f) &a[%level%/#%power%] %prefix% %name%%suffix%: &f";
 
 		String xacminh;
 		if (isHackChecked(player.getName())) xacminh = "§a✔";
@@ -184,7 +188,30 @@ public class Travelers {
 		else power = p + "";
 
 		format = format.replace("%xacminh%", xacminh).replace("%level%", level).replace("%power%", power).replace("%prefix%", prefix).replace("%suffix%", suffix).replace("%name%", player.getName()).replace("&", "§");
+
+		if (Bukkit.getPluginManager().isPluginEnabled("SkyBattleClient")) {
+			format = format.replace("%rank%", manaki.plugin.skybattleclient.util.Utils.getRankDisplay(getSkybattleRank(player)));
+		}
+
 		return format;
+	}
+
+	public static RankData getSkybattleRank(Player player) {
+		// Get max rank
+		BattleType bt = null;
+		int maxp = -1;
+		var rp = RankedPlayers.get(player.getName());
+		for (BattleType type : BattleType.values()) {
+			var rd = rp.getRankData(type);
+			var point = manaki.plugin.skybattleclient.util.Utils.toPoint(rd.getType(), rd.getGrade(), rd.getPoint());
+			if (point > maxp) {
+				maxp = point;
+				bt = type;
+			}
+		}
+
+		// return
+		return rp.getRankData(bt);
 	}
 	
 }

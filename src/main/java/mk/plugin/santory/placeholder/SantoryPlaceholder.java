@@ -40,7 +40,7 @@ public class SantoryPlaceholder extends PlaceholderExpansion {
 		else if (s.equalsIgnoreCase("player_xacminh")) {
 			if (Travelers.isHackChecked(player.getName())) {
 				return "§a✔ ";
-			} else return "§8✔ ";
+			} else return "§7✔ ";
 		}
 		
 		else if (s.contains("random_int_")) {
