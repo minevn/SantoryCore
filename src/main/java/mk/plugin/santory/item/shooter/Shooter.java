@@ -1,7 +1,6 @@
 package mk.plugin.santory.item.shooter;
 
 import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.utils.Utils;
@@ -24,6 +23,7 @@ public enum Shooter {
 			}
 			arrow.setVelocity(v);
 			arrow.setShooter(player);
+			arrow.setCritical(true);
 			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 
 			Damages.setProjectileDamage(arrow, damage);
