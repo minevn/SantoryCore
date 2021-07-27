@@ -22,7 +22,7 @@ public enum Shooter {
 			else {
 				arrow = player.getWorld().spawnArrow(location, v, 1, 0);
 			}
-
+			arrow.setVelocity(v);
 			arrow.setShooter(player);
 			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 
