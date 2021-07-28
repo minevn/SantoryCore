@@ -27,7 +27,7 @@ public enum Shooter {
 			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
 
 			Damages.setProjectileDamage(arrow, damage);
-			player.playSound(location, Sound.ENTITY_ARROW_SHOOT, 1, 1);
+			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
 			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 20);
 
 			return arrow;
