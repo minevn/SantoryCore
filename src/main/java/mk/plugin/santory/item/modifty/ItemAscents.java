@@ -43,7 +43,7 @@ public class ItemAscents {
 		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị (Chính)"), getInputExecutor()));
 		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
 		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
-		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(), getButtonExecutor()));
+		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(0), getButtonExecutor()));
 		
 		return slots;
 	}
@@ -150,7 +150,7 @@ public class ItemAscents {
 						// Check can do
 						if (GUIs.countPlaced("material", status) == MATERIAL_SLOTS.size()) {
 							double chance = getChance(status);
-							status.getInventory().setItem(BUTTON_SLOT, getOkButton(chance));
+							status.getInventory().setItem(BUTTON_SLOT, getOkButton(chance, Configs.getAscentFee(i.getData().getAscent())));
 							status.setData("canDo", "");
 						}
 					});
@@ -179,15 +179,6 @@ public class ItemAscents {
 					player.sendMessage("§cChưa thể đột phá");
 					return;
 				}
-				
-				int fee = Configs.ASCENT_FEE;
-				double chance = getChance(status);
-				
-				// Check fee
-				if (!EcoType.MONEY.take(player, fee)) {
-					player.sendMessage("§cKhông đủ tiền!");
-					return;
-				}
 
 				// Do
 				ItemStack is = GUIs.getItem("item", status);
@@ -196,6 +187,15 @@ public class ItemAscents {
 				// Amulet
 				boolean amulet = GUIs.countPlaced("amulet", status) != 0;
 				var readR = Items.read(r);
+
+				int fee = Configs.getAscentFee(readR.getData().getAscent());
+				double chance = getChance(status);
+				
+				// Check fee
+				if (!EcoType.MONEY.take(player, fee)) {
+					player.sendMessage("§cKhông đủ tiền!");
+					return;
+				}
 
 				// Get
 				int previous = Items.read(is).getData().getAscent().getValue();
@@ -267,8 +267,7 @@ public class ItemAscents {
 		return chance;
 	}
 	
-	public static ItemStack getDefaultButton() {
-		double fee = Configs.ASCENT_FEE;
+	public static ItemStack getDefaultButton(double fee) {
 		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể đột phá");
 		List<String> lore = Lists.newArrayList();
@@ -279,8 +278,7 @@ public class ItemAscents {
 		return is;
 	}
 	
-	public static ItemStack getOkButton(double chance) {
-		double fee = Configs.ASCENT_FEE;
+	public static ItemStack getOkButton(double chance, double fee) {
 		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể đột phá");
 		List<String> lore = Lists.newArrayList();

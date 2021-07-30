@@ -53,17 +53,32 @@ timed:
   fee: 10000
 
 ascent:
-  base-chance: 50
-  fee: 5000
   free-permission: 'santory.ascent.free'
+  base-chance: 50
+  fee:
+    I: 5000
+    II: 10000
+    III: 15000
+    IV: 20000
+    V: 30000
 
 upgrade:
   base-chance: 50
-  fee: 500
   exp-per-material: 100
+  fee:
+    I: 5000
+    II: 10000
+    III: 15000
+    IV: 20000
+    V: 30000
 
 enhance:
-  fee: 100
+  fee:
+  - '1-10:500'
+  - '11-20:1000'
+  - '21-30:1500'
+  - '31-40:2000'
+  - '41-50:3500'
   chance:
   - '1-10:80'
   - '11-20:40'

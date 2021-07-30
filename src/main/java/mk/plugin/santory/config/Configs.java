@@ -2,6 +2,7 @@ package mk.plugin.santory.config;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.element.Element;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.item.ItemModel;
@@ -54,11 +55,8 @@ public class Configs {
 	public static int MAX_DURABILITY = 800;
 	
 	public static double ASCENT_BASE_CHANCE = 50;
-	public static int ASCENT_FEE = 10000;
 	public static double UPGRADE_BASE_CHANCE = 50;
-	public static int UPGRADE_FEE = 10000;
 	public static int UPGRADE_EXP = 100;
-	public static int ENHANCE_FEE = 10000;
 	public static int TIMED_FEE = 10000;
 
 	public static int ART_BASE_MAIN_STAT = 15;
@@ -77,6 +75,10 @@ public class Configs {
 	private static final Map<Grade, Integer> gradeEnhanceLevels = Maps.newHashMap();
 
 	private static final Map<Integer, Double> enhanceRates = Maps.newHashMap();
+	private static final Map<Integer, Integer> enhanceFees = Maps.newHashMap();
+
+	private static final Map<Grade, Integer> upgradeFees = Maps.newHashMap();
+	private static final Map<Ascent, Integer> ascentFees = Maps.newHashMap();
 	
 	private static final Map<String, ItemModel> models = Maps.newHashMap();
 	private static final Map<String, Wish> wishes = Maps.newHashMap();
@@ -103,11 +105,8 @@ public class Configs {
 		LEVEL_PLUS_EXP = ConfigGetter.from(config).getLong("level.plus-exp", LEVEL_PLUS_EXP);
 		MAX_DURABILITY = ConfigGetter.from(config).getInt("item.max-durability", MAX_DURABILITY);
 		ASCENT_BASE_CHANCE = ConfigGetter.from(config).getDouble("ascent.base-chance", ASCENT_BASE_CHANCE);
-		ASCENT_FEE = ConfigGetter.from(config).getInt("ascent.fee", ASCENT_FEE);
 		UPGRADE_BASE_CHANCE = ConfigGetter.from(config).getDouble("upgrade.base-chance", UPGRADE_BASE_CHANCE);
-		UPGRADE_FEE = ConfigGetter.from(config).getInt("upgrade.fee", UPGRADE_FEE);
 		UPGRADE_EXP = ConfigGetter.from(config).getInt("upgrade.exp-per-material", UPGRADE_EXP);
-		ENHANCE_FEE = ConfigGetter.from(config).getInt("enhance.fee", ENHANCE_FEE);
 		ART_BASE_MAIN_STAT = ConfigGetter.from(config).getInt("artifact.base-main-stat", ART_BASE_MAIN_STAT);
 		ART_BASE_SUB_STAT = ConfigGetter.from(config).getInt("artifact.base-sub-stat", ART_BASE_SUB_STAT);
 		ART_STAT_RANGE = ConfigGetter.from(config).getDouble("artifact.stat-range", ART_STAT_RANGE);
@@ -208,6 +207,31 @@ public class Configs {
 			int max = Integer.valueOf(s.split(":")[0].split("-")[1]);
 			double chance = Double.valueOf(s.split(":")[1]);
 			for (int i = min ; i <= max ; i++) enhanceRates.put(i, chance);
+		});
+
+		// Enhance fees
+		enhanceFees.clear();
+		config.getStringList("enhance.fee").forEach(s -> {
+			int min = Integer.parseInt(s.split(":")[0].split("-")[0]);
+			int max = Integer.parseInt(s.split(":")[0].split("-")[1]);
+			int fee = Integer.parseInt(s.split(":")[1]);
+			for (int i = min ; i <= max ; i++) enhanceFees.put(i, fee);
+		});
+
+		// Upgrade fee
+		upgradeFees.clear();
+		config.getStringList("upgrade.fee").forEach(s -> {
+			Grade g = Grade.valueOf(s.split(":")[0].toUpperCase());
+			int fee = Integer.parseInt(s.split(":")[1]);
+			upgradeFees.put(g, fee);
+		});
+
+		// Ascent fee
+		ascentFees.clear();
+		config.getStringList("ascent.fee").forEach(s -> {
+			Ascent g = Ascent.valueOf(s.split(":")[0].toUpperCase());
+			int fee = Integer.parseInt(s.split(":")[1]);
+			ascentFees.put(g, fee);
 		});
 		
 		// Art-set-stat
@@ -450,6 +474,18 @@ public class Configs {
 
 	public static Map<String, String> getChatSuffixes() {
 		return chatSuffixes;
+	}
+
+	public static int getEnanceFee(int lv) {
+		return enhanceFees.getOrDefault(lv, 0);
+	}
+
+	public static int getUpgradeFee(Grade g) {
+		return upgradeFees.getOrDefault(g, 0);
+	}
+
+	public static int getAscentFee(Ascent a) {
+		return ascentFees.getOrDefault(a, 0);
 	}
 
 }

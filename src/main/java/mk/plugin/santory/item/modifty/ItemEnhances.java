@@ -43,7 +43,7 @@ public class ItemEnhances {
 		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị"), getInputExecutor()));
 		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
 		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
-		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(), getButtonExecutor()));
+		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(0), getButtonExecutor()));
 		
 		return slots;
 	}
@@ -152,11 +152,11 @@ public class ItemEnhances {
 			Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 				// Check can do
 				if (GUIs.countAmountPlaced("material", status) == GUIs.countAmountPlaced("amulet", status) || GUIs.countPlaced("amulet", status) == 0) {
-					status.getInventory().setItem(BUTTON_SLOT, getOkButton(status));
+					status.getInventory().setItem(BUTTON_SLOT, getOkButton(status, Configs.getEnanceFee(i.getData().getLevel())));
 					status.setData("canDo", "");
 				}
 				else {
-					status.getInventory().setItem(BUTTON_SLOT, getDefaultButton());
+					status.getInventory().setItem(BUTTON_SLOT, getDefaultButton(Configs.getEnanceFee(i.getData().getLevel())));
 					status.removeData("canDo");
 				}
 
@@ -181,7 +181,13 @@ public class ItemEnhances {
 				return;
 			}
 
-			int fee = Configs.ENHANCE_FEE;
+			// Do
+			ItemStack is = GUIs.getItem("item", status);
+			ItemStack r = (ItemStack) status.getData("result");
+
+			var readR = Items.read(r);
+
+			int fee = Configs.getEnanceFee(readR.getData().getLevel());
 			double chance = getChance(status);
 
 			// Check fee
@@ -189,12 +195,6 @@ public class ItemEnhances {
 				player.sendMessage("§cKhông đủ tiền!");
 				return;
 			}
-
-			// Do
-			ItemStack is = GUIs.getItem("item", status);
-			ItemStack r = (ItemStack) status.getData("result");
-
-			var readR = Items.read(r);
 
 			// Get
 			int previous = Items.read(is).getData().getAscent().getValue();
@@ -276,8 +276,7 @@ public class ItemEnhances {
 		return chance;
 	}
 	
-	public static ItemStack getDefaultButton() {
-		double fee = Configs.ENHANCE_FEE;
+	public static ItemStack getDefaultButton(double fee) {
 		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể cường hóa");
 		List<String> lore = Lists.newArrayList();
@@ -290,8 +289,7 @@ public class ItemEnhances {
 		return is;
 	}
 	
-	public static ItemStack getOkButton(GUIStatus status) {
-		double fee = Configs.ENHANCE_FEE;
+	public static ItemStack getOkButton(GUIStatus status, double fee) {
 		ItemStack is = Icon.BUTTON.clone();
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể cường hóa");
 		List<String> lore = Lists.newArrayList();
