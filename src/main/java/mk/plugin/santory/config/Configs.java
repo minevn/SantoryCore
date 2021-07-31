@@ -98,6 +98,8 @@ public class Configs {
 	private static List<String> xmSuccess = Lists.newArrayList();
 	private static Map<String, SantoryPermission> permissions = Maps.newHashMap();
 
+	private static List<String> newbieProtectionWorlds;
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -284,6 +286,8 @@ public class Configs {
 		}
 
 		xmSuccess = config.getStringList("xacminh-success");
+
+		newbieProtectionWorlds = config.getStringList("newbie-protection-worlds");
 	}
 
 	public static WishKey getWishKey(String id) {
@@ -488,4 +492,7 @@ public class Configs {
 		return ascentFees.getOrDefault(a, 0);
 	}
 
+	public static List<String> getNewbieProtectionWorlds() {
+		return newbieProtectionWorlds;
+	}
 }

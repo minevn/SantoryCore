@@ -1,3 +1,8 @@
+newbie-protection-worlds:
+  - world_pvp
+  - world_mine_1
+  - world_forest_1
+
 fast-tiemren: false
 full-drop: true
 

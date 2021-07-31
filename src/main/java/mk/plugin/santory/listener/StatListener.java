@@ -28,42 +28,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class StatListener implements Listener {
-	
+
+	/*
+	Newbie Protection:
+	- No PvP
+	- 90% PvE Damage Reduction
+	 */
+
 	private final int ENTITY_DEFAULT_DEFENSE = 0;
-	
-	// Player damaged armor
-//	@EventHandler(priority = EventPriority.HIGHEST)
-//	public void onPlayerDamaged(EntityDamageByEntityEvent e) {
-//		if (e.getEntity() instanceof Player == false) return;
-//		Player player = (Player) e.getEntity();
-//
-//		// No break in world pvp
-//		if (Configs.isPvPWorld(player.getWorld())) return;
-//
-//		// Durability
-////		double lastHealth = ((LivingEntity) e.getEntity()).getHealth();
-////		Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-////			double realDamage = lastHealth - player.getHealth();
-////			if (e.getEntity() instanceof Player) {
-////				ItemStack[] armors =  player.getInventory().getArmorContents();
-////				for (int i = 0 ; i < armors.length ; i++) {
-////					ItemStack is = armors[i];
-////					if (Items.is(is) && realDamage > 5) {
-////						Item item = Items.read(is);
-////						ItemData data = item.getData();
-////						if (data.getDurability() == 0) {
-////							player.sendMessage("§cMột giáp của bạn có độ bền bằng 0 và mất tác dụng, hãy đi sửa chữa");
-////							continue;
-////						}
-////						data.setDurability(Math.max(0, data.getDurability() - 1));
-////						armors[i] = Items.write(player, is, item);
-////
-////					}
-////				}
-////				player.getInventory().setArmorContents(armors);
-////			}
-////		});
-//	}
 	
 	// Player get damaged by entity not player
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -81,9 +53,20 @@ public class StatListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
+		var damage = e.getDamage();
+
 		double sucThu = Travelers.getStatValue(player, Stat.DEFENSE);
-		e.setDamage(e.getDamage() * (1 - sucThu * 0.01));
+		damage = e.getDamage() * (1 - sucThu * 0.01);
+
+		if (Configs.getNewbieProtectionWorlds().contains(entity.getLocation().getWorld().getName())) {
+			if (player.getLevel() <= 10) {
+				player.sendActionBar("§aĐược giảm 90% sát thương từ quái");
+				damage = damage * 0.1;
+			}
+		}
+
+		e.setDamage(damage);
 	}
 	
 	// Player damage entity
@@ -167,7 +150,7 @@ public class StatListener implements Listener {
 
 				// Hologram list
 				List<String> holos = Lists.newArrayList();
-				
+
 				boolean crit = false;
 				// Check if attack
 				if (d.getType() == DamageType.ATTACK) {
@@ -208,6 +191,16 @@ public class StatListener implements Listener {
 				if (entity instanceof Player) {
 					// only 50% damage
 					damage *= 0.5;
+
+					// No Newbie PvP
+					if (Configs.getNewbieProtectionWorlds().contains(entity.getLocation().getWorld().getName())) {
+						var target = (Player) entity;
+						if (target.getLevel() <= 10 || player.getLevel() <= 10) {
+							e.setCancelled(true);
+							player.sendMessage("§cNgười chơi mới không thể PvP (Cấp <10)");
+							return;
+						}
+					}
 				}
 
 				// Suc thu, xuyen giap
