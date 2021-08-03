@@ -62,7 +62,7 @@ public class StatListener implements Listener {
 
 		if (Configs.getNewbieProtectionWorlds().contains(entity.getLocation().getWorld().getName())) {
 			if (player.getLevel() <= LEVEL_PROTECTION) {
-				player.sendActionBar("§aĐược giảm 90% sát thương từ quái");
+				player.sendActionBar("§aĐược giảm 90% sát thương từ quái (đến §a§lLv." + LEVEL_PROTECTION + "§a)");
 				damage = damage * 0.1;
 			}
 		}
