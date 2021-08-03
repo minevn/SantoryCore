@@ -36,6 +36,7 @@ public class StatListener implements Listener {
 	 */
 
 	private final int ENTITY_DEFAULT_DEFENSE = 0;
+	private final int LEVEL_PROTECTION = 10;
 	
 	// Player get damaged by entity not player
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -60,7 +61,7 @@ public class StatListener implements Listener {
 		damage = e.getDamage() * (1 - sucThu * 0.01);
 
 		if (Configs.getNewbieProtectionWorlds().contains(entity.getLocation().getWorld().getName())) {
-			if (player.getLevel() <= 10) {
+			if (player.getLevel() <= LEVEL_PROTECTION) {
 				player.sendActionBar("§aĐược giảm 90% sát thương từ quái");
 				damage = damage * 0.1;
 			}
