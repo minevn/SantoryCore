@@ -37,7 +37,7 @@ public class ItemListener implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
-		if (e.getAction() == Action.LEFT_CLICK_AIR) {
+		if (e.getAction().name().contains("LEFT_CLICK")) {
 			player.setMetadata(INTERACT_TAG, new FixedMetadataValue(SantoryCore.get(), ""));
 		}
 	}
