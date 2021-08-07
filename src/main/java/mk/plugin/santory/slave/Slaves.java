@@ -15,18 +15,19 @@ import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.slave.state.SlaveState;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.traveler.TravelerOptions;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Slaves {
 
@@ -69,11 +70,14 @@ public class Slaves {
         h.setCustomName(slave.getModel().getTier().getColor() + slave.getModel().getName());
         h.setCustomNameVisible(true);
         h.setBaby(true);
-        h.getEquipment().setHelmet(Utils.buildSkull(slave.getModel().getHead()));
-        h.getEquipment().setChestplate(Utils.buildChestplate(slave.getModel().getChestColor()));
         h.setSilent(true);
         h.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(100);
         h.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(DEFAULT_MOVE_SPEED);
+
+        Tasks.async(() -> {
+            h.getEquipment().setHelmet(Utils.buildSkull(slave.getModel().getHead()));
+            h.getEquipment().setChestplate(Utils.buildChestplate(slave.getModel().getChestColor()));
+        });
 
         currentSlaves.put(h, id);
         update(id);
@@ -177,7 +181,10 @@ public class Slaves {
     public static boolean isMaster(Player player, Entity e) {
         if (!isSlave(e)) return false;
         Slave slave = getSlave(e);
-        return Masters.get(player).getSlaves().contains(slave);
+        for (Slave sc : Masters.get(player).getSlaves()) {
+            if (sc.equals(slave)) return true;
+        }
+        return false;
     }
 
     public static Set<SlaveState> getCurrentStates(String id) {

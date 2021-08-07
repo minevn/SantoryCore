@@ -68,7 +68,7 @@ public class SkillXoayKy implements SkillExecutor {
                 if (i * 3 > amount) {
                     this.cancel();
                     Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
-                        player.getNearbyEntities(3, 3, 3).forEach(e -> {
+                        slave.getNearbyEntities(3, 3, 3).forEach(e -> {
                             if (e != player && e != slave && e instanceof LivingEntity) {
                                 LivingEntity le = (LivingEntity) e;
                                 if (!Utils.canAttack(e)) return;

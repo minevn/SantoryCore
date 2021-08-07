@@ -35,7 +35,7 @@ public class Slave {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Slave == false) return false;
+        if (!(o instanceof Slave)) return false;
         Slave so = (Slave) o;
         return so.getID().equalsIgnoreCase(this.getID());
     }

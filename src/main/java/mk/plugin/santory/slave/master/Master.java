@@ -39,11 +39,8 @@ public class Master {
     }
 
     public List<Slave> getSlaves() {
-        List<Slave> l = Lists.newArrayList();
-        for (Slave slave : this.slaves) {
-            if (slave.getModel() != null) l.add(slave);
-        }
-        return l;
+        this.slaves.removeIf(slave -> slave.getModel() == null);
+        return slaves;
     }
 
     public void remove(String id) {

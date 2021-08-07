@@ -47,7 +47,15 @@ public class StatListener implements Listener {
 		
 		Player player = (Player) e.getEntity();
 		LivingEntity entity = (LivingEntity) e.getDamager();
-		
+
+		// Slave
+		if (Slaves.hasSlave(player)) {
+			if (Slaves.isMaster(player, entity)) {
+				e.setCancelled(true);
+				return;
+			}
+		}
+
 		double ne = Travelers.getStatValue(player, Stat.DODGE);
 		if (Utils.rate(ne)) {
 			Holograms.hologram(SantoryCore.get(), "§a§oNé", 15, player, entity, 1);
