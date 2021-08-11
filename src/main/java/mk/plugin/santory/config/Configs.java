@@ -100,6 +100,11 @@ public class Configs {
 
 	private static List<String> newbieProtectionWorlds;
 
+	private static int skinHandLimitDefault;
+	private static Map<String, Integer> skinHandLimits;
+	private static List<Integer> skinNPCs;
+	private static List<String> skins;
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -288,6 +293,16 @@ public class Configs {
 		xmSuccess = config.getStringList("xacminh-success");
 
 		newbieProtectionWorlds = config.getStringList("newbie-protection-worlds");
+
+		skinHandLimitDefault = config.getInt("skin-hand-limit-default", 1);
+		skinHandLimits = Maps.newHashMap();
+		for (String s : config.getStringList("skin-hand-limit")) {
+			var perm = s.split(":")[0];
+			var limit = Integer.valueOf(s.split(":")[1]);
+			skinHandLimits.put(perm, limit);
+		}
+		skinNPCs = config.getIntegerList("skin-npcs");
+		skins = config.getStringList("skins");
 	}
 
 	public static WishKey getWishKey(String id) {
@@ -494,5 +509,21 @@ public class Configs {
 
 	public static List<String> getNewbieProtectionWorlds() {
 		return newbieProtectionWorlds;
+	}
+
+	public static int getSkinHandLimitDefault() {
+		return skinHandLimitDefault;
+	}
+
+	public static Map<String, Integer> getSkinHandLimits() {
+		return skinHandLimits;
+	}
+
+	public static List<Integer> getSkinNPCs() {
+		return skinNPCs;
+	}
+
+	public static List<String> getSkins() {
+		return skins;
 	}
 }

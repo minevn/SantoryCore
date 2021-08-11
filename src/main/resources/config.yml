@@ -1,3 +1,19 @@
+skin-npcs:
+  - 0
+  - 1
+skins:
+  - skin1
+  - skin2
+  - skin3
+  - skin4
+  - skin5
+
+skin-hand-limit-default: 1
+skin-hand-limit:
+  - 'santory.vip:2'
+  - 'santory.hero:3'
+  - 'santory.champion:4'
+
 newbie-protection-worlds:
   - world_pvp
   - world_mine_1

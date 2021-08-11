@@ -12,6 +12,7 @@ import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.skin.Skins;
+import mk.plugin.santory.skin.system.PlayerSkins;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
@@ -143,15 +144,18 @@ public class Travelers {
 			items.add(Items.read(hand));
 		}
 
-		// Off hand skin
-		var offhand = player.getInventory().getItemInOffHand();
-		if (Skins.read(offhand) != null && Items.is(offhand)) items.add(Items.read(offhand));
-
-		// Armor
-		for (ItemStack armor : player.getInventory().getArmorContents()) {
+		// Chestplate
+		var armor = player.getInventory().getChestplate();
+		if (armor != null) {
 			if (Items.is(armor)) {
 				items.add(Items.read(armor));
 			}
+		}
+
+		// Skins
+		var skindata = PlayerSkins.get(player.getName());
+		for (Item skin : skindata.getSkins()) {
+			if (skin != null) items.add(skin);
 		}
 		
 		return items;

@@ -2,6 +2,8 @@ package mk.plugin.santory.utils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import mk.plugin.santory.main.SantoryCore;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ItemStackManager {
 
@@ -112,6 +115,19 @@ public class ItemStackManager {
         synchronized (is) {
             NamespacedKey nk = new NamespacedKey(plugin, key);
             meta.getPersistentDataContainer().set(nk, PersistentDataType.STRING, value);
+            is.setItemMeta(meta);
+        }
+    }
+
+    public void clearTags() {
+        synchronized (is) {
+            Set<NamespacedKey> keys = Sets.newHashSet();
+            for (NamespacedKey key : meta.getPersistentDataContainer().getKeys()) {
+                keys.add(new NamespacedKey(plugin, key.getKey()));
+            }
+            for (NamespacedKey key : keys) {
+                meta.getPersistentDataContainer().remove(key);
+            }
             is.setItemMeta(meta);
         }
     }

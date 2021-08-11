@@ -23,6 +23,7 @@ import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
 import mk.plugin.santory.skin.Skins;
+import mk.plugin.santory.skin.gui.SkinGUI;
 import mk.plugin.santory.slave.Slave;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
@@ -500,6 +501,17 @@ public class AdminCommand implements CommandExecutor {
 				}
 
 			}
+
+			/*
+			Slave commands
+			 */
+			else if (args[0].equalsIgnoreCase("skin")) {
+
+				if (args[1].equalsIgnoreCase("gui")) {
+					Player player = (Player) sender;
+					SkinGUI.open(player);
+				}
+			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -571,6 +583,10 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("§a/santory slave addexp <*exp>");
 		sender.sendMessage("§a/santory slave getstone <*I/II/III/IV/V>");
 		sender.sendMessage("§a/santory slave gui <player>");
+		sender.sendMessage("");
+
+		// Skins
+		sender.sendMessage("§6/santory skin gui");
 		sender.sendMessage("");
 
 		sender.sendMessage("§2§l=================================================");

@@ -27,6 +27,10 @@
 
     <repositories>
         <repository>
+            <id>everything</id>
+            <url>http://repo.citizensnpcs.co/</url>
+        </repository>
+        <repository>
             <id>minevn</id>
             <url>http://pack.minefs.net/repo/</url>
         </repository>
@@ -135,6 +139,13 @@
             <groupId>com.github.metalshark</groupId>
             <artifactId>GlowAPI</artifactId>
             <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.citizensnpcs</groupId>
+            <artifactId>citizensapi</artifactId>
+            <version>2.0.27-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,6 @@
 package mk.plugin.santory.skin;
 
+import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import org.bukkit.entity.Player;
@@ -8,6 +9,11 @@ import org.bukkit.inventory.ItemStack;
 public class Skins {
 
     public static final String TAG = "santory.skin";
+
+    public static Skin of(Item item) {
+        if (item == null) return null;
+        return new Skin(SkinType.valueOf(item.getModel().getMetadata().get("skin-type")));
+    }
 
     public static Skin read(ItemStack is) {
         if (is == null) return null;

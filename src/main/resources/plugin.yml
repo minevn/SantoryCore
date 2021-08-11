@@ -3,7 +3,7 @@ author: MankaiStep
 version: 1.0
 main: mk.plugin.santory.main.SantoryCore
 depend: [PlayerData, HolographicDisplays, MythicMobs]
-soft-depend: [PlaceholderAPI, GlowAPI]
+soft-depend: [PlaceholderAPI, GlowAPI, Citizens]
 api-version: 1.13
 commands:
     santory:
@@ -30,3 +30,7 @@ commands:
         permission: santory.command.player
         description: Loa the gioi
         aliases: [loa, loathegioi]
+    skinsystem:
+        permission: santory.command.player
+        description: Skin
+        aliases: [trangphuc]

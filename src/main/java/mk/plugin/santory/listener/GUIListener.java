@@ -1,9 +1,12 @@
 package mk.plugin.santory.listener;
 
 import mk.plugin.santory.item.modifty.ModifyGUI;
+import mk.plugin.santory.skin.gui.SkinGUI;
+import mk.plugin.santory.skin.gui.SkinNPCGUI;
 import mk.plugin.santory.slave.gui.SlaveInfoGUI;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.traveler.TravelerInfoGUI;
+import mk.plugin.santory.wish.WishGUI;
 import mk.plugin.santory.wish.WishRolls;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -40,6 +43,9 @@ public class GUIListener implements Listener {
 		WishRolls.onClick(e);
 		TravelerInfoGUI.onClick(e);
 		ModifyGUI.onClick(e);
+		SkinGUI.onClick(e);
+		WishGUI.onClick(e);
+		SkinNPCGUI.onClick(e);
 	}
 	
 	@EventHandler
@@ -49,6 +55,7 @@ public class GUIListener implements Listener {
 		ArtifactGUI.eventClose(e);
 		SlaveInfoGUI.onClose(e);
 		WishRolls.onClose(e);
+		SkinGUI.onClose(e);
 	}
 
 	@EventHandler

@@ -5,15 +5,13 @@ import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.TravelerOptions;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
-import mk.plugin.santory.wish.Wish;
-import mk.plugin.santory.wish.WishRolls;
-import mk.plugin.santory.wish.WishRolls10;
-import mk.plugin.santory.wish.Wishes;
+import mk.plugin.santory.wish.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -26,8 +24,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -120,6 +121,12 @@ public class PlayerListener implements Listener {
 					String id = entry.getKey();
 
 					if (!Configs.checkPermission(player, "wish")) return;
+
+					// Left click
+					if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+						WishGUI.open(player, id);
+						return;
+					}
 
 					// Right crate, key
 					var is = player.getInventory().getItemInMainHand();

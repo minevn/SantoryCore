@@ -6,12 +6,15 @@ import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.history.histories.*;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
+import mk.plugin.santory.skin.listener.SkinListener;
+import mk.plugin.santory.skin.system.PlayerSkins;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
 import mk.plugin.santory.slave.task.SlaveTask;
 import mk.plugin.santory.task.HealTask;
 import mk.plugin.santory.task.TargetTask;
 import mk.plugin.santory.traveler.Travelers;
+import mk.plugin.santory.utils.Tasks;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -48,6 +51,7 @@ public class SantoryCore extends JavaPlugin {
 	public void onDisable() {
 		this.saveOninePlayers();
 		for (Player player : Bukkit.getOnlinePlayers()) {
+			PlayerSkins.destroy(player);
 			Slaves.despawnCurrentSlave(player);
 		}
 	}
@@ -70,8 +74,9 @@ public class SantoryCore extends JavaPlugin {
 		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new GUIListener(), this);
 		pm.registerEvents(new ItemEquipListener(), this);
-		
 		pm.registerEvents(new SlaveListener(), this);
+		pm.registerEvents(new SkinListener(), this);
+		pm.registerEvents(new NPCListener(), this);
 		
 		if (pm.isPluginEnabled("MythicMobs")) {
 			pm.registerEvents(new MobListener(), this);
@@ -87,6 +92,9 @@ public class SantoryCore extends JavaPlugin {
 		this.targetTask.runTaskTimerAsynchronously(this, 0, 1);
 		new HealTask().runTaskTimer(this, 0, 30);
 		new SlaveTask().runTaskTimer(this, 0, 10);
+
+		// Skin armorstand illegal check
+		Tasks.sync(SkinListener::illegalCheck,0, 100);
 	}
 	
 	public void registerPlaceholders() {
@@ -107,6 +115,7 @@ public class SantoryCore extends JavaPlugin {
 		this.getCommand("see").setExecutor(playerCmd);
 		this.getCommand("artifact").setExecutor(playerCmd);
 		this.getCommand("globalspeaker").setExecutor(playerCmd);
+		this.getCommand("skinsystem").setExecutor(playerCmd);
 	}
 
 	public void initHistories() {

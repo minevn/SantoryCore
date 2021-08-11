@@ -4,6 +4,7 @@ import mk.plugin.santory.artifact.ArtifactGUI;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.modifty.ModifyGUI;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skin.gui.SkinGUI;
 import mk.plugin.santory.traveler.TravelerInfoGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,6 +46,10 @@ public class PlayerCommand implements CommandExecutor {
 
         else if (cmd.getName().equalsIgnoreCase("player")) {
             TravelerInfoGUI.open(player);
+        }
+
+        else if (cmd.getName().equalsIgnoreCase("skinsystem")) {
+            SkinGUI.open(player);
         }
 
         else if (cmd.getName().equalsIgnoreCase("globalspeaker")) {
