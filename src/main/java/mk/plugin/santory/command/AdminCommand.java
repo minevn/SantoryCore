@@ -114,12 +114,12 @@ public class AdminCommand implements CommandExecutor {
 				else if (args[1].equalsIgnoreCase("setlevel")) {
 					Player player = Bukkit.getPlayer(args[2]);
 					int level = Integer.parseInt(args[3]);
-					boolean allowdesc = args.length == 4 || Boolean.valueOf(args[4]);
-					int nextlv = allowdesc ? level : Math.max(player.getLevel(), level);
+					boolean allowdesc = args.length == 4 || Boolean.parseBoolean(args[4]);
+					if (!allowdesc && player.getLevel() >= level) return false;
 					
 					Traveler t = Travelers.get(player);
 					TravelerData td = t.getData();
-					td.setExp(TravelerOptions.getTotalExpTo(nextlv));
+					td.setExp(TravelerOptions.getTotalExpTo(level));
 					Travelers.save(player.getName());
 					Travelers.updateLevel(player);
 					
