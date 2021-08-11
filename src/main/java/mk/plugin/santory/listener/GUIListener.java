@@ -1,11 +1,13 @@
 package mk.plugin.santory.listener;
 
+import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.modifty.ModifyGUI;
 import mk.plugin.santory.skin.gui.SkinGUI;
 import mk.plugin.santory.skin.gui.SkinNPCGUI;
 import mk.plugin.santory.slave.gui.SlaveInfoGUI;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.traveler.TravelerInfoGUI;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.wish.WishGUI;
 import mk.plugin.santory.wish.WishRolls;
 import org.bukkit.Bukkit;
@@ -93,7 +95,24 @@ public class GUIListener implements Listener {
 				ItemStack ci = e.getCurrentItem(); // current item
 				doPlace(ci, player, status, gui, gs, slot);
 			}
-			else player.sendMessage("§cẤn §fShift + Chuột trái §cđể đặt item");
+			else {
+				player.sendMessage("§cẤn §fShift + Chuột trái §cđể đặt item");
+
+				ItemStack ci = e.getCurrentItem();
+				var item = Items.read(ci);
+				if (item != null) {
+					if (item.getData().getLevel() == 0) {
+						Tasks.sync(() -> {
+							player.closeInventory();
+							player.sendTitle("§c§lSHIFT + Chuột trái", "§fShift + Chuột trái để đặt item", 5, 40, 0);
+							player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+							Tasks.sync(() -> {
+								GUIs.open(player, gui);
+							}, 45);
+						});
+					}
+				}
+			}
 		}
 		
 		// Detect button
