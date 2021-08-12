@@ -127,28 +127,32 @@ public class PlayerSkins {
             for (int i = 0; i < alist.size(); i++) {
                 var as = alist.get(i);
                 for (int i1 = 0; i1 < 2; i1++) {
-                    if (i1 >= hands.size()) break;
+                    if (i * 2 + i1 >= hands.size()) break;
                     var is = hands.get(i * 2 + i1);
+                    if (is == null) continue;
                     var slot = i1 == 0 ? EquipmentSlot.HAND : EquipmentSlot.OFF_HAND;
                     as.getEquipment().setItem(slot, is);
                 }
             }
         }
 
-
-        // Nametag
-        var sb = (Snowball) p.getWorld().spawnEntity(p.getLocation(), EntityType.SNOWBALL);
-        sb.setCustomName(p.getName());
-        sb.setCustomNameVisible(true);
-        p.addPassenger(sb);
-
-        // Hide packet
-        var packet = new PacketPlayOutEntityDestroy(sb.getEntityId());
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-
         // E list
         List<Entity> elist = Lists.newArrayList(alist);
-        elist.add(sb);
+
+        // Nametag
+        if (alist.size() > 0) {
+            var sb = (Snowball) p.getWorld().spawnEntity(p.getLocation(), EntityType.SNOWBALL);
+            sb.setCustomName(p.getName());
+            sb.setCustomNameVisible(true);
+            p.addPassenger(sb);
+
+            // Hide packet
+            var packet = new PacketPlayOutEntityDestroy(sb.getEntityId());
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+
+            elist.add(sb);
+        }
+
 
         equips.put(p.getName(), elist);
     }
