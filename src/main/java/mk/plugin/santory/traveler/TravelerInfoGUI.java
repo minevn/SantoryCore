@@ -7,6 +7,7 @@ import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.modifty.ModifyGUI;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skin.gui.SkinGUI;
 import mk.plugin.santory.slave.gui.SlaveSelectGUI;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.tier.Tier;
@@ -22,6 +23,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +50,7 @@ public class TravelerInfoGUI {
            inv.setItem(0, datais);
            inv.setItem(1, statis);
            inv.setItem(3, getArtifactIcon());
-           inv.setItem(4, getSlaveIcon());
+           inv.setItem(4, getSkinIcon());
            inv.setItem(8, getFapsuIcon());
         });
     }
@@ -117,11 +119,12 @@ public class TravelerInfoGUI {
         return is;
     }
 
-    public static ItemStack getSlaveIcon() {
-        var is = new ItemStack(Material.SKELETON_SKULL);
+    public static ItemStack getSkinIcon() {
+        var is = new ItemStack(Material.GOLDEN_HELMET);
         var meta = is.getItemMeta();
-        meta.setDisplayName("§a§lBạn đồng hành");
+        meta.setDisplayName("§a§lTrang phục");
         meta.setLore(List.of("§f§oClick để mở menu"));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         is.setItemMeta(meta);
         return is;
     }
@@ -188,7 +191,7 @@ public class TravelerInfoGUI {
             }
             else if (slot == 4) {
                 // Slave
-                SlaveSelectGUI.open(player);
+                SkinGUI.open(player);
             }
             else if (slot == 8) {
                 // Fapsu

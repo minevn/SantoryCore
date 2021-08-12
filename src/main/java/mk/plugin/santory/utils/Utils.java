@@ -377,7 +377,7 @@ public class Utils {
 		LivingEntity target = null;
 		double d = 999;
 		for (Entity near : nears) {
-			if (!(near instanceof LivingEntity) || near == player) continue;
+			if (!(near instanceof LivingEntity) || near == player || near instanceof ArmorStand) continue;
 			if (near instanceof Player) {
 				if (((Player) near).getGameMode() == GameMode.SPECTATOR) continue;
 			}

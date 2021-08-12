@@ -2,8 +2,8 @@ name: SantoryCore
 author: MankaiStep
 version: 1.0
 main: mk.plugin.santory.main.SantoryCore
-depend: [PlayerData, HolographicDisplays, MythicMobs]
-soft-depend: [PlaceholderAPI, GlowAPI, Citizens]
+depend: [PlayerData, HolographicDisplays, MythicMobs, Citizens]
+soft-depend: [PlaceholderAPI, GlowAPI]
 api-version: 1.13
 commands:
     santory:
@@ -33,4 +33,4 @@ commands:
     skinsystem:
         permission: santory.command.player
         description: Skin
-        aliases: [trangphuc]
+        aliases: [trangphuc, skin]

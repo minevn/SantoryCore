@@ -196,6 +196,7 @@ public class Travelers {
 		if (Bukkit.getPluginManager().isPluginEnabled("SkyBattleClient")) {
 			format = format.replace("%rank%", manaki.plugin.skybattleclient.util.Utils.getRankDisplay(getSkybattleRank(player)));
 		}
+		format = format.replace("%rank%", "");
 
 		return format;
 	}

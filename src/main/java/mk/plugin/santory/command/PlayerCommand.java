@@ -53,37 +53,41 @@ public class PlayerCommand implements CommandExecutor {
         }
 
         else if (cmd.getName().equalsIgnoreCase("globalspeaker")) {
+            boolean has = false;
             for (ItemStack is : player.getInventory().getContents()) {
                 if (Configs.isGlobalSpeaker(is)) {
                     is.setAmount(is.getAmount() - 1);
                     player.updateInventory();
-
-                    // Chat
-                    String message = "";
-                    for (int i = 0 ; i < args.length ; i++) {
-                        message += args[i] + " ";
-                    }
-                    message = ChatColor.stripColor(message);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    DataOutputStream out = new DataOutputStream(stream);
-                    String prefix = "§f ;§6§l❖ §a§l[SoraSky] §f§l"+ player.getName() + " §7§l> §e" ;
-                    String suffix = ";§f ";
-                    String action = "fsbc";
-                    String data2 = "";
-                    try {
-                        out.writeUTF(action);
-                        out.writeUTF(prefix + message + suffix);
-                        out.writeUTF(data2);
-                        ((PluginMessageRecipient) player).sendPluginMessage(SantoryCore.get(), "fs:minestrike", stream.toByteArray());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    return false;
+                    has = true;
+                    break;
                 }
             }
 
-            player.sendMessage("§cBạn cần có Loa thế giới");
+            if (has || player.hasPermission("santory.admin")) {
+                // Chat
+                String message = "";
+                for (int i = 0 ; i < args.length ; i++) {
+                    message += args[i] + " ";
+                }
+                message = ChatColor.stripColor(message);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(stream);
+                String prefix = "§f ;§6§l❖ §a§l[SoraSky] §f§l"+ player.getName() + " §7§l> §e" ;
+                String suffix = ";§f ";
+                String action = "fsbc";
+                String data2 = "";
+                try {
+                    out.writeUTF(action);
+                    out.writeUTF(prefix + message + suffix);
+                    out.writeUTF(data2);
+                    ((PluginMessageRecipient) player).sendPluginMessage(SantoryCore.get(), "fs:minestrike", stream.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return false;
+            }
+            else player.sendMessage("§cBạn cần có Loa thế giới");
         }
 
         return false;
