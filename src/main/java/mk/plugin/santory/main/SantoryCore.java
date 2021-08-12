@@ -7,6 +7,7 @@ import mk.plugin.santory.history.histories.*;
 import mk.plugin.santory.listener.*;
 import mk.plugin.santory.placeholder.SantoryPlaceholder;
 import mk.plugin.santory.skin.listener.SkinListener;
+import mk.plugin.santory.skin.listener.SkinTeleportListener;
 import mk.plugin.santory.skin.system.PlayerSkins;
 import mk.plugin.santory.slave.Slaves;
 import mk.plugin.santory.slave.master.Masters;
@@ -76,6 +77,7 @@ public class SantoryCore extends JavaPlugin {
 		pm.registerEvents(new ItemEquipListener(), this);
 		pm.registerEvents(new SlaveListener(), this);
 		pm.registerEvents(new SkinListener(), this);
+		pm.registerEvents(new SkinTeleportListener(), this);
 		pm.registerEvents(new NPCListener(), this);
 		
 		if (pm.isPluginEnabled("MythicMobs")) {

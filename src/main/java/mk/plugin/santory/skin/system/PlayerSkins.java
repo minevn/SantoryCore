@@ -9,14 +9,17 @@ import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skin.SkinType;
 import mk.plugin.santory.skin.Skins;
+import mk.plugin.santory.skin.listener.SkinTeleportListener;
 import mk.plugin.santory.traveler.TravelerStorage;
 import mk.plugin.santory.utils.ItemStackManager;
+import mk.plugin.santory.utils.Tasks;
 import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.EulerAngle;
 
 import java.util.List;
@@ -45,6 +48,9 @@ public class PlayerSkins {
     }
 
     public static void destroy(Player p) {
+        p.eject();
+        p.getPassengers().clear();
+
         // Head check
         var skindata = get(p.getName());
         var ishead = p.getInventory().getHelmet();
@@ -144,6 +150,9 @@ public class PlayerSkins {
             var sb = (Snowball) p.getWorld().spawnEntity(p.getLocation(), EntityType.SNOWBALL);
             sb.setCustomName(p.getName());
             sb.setCustomNameVisible(true);
+            sb.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+            sb.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
+
             p.addPassenger(sb);
 
             // Hide packet
@@ -164,7 +173,9 @@ public class PlayerSkins {
         a.setLeftArmPose(new EulerAngle(0, 0, 0));
         a.setRightArmPose(new EulerAngle(0, 0, 0));
         a.setRotation(p.getLocation().getYaw(), p.getLocation().getPitch());
-        p.getPassengers().clear();
+        a.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+        a.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
+
         p.addPassenger(a);
 
         return a;
@@ -173,9 +184,22 @@ public class PlayerSkins {
     public static boolean isIllegal(Entity as) {
         if (!NPCSkins.isIllegal(as)) return false;
         for (List<Entity> list : equips.values()) {
-            if (list.contains(as)) return false;
+            if (list.contains(as)) {
+                return as.getVehicle() == null;
+            }
         }
         return true;
+    }
+
+    public static void doBeforeTeleport(Player p, int tick) {
+        destroy(p);
+        SkinTeleportListener.delay(p, tick);
+        Tasks.sync(() -> {
+            if (SkinTeleportListener.isDelayed(p)) {
+                return;
+            }
+            PlayerSkins.equip(p);
+        }, tick + 5);
     }
 
 }

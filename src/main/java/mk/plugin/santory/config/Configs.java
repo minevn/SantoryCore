@@ -105,6 +105,8 @@ public class Configs {
 	private static List<Integer> skinNPCs;
 	private static List<String> skins;
 
+	private static List<String> teleportCommands;
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -303,6 +305,7 @@ public class Configs {
 		}
 		skinNPCs = config.getIntegerList("skin-npcs");
 		skins = config.getStringList("skins");
+		teleportCommands = config.getStringList("teleport-commands");
 	}
 
 	public static WishKey getWishKey(String id) {
@@ -525,5 +528,9 @@ public class Configs {
 
 	public static List<String> getSkins() {
 		return skins;
+	}
+
+	public static List<String> getTeleportCommands() {
+		return teleportCommands;
 	}
 }

@@ -1,3 +1,9 @@
+teleport-commands:
+  - spawn
+  - is go
+  - island go
+  - tpa
+
 skin-npcs:
   - 0
   - 1
