@@ -67,7 +67,7 @@ public class ItemEquipListener implements Listener {
     @EventHandler
     public void onOffHandEquip(InventoryClickEvent e) {
         var inv = e.getClickedInventory();
-        if (inv == null || inv.getType() != InventoryType.PLAYER) return;
+        if (inv == null || inv.getType() != InventoryType.PLAYER && inv.getType() != InventoryType.CRAFTING) return;
 
         var p = (Player) e.getWhoClicked();
         var slot = e.getSlot();
@@ -90,13 +90,13 @@ public class ItemEquipListener implements Listener {
     Off hand 2
     */
     @EventHandler
-    public void onOffHandEquip(InventoryDragEvent e) {
+    public void onOffHandEquip222(InventoryDragEvent e) {
         var inv = e.getInventory();
-        if (inv.getType() != InventoryType.PLAYER) return;
+        if (inv.getType() != InventoryType.PLAYER && inv.getType() != InventoryType.CRAFTING) return;
 
         var p = (Player) e.getWhoClicked();
         var slots = e.getInventorySlots();
-        var cursor = e.getCursor();
+        var cursor = e.getOldCursor();
 
         if (slots.contains(39)) {
             p.sendMessage("§cKhông thể tương tác, hành động đã được ghi lại");
