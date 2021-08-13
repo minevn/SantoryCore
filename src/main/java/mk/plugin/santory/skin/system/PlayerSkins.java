@@ -146,21 +146,21 @@ public class PlayerSkins {
         List<Entity> elist = Lists.newArrayList(alist);
 
         // Nametag
-        if (alist.size() > 0) {
-            var sb = (Snowball) p.getWorld().spawnEntity(p.getLocation(), EntityType.SNOWBALL);
-            sb.setCustomName(p.getName());
-            sb.setCustomNameVisible(true);
-            sb.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
-            sb.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
-
-            p.addPassenger(sb);
-
-            // Hide packet
-            var packet = new PacketPlayOutEntityDestroy(sb.getEntityId());
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
-
-            elist.add(sb);
-        }
+//        if (alist.size() > 0) {
+//            var sb = (Snowball) p.getWorld().spawnEntity(p.getLocation(), EntityType.SNOWBALL);
+//            sb.setCustomName(p.getName());
+//            sb.setCustomNameVisible(true);
+//            sb.setMetadata("settings.bypass", new FixedMetadataValue(SantoryCore.get(), ""));
+//            sb.setMetadata("Dungeon3", new FixedMetadataValue(SantoryCore.get(), ""));
+//
+//            p.addPassenger(sb);
+//
+//            // Hide packet
+//            var packet = new PacketPlayOutEntityDestroy(sb.getEntityId());
+//            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+//
+//            elist.add(sb);
+//        }
 
 
         equips.put(p.getName(), elist);

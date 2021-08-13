@@ -14,11 +14,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemEquipListener implements Listener {
@@ -84,5 +86,29 @@ public class ItemEquipListener implements Listener {
         }
     }
 
+    /*
+    Off hand 2
+    */
+    @EventHandler
+    public void onOffHandEquip(InventoryDragEvent e) {
+        var inv = e.getInventory();
+        if (inv.getType() != InventoryType.PLAYER) return;
+
+        var p = (Player) e.getWhoClicked();
+        var slots = e.getInventorySlots();
+        var cursor = e.getCursor();
+
+        if (slots.contains(39)) {
+            p.sendMessage("§cKhông thể tương tác, hành động đã được ghi lại");
+            p.sendMessage("§c§lNẾU BẠN CỐ Ý BUG/TÌM CÁCH BUG THÌ BẠN SẼ BỊ TRỪNG PHẠT THÍCH ĐÁNG");
+            e.setCancelled(true);
+            SantoryCore.get().getLogger().warning("Player " + p.getName() + " interacted with helmet slot");
+        }
+
+        if (Items.is(cursor) && slots.contains(40)) {
+            p.sendMessage("§cKhông thể tương tác tay phụ với trang bị này!");
+            e.setCancelled(true);
+        }
+    }
 
 }

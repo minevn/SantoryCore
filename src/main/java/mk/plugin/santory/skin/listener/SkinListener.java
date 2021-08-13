@@ -1,9 +1,7 @@
 package mk.plugin.santory.skin.listener;
 
-import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skin.Skins;
-import mk.plugin.santory.skin.system.PlayerSkin;
 import mk.plugin.santory.skin.system.PlayerSkins;
 import mk.plugin.santory.utils.Tasks;
 import org.bukkit.Bukkit;
@@ -15,9 +13,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.util.EulerAngle;
 
 public class SkinListener implements Listener {
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        var is = e.getItem();
+        if (is != null && Skins.read(is) != null) {
+            e.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
