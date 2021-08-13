@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 		Player player = e.getPlayer();
 		String format = Travelers.getFormatChatWithName(player);
-		e.setFormat(format + e.getMessage().replace("%", ""));
+		e.setFormat(format + e.getMessage().replace("%", "%%"));
 	}
 
 	/*
