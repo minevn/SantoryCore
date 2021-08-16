@@ -42,9 +42,7 @@ public class WeaponListener implements Listener {
 	public static void removeCooldownAttack(Player player) {
 		cooldownAttack.remove(player.getName());
 	}
-	
-	private static final Map<Player, Long> cooldownSkill = Maps.newHashMap();
-	
+
 	@EventHandler
 	public void onWeaponSkill(ItemToggleEvent e) {
 		Player player = e.getPlayer();
@@ -63,22 +61,7 @@ public class WeaponListener implements Listener {
 			Skill skill = w.getSkill();
 			if (skill == null) return;
 			
-			// Check delay
-			if (cooldownSkill.containsKey(player)) {
-				if (cooldownSkill.get(player) > System.currentTimeMillis()) {
-					player.sendMessage("§cKỹ năng chưa hồi xong");
-					player.sendMessage("§cCòn §6" + ((cooldownSkill.get(player) - System.currentTimeMillis()) / 1000 + 1) + "s"); 
-					return;
-				}
-			}
-			cooldownSkill.put(player, System.currentTimeMillis() + skill.getCooldown() * 1000L);
-			
-			// Execute
-			player.sendTitle("§c§l「" + skill.getName() + "」", "§7§oThực thi kỹ năng", 0, 20, 0);
-			skill.getExecutor().start(getComponents(player, item));
-
-			// Event
-			Bukkit.getPluginManager().callEvent(new PlayerSkillExecuteEvent(player, skill));
+			Utils.castSkill(player, skill, item);
 		}
 	}
 	

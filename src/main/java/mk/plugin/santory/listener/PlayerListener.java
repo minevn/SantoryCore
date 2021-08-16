@@ -4,6 +4,9 @@ import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
+import mk.plugin.santory.item.ItemType;
+import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.shield.Shield;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.slave.master.Masters;
@@ -38,6 +41,33 @@ import remvn.reanticheatspigot.event.PlayerCheckedEvent;
 import java.util.Map;
 
 public class PlayerListener implements Listener {
+
+	@EventHandler
+	public void onShieldSkill(PlayerInteractEvent e) {
+		// Check action
+		if (e.getHand() != EquipmentSlot.OFF_HAND) return;
+		if (!e.getAction().name().startsWith("LEFT_CLICK")) return;
+		var p = e.getPlayer();
+		if (!p.isSneaking()) return;
+
+		// Check item
+		var isShield = e.getItem();
+		var item = Items.read(isShield);
+		if (item == null) return;
+		if (item.getModel().getType() != ItemType.SHIELD) return;
+
+		// Expired
+		if (item.getData().isExpired()) {
+			p.sendMessage("§cTrang bị đã hết hạn!");
+			return;
+		}
+
+		var shield = Shield.parse(item.getModel());
+		var skill = shield.getSkill();
+
+		// Cast skill
+		Utils.castSkill(p, skill, item);
+	}
 
 	/*
 	Chat

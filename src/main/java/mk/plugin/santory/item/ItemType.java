@@ -5,6 +5,7 @@ public enum ItemType {
 	WEAPON,
 	ARMOR,
 	ARTIFACT,
-	SKIN
+	SKIN,
+	SHIELD
 
 }

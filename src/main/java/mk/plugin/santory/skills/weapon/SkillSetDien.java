@@ -1,4 +1,4 @@
-package mk.plugin.santory.skills;
+package mk.plugin.santory.skills.weapon;
 
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;

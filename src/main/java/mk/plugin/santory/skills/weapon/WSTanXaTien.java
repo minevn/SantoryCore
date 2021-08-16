@@ -1,4 +1,4 @@
-package mk.plugin.santory.skills;
+package mk.plugin.santory.skills.weapon;
 
 import java.util.ArrayList;
 import java.util.List;

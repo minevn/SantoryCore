@@ -7,6 +7,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
+import mk.plugin.santory.event.PlayerSkillExecuteEvent;
 import mk.plugin.santory.grade.Grade;
 import mk.plugin.santory.hologram.Holograms;
 import mk.plugin.santory.item.Item;
@@ -15,6 +16,7 @@ import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.weapon.WeaponType;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.tier.Tier;
 import mk.plugin.santory.traveler.Traveler;
@@ -45,6 +47,40 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
+
+	private static final Map<Player, Long> cooldownSkill = Maps.newConcurrentMap();
+
+	public static boolean castSkill(Player player, Skill skill, Item item) {
+		// Check delay
+		if (cooldownSkill.containsKey(player)) {
+			if (cooldownSkill.get(player) > System.currentTimeMillis()) {
+				player.sendMessage("§cKỹ năng chưa hồi xong");
+				player.sendMessage("§cCòn §6" + ((cooldownSkill.get(player) - System.currentTimeMillis()) / 1000 + 1) + "s");
+				return false;
+			}
+		}
+		cooldownSkill.put(player, System.currentTimeMillis() + skill.getCooldown() * 1000L);
+
+		// Execute
+		player.sendTitle("§c§l「" + skill.getName() + "」", "§7§oThực thi kỹ năng", 0, 20, 0);
+		skill.getExecutor().start(getComponents(player, item));
+
+		// Event
+		Bukkit.getPluginManager().callEvent(new PlayerSkillExecuteEvent(player, skill));
+
+		return true;
+	}
+
+	private static Map<String, Object> getComponents(Player player, Item item) {
+		Map<String, Object> m = Maps.newHashMap();
+		m.put("player", player);
+		List<Integer> l = Items.skillValues(item.getModel().getDesc());
+		if (l.size() == 5) {
+			m.put("scale", Double.valueOf(l.get(item.getData().getAscent().getValue() - 1)));
+		}
+
+		return m;
+	}
 
 	public static String twoNumbers(int value) {
 		if (value / 10 != 0) return value + "";

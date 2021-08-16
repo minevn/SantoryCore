@@ -131,6 +131,21 @@ public enum Stat{
 		public String getSubStat() {
 			return "%";
 		}
+	},
+
+	COUNTER("Phản đòn", 5, "§6") {
+		@Override
+		public double pointsToValue(int point) {
+			return Utils.round(((double) point / (point + 50))) * 35;
+		}
+
+		@Override
+		public void set(Player player, int point) {}
+
+		@Override
+		public String getSubStat() {
+			return "%";
+		}
 	};
 	
 	public abstract double pointsToValue(int point);

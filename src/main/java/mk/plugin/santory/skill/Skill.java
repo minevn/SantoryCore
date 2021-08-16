@@ -1,6 +1,9 @@
 package mk.plugin.santory.skill;
 
-import mk.plugin.santory.skills.*;
+import mk.plugin.santory.skills.shield.SkillDayLui;
+import mk.plugin.santory.skills.shield.SkillHoiPhuc;
+import mk.plugin.santory.skills.shield.SkillNguyenRua;
+import mk.plugin.santory.skills.weapon.*;
 
 public enum Skill {
 	
@@ -27,7 +30,10 @@ public enum Skill {
 	DAI_MA("Đại ma", new SkillDaiMa(), 5),
 	BAO_TEN("Bão tên", new SkillBaoTen(), 5),
 	TRUONG_TRONG_LUC("Trường trọng lực", new SkillTruongTrongLuc(), 10),
-	BOC_PHA_THIEN("Bộc phá thiên", new SkillBocPhaThien(), 12);
+	BOC_PHA_THIEN("Bộc phá thiên", new SkillBocPhaThien(), 12),
+	DAY_LUI("Đẩy lùi", new SkillDayLui(), 7),
+	HOI_PHUC("Hồi phục", new SkillHoiPhuc(), 7),
+	NGUYEN_RUA("Nguyền rủa", new SkillNguyenRua(), 6)
 
 	;
 	

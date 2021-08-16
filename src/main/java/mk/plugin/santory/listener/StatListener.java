@@ -182,7 +182,7 @@ public class StatListener implements Listener {
 					if (e.getEntity() instanceof Player) {
 						Player target = (Player) e.getEntity();
 						
-						// Stat Ne
+						// Stat DODGE
 						if (Utils.rate(Travelers.getStatValue(target, Stat.DODGE))) {
 							Location loc = player.getLocation();
 							loc.add(loc.getDirection().multiply(1.3f));
@@ -191,7 +191,18 @@ public class StatListener implements Listener {
 							e.setCancelled(true);
 							return;
 						}
-						
+
+						// Stat COUNTER
+						var counterValue = Travelers.getStatValue(target, Stat.COUNTER);
+						if (Utils.rate(counterValue)) {
+							Location loc = player.getLocation();
+							loc.add(loc.getDirection().multiply(1.3f));
+							Utils.hologram(Utils.ranLoc(loc, 1), "§2§lPhản đòn", 15, target);
+							Utils.hologram(Utils.ranLoc(loc, 1), "§c§lPhản đòn", 15, player);
+
+							double counterDamage = damage * counterValue / 100;
+							Damages.damage(target, player, new Damage(counterDamage, DamageType.SKILL), 1);
+						}
 					}					
 				}
 				// End attack

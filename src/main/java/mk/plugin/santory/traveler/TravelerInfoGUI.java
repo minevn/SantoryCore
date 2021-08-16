@@ -144,7 +144,7 @@ public class TravelerInfoGUI {
         for (Stat stat : Stat.values()) {
             int point = t.getState().getStat(player, stat);
             double value = Utils.round(Travelers.getStatValue(player, stat));
-            lore.add("§c" + stat.getName() + ": §f" + point + " (" + value + ")");
+            lore.add("§c" + stat.getName() + ": §f" + point + " (" + value + stat.getSubStat() + ")");
         }
 
         ItemStack is = Icon.INFO.clone();

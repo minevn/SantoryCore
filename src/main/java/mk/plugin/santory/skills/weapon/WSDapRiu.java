@@ -1,4 +1,4 @@
-package mk.plugin.santory.skills;
+package mk.plugin.santory.skills.weapon;
 
 import mk.plugin.santory.damage.Damage;
 import mk.plugin.santory.damage.DamageType;
@@ -33,6 +33,8 @@ public class WSDapRiu implements SkillExecutor {
 		Location main = player.getLocation().add(player.getLocation().getDirection().multiply(1));
 		Utils.getLivingEntities(player, main, 3, 3, 3).forEach(le -> {
 			if (!Utils.canAttack(le)) return;
+			if (player == le) return;
+
 			Bukkit.getScheduler().runTask(SantoryCore.get(),() -> {
 				Damages.damage(player, le, new Damage(damage, DamageType.SKILL), 5);
 			});

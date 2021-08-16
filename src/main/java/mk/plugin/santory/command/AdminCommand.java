@@ -22,6 +22,7 @@ import mk.plugin.santory.item.modifty.ItemEnhances;
 import mk.plugin.santory.item.modifty.upgrade.UpgradeStone;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.mob.Mobs;
+import mk.plugin.santory.skill.Skill;
 import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.skin.gui.SkinGUI;
 import mk.plugin.santory.slave.Slave;
@@ -49,6 +50,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class AdminCommand implements CommandExecutor {
@@ -512,6 +514,17 @@ public class AdminCommand implements CommandExecutor {
 					SkinGUI.open(player);
 				}
 			}
+
+			/*
+			Skill commands
+			 */
+			else if (args[0].equalsIgnoreCase("skill")) {
+
+				if (args[1].equalsIgnoreCase("cast")) {
+					var skill = Skill.valueOf(args[2].toUpperCase());
+					skill.getExecutor().start(Map.of("player", sender, "scale", Double.valueOf(args[3])));
+				}
+			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
@@ -571,7 +584,7 @@ public class AdminCommand implements CommandExecutor {
 		sender.sendMessage("");
 		
 		// Mobs
-		sender.sendMessage("§9/santory mob damage <*mob_uuid> <*player_uuid> <multi>");
+		sender.sendMessage("§e/santory mob damage <*mob_uuid> <*player_uuid> <multi>");
 		sender.sendMessage("");
 
 		// Slaves
@@ -587,6 +600,10 @@ public class AdminCommand implements CommandExecutor {
 
 		// Skins
 		sender.sendMessage("§6/santory skin gui");
+		sender.sendMessage("");
+
+		// Skills
+		sender.sendMessage("§c/santory skill cast <*skill> <scale>");
 		sender.sendMessage("");
 
 		sender.sendMessage("§2§l=================================================");

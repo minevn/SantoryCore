@@ -1,4 +1,4 @@
-package mk.plugin.santory.skills;
+package mk.plugin.santory.skills.weapon;
 
 import com.google.common.collect.Sets;
 import mk.plugin.santory.damage.Damage;
