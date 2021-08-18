@@ -17,7 +17,7 @@ public class SkillDayLui implements SkillExecutor {
         Player player = (Player) components.get("player");
         int duration = Double.valueOf((double) components.get("scale")).intValue();
 
-        player.getWorld().playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 1f, 1f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_HURT, 1f, 1f);
         Location main = player.getLocation().add(player.getLocation().getDirection().multiply(1));
         Utils.getLivingEntities(player, main, 3, 3, 3).forEach(le -> {
             if (!Utils.canAttack(le)) return;
