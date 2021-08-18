@@ -1,20 +1,17 @@
 package mk.plugin.santory.skin.gui;
 
 import com.google.common.collect.Lists;
-import mk.plugin.santory.artifact.ArtifactGUI;
-import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.main.SantoryCore;
 import mk.plugin.santory.skin.SkinType;
 import mk.plugin.santory.skin.Skins;
-import mk.plugin.santory.skin.system.PlayerSkin;
 import mk.plugin.santory.skin.system.PlayerSkins;
-import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.ItemStackManager;
 import mk.plugin.santory.utils.Tasks;
+import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -26,7 +23,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ObjectInputFilter;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +37,7 @@ public class SkinGUI {
         p.openInventory(inv);
 
         Tasks.async(() -> {
+            for (int i = 0 ; i < inv.getSize() ; i++) inv.setItem(i, Utils.getBlackSlot());
             inv.setItem(HEAD, getHead());
             for (Integer slot : HANDS) inv.setItem(slot, getBack());
             var skindata = PlayerSkins.get(p.getName());

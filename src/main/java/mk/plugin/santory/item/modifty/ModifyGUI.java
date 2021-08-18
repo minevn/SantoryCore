@@ -22,10 +22,11 @@ import java.util.List;
 
 public class ModifyGUI {
 
-    private static final int ENHANCE_SLOT = 1;
-    private static final int UPGRADE_SLOT = 3;
-    private static final int ASCENT_SLOT = 5;
-    private static final int TIMED_SLOT = 7;
+    private static final int ENHANCE_SLOT = 0;
+    private static final int UPGRADE_SLOT = 2;
+    private static final int ASCENT_SLOT = 4;
+    private static final int TIMED_SLOT = 6;
+    private static final int ART_SCRAP_SLOT = 8;
 
     public static void open(Player player) {
         var inv = Bukkit.createInventory(new Holder(), 9, "§0§lFAP SƯ SORASKY");
@@ -37,6 +38,7 @@ public class ModifyGUI {
             inv.setItem(UPGRADE_SLOT, getUpgradeIcon());
             inv.setItem(ASCENT_SLOT, getAscentIcon());
             inv.setItem(TIMED_SLOT, getTimedIcon());
+            inv.setItem(ART_SCRAP_SLOT, getArtScrapIcon());
         });
     }
 
@@ -67,7 +69,9 @@ public class ModifyGUI {
             case TIMED_SLOT:
                 GUIs.open(player, GUI.TIMED);
                 break;
-
+            case ART_SCRAP_SLOT:
+                GUIs.open(player, GUI.ARTIFACT_SCRAP);
+                break;
         }
     }
 
@@ -129,6 +133,19 @@ public class ModifyGUI {
         desc.add("§a§lGhép trang bị vĩnh viễn");
         desc.add("§f§o- Để §a§ochuyển trang bị có hạn §f§othành §a§otrang bị vĩnh viễn");
         desc.add("§f§o- Nguyên liệu bắt buộc: Trang bị cùng loại (1 có hạn, 1 vĩnh viễn)");
+
+        ItemStackUtils.setDisplayName(is, desc.get(0));
+        desc.remove(0);
+        ItemStackUtils.setLore(is, desc);
+        return is;
+    }
+
+    private static ItemStack getArtScrapIcon() {
+        var is = Icon.ARTIFACT_SCRAP.clone();
+        List<String> desc = Lists.newArrayList();
+        desc.add("§a§lGhép di vật");
+        desc.add("§f§o- Ghép 4 di vật thành 1 di vật ngẫu nhiên");
+        desc.add("§f§o- Nguyên liệu bắt buộc: 4 di vật cùng độ hiếm");
 
         ItemStackUtils.setDisplayName(is, desc.get(0));
         desc.remove(0);

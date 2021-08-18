@@ -20,6 +20,7 @@ import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -134,7 +135,9 @@ public class ItemTimeds {
                         // Check can do
                         if (GUIs.countPlaced("material", status) == MATERIAL_SLOTS.size()) {
                             status.getInventory().setItem(BUTTON_SLOT, getOkButton());
-                            status.setData("canDo", "");
+                            status.setData("canDo", "");					Tasks.async(() -> {
+                                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+                            });
                         }
                     });
 
@@ -207,7 +210,7 @@ public class ItemTimeds {
 
     public static ItemStack getDefaultButton() {
         double fee = Configs.TIMED_FEE;
-        ItemStack is = Icon.BUTTON.clone();
+        ItemStack is = new ItemStack(Material.RED_CONCRETE);
         ItemStackUtils.setDisplayName(is, "§c§lChưa thể ghép");
         List<String> lore = Lists.newArrayList();
         lore.add("§f§o- Trang bị có hạn và trang bị vĩnh viễn phải giống nhau");
@@ -219,11 +222,16 @@ public class ItemTimeds {
 
     public static ItemStack getOkButton() {
         double fee = Configs.TIMED_FEE;
-        ItemStack is = Icon.BUTTON.clone();
-        ItemStackUtils.setDisplayName(is, "§a§lCó thể đột ghép vĩnh viễn");
+        ItemStack is = new ItemStack(Material.LIME_CONCRETE);
+        ItemStackUtils.setDisplayName(is, "§a§lCó thể ghép");
         List<String> lore = Lists.newArrayList();
         lore.add("§f§o- Phí §l" + fee + "$");
+
+        lore.add("");
+        lore.add("§a§lCLICK để ghép vĩnh viễn");
+
         ItemStackUtils.setLore(is, lore);
+        ItemStackUtils.addEnchantEffect(is);
 
         return is;
     }

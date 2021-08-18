@@ -107,6 +107,9 @@ public class Configs {
 
 	private static List<String> teleportCommands;
 
+	private static Map<Tier, Integer> artScrapFees;
+	private static Map<String, String> artSetTrans;
+
 	public static void reload(JavaPlugin plugin) {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
 		LEVEL_VALLINA_UPDATE = ConfigGetter.from(config).getBoolean("level.vallina-update", LEVEL_VALLINA_UPDATE);
@@ -306,6 +309,19 @@ public class Configs {
 		skinNPCs = config.getIntegerList("skin-npcs");
 		skins = config.getStringList("skins");
 		teleportCommands = config.getStringList("teleport-commands");
+
+		artScrapFees = Maps.newHashMap();
+		for (String tierS : config.getConfigurationSection("artifact-scrap-fee").getKeys(false)) {
+			var tier = Tier.valueOf(tierS);
+			int fee = config.getInt("artifact-scrap-fee." + tierS);
+			artScrapFees.put(tier, fee);
+		}
+
+		artSetTrans = Maps.newHashMap();
+		for (String id : config.getConfigurationSection("artifact-set-name").getKeys(false)) {
+			var name = config.getString("artifact-set-name." + id);
+			artSetTrans.put(id, name);
+		}
 	}
 
 	public static WishKey getWishKey(String id) {
@@ -532,5 +548,13 @@ public class Configs {
 
 	public static List<String> getTeleportCommands() {
 		return teleportCommands;
+	}
+
+	public static String artiSetTrans(String setId) {
+		return artSetTrans.getOrDefault(setId, setId);
+	}
+
+	public static int getArtScrapFee(Tier tier) {
+		return artScrapFees.getOrDefault(tier, 0);
 	}
 }

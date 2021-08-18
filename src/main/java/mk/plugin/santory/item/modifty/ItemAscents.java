@@ -20,6 +20,7 @@ import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +42,7 @@ public class ItemAscents {
 			slots.put(sl, new GUISlot("material", GUIs.getItemSlot(Icon.SUBITEM.clone(), "§a§oĐặt nguyên liệu trang bị (Phụ)"), getInputExecutor()));
 		});
 		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị (Chính)"), getInputExecutor()));
-		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
+		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may (Không bắt buộc)"), getInputExecutor()));
 		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
 		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(0), getButtonExecutor()));
 		
@@ -152,6 +153,9 @@ public class ItemAscents {
 							double chance = getChance(status);
 							status.getInventory().setItem(BUTTON_SLOT, getOkButton(chance, Configs.getAscentFee(i.getData().getAscent())));
 							status.setData("canDo", "");
+							Tasks.async(() -> {
+								player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+							});
 						}
 					});
 
@@ -268,7 +272,7 @@ public class ItemAscents {
 	}
 	
 	public static ItemStack getDefaultButton(double fee) {
-		ItemStack is = Icon.BUTTON.clone();
+		ItemStack is = new ItemStack(Material.RED_CONCRETE);
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể đột phá");
 		List<String> lore = Lists.newArrayList();
 		lore.add("§f§o- Nguyên liệu phải cùng loại với trang bị");
@@ -279,12 +283,16 @@ public class ItemAscents {
 	}
 	
 	public static ItemStack getOkButton(double chance, double fee) {
-		ItemStack is = Icon.BUTTON.clone();
+		ItemStack is = new ItemStack(Material.LIME_CONCRETE);
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể đột phá");
 		List<String> lore = Lists.newArrayList();
-		lore.add("§a§o- Tỉ lệ §l" + chance + "%");
-		lore.add("§f§o- Phí §l" + fee + "$");
+		lore.add("§a§o- Tỉ lệ §f§l" + chance + "%");
+		lore.add("§a§o- Phí §f§l" + fee + "$");
+		lore.add("");
+		lore.add("§a§lCLICK để đột phá");
+
 		ItemStackUtils.setLore(is, lore);
+		ItemStackUtils.addEnchantEffect(is);
 		
 		return is;
 	}

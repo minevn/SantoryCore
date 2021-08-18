@@ -2,6 +2,7 @@ package mk.plugin.santory.gui;
 
 import java.util.Map;
 
+import mk.plugin.santory.artifact.ArtifactScrapGUI;
 import mk.plugin.santory.item.modifty.ItemAscents;
 import mk.plugin.santory.item.modifty.ItemEnhances;
 import mk.plugin.santory.item.modifty.ItemTimeds;
@@ -12,7 +13,10 @@ public enum GUI {
 	ASCENT(9, "§0§lĐỘT PHÁ TRANG BỊ", ItemAscents.getSlots(), ItemAscents.getInputChecker(), ItemAscents.getAmountChecker()),
 	UPGRADE(9, "§0§lNÂNG BẬC TRANG BỊ", ItemUpgrades.getSlots(), ItemUpgrades.getInputChecker(), ItemUpgrades.getAmountChecker()),
 	ENHANCE(9, "§0§lCƯỜNG HÓA TRANG BỊ", ItemEnhances.getSlots(), ItemEnhances.getInputChecker(), ItemEnhances.getAmountChecker()),
-	TIMED(9, "§0§lGHÉP TRANG BỊ VĨNH VIỄN", ItemTimeds.getSlots(), ItemTimeds.getInputChecker(), ItemTimeds.getAmountChecker());
+	TIMED(9, "§0§lGHÉP TRANG BỊ VĨNH VIỄN", ItemTimeds.getSlots(), ItemTimeds.getInputChecker(), ItemTimeds.getAmountChecker()),
+	ARTIFACT_SCRAP(9, "§0§lGHÉP DI VẬT", ArtifactScrapGUI.getSlots(), ArtifactScrapGUI.getInputChecker(), ArtifactScrapGUI.getAmountChecker());
+
+	;
 
     private final int size;
 	private final String title;

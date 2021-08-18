@@ -20,5 +20,7 @@ public class Icon {
     public static final ItemStack ASCENT = ItemStackUtils.create(Material.GLASS_PANE, 10);
     public static final ItemStack SUBITEM = ItemStackUtils.create(Material.GLASS_PANE, 14);
     public static final ItemStack TIMED = ItemStackUtils.create(Material.GLASS_PANE, 44);
+    public static final ItemStack RANDOM_ARTIFACT = ItemStackUtils.create(Material.GLASS_PANE, 56);
+    public static final ItemStack ARTIFACT_SCRAP = ItemStackUtils.create(Material.GLASS_PANE, 57);
 
 }

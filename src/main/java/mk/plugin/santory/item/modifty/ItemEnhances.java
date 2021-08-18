@@ -41,7 +41,7 @@ public class ItemEnhances {
 		Map<Integer, GUISlot> slots = Maps.newHashMap();
 		slots.put(MATERIAL_SLOT, new GUISlot("material", GUIs.getItemSlot(Icon.ENHANCE_STONE.clone(), "§a§oĐặt Đá cường hóa"), getInputExecutor()));
 		slots.put(ITEM_SLOT, new GUISlot("item", GUIs.getItemSlot(Icon.ITEM.clone(), "§a§oĐặt trang bị"), getInputExecutor()));
-		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may"), getInputExecutor()));
+		slots.put(AMULET_SLOT, new GUISlot("amulet", GUIs.getItemSlot(Icon.AMULET.clone(), "§a§oĐặt bùa may (Không bắt buộc)"), getInputExecutor()));
 		slots.put(RESULT_SLOT, new GUISlot("result", GUIs.getItemSlot(Icon.RESULT.clone(), "§aKết quả")));
 		slots.put(BUTTON_SLOT, new GUISlot("button", getDefaultButton(0), getButtonExecutor()));
 		
@@ -154,6 +154,9 @@ public class ItemEnhances {
 				if (GUIs.countAmountPlaced("material", status) == GUIs.countAmountPlaced("amulet", status) || GUIs.countPlaced("amulet", status) == 0) {
 					status.getInventory().setItem(BUTTON_SLOT, getOkButton(status, Configs.getEnanceFee(i.getData().getLevel())));
 					status.setData("canDo", "");
+					Tasks.async(() -> {
+						player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+					});
 				}
 				else {
 					status.getInventory().setItem(BUTTON_SLOT, getDefaultButton(Configs.getEnanceFee(i.getData().getLevel())));
@@ -277,12 +280,11 @@ public class ItemEnhances {
 	}
 	
 	public static ItemStack getDefaultButton(double fee) {
-		ItemStack is = Icon.BUTTON.clone();
+		ItemStack is = new ItemStack(Material.RED_CONCRETE);
 		ItemStackUtils.setDisplayName(is, "§c§lChưa thể cường hóa");
 		List<String> lore = Lists.newArrayList();
-		lore.add("§f§o- Phí §l" + fee + "$");
-		lore.add("§f§o- Yêu cầu số lượng đá bằng số lượng bùa");
-		lore.add("§f§o  hoặc không có bùa");
+		lore.add("§f§o- Đặt tối thiểu 1 trang bị và 1 Đá cường hóa");
+		lore.add("§f§o- Phí §l§l" + fee + "$");
 		
 		ItemStackUtils.setLore(is, lore);
 		
@@ -290,14 +292,16 @@ public class ItemEnhances {
 	}
 	
 	public static ItemStack getOkButton(GUIStatus status, double fee) {
-		ItemStack is = Icon.BUTTON.clone();
+		ItemStack is = new ItemStack(Material.LIME_CONCRETE);
 		ItemStackUtils.setDisplayName(is, "§a§lCó thể cường hóa");
 		List<String> lore = Lists.newArrayList();
-		lore.add("§f§o- Phí §l" + fee + "$");
+		lore.add("§a§o- Phí §f§l" + fee + "$");
 		double chance = status != null ? getChance(status) : 0;
-		lore.add("§a§o- Tỉ lệ: §l" + chance + "%");
-		
+		lore.add("§a§o- Tỉ lệ: §f§l" + chance + "%");
+		lore.add("");
+		lore.add("§a§lCLICK để cường hóa");
 		ItemStackUtils.setLore(is, lore);
+		ItemStackUtils.addEnchantEffect(is);
 		
 		return is;
 	}

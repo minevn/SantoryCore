@@ -1,3 +1,18 @@
+artifact-scrap-fee:
+  UNCOMMON: 1000
+  RARE: 2500
+  EPIC: 5000
+
+artifact-set-name:
+  cuongchien: Cuồng chiến
+  hoiphuc: Hồi phục
+  maohiem: Mạo hiểm
+  mayman: May mắn
+  nhanhnhen: Nhanh nhẹn
+  phieuluu: Phiêu lưu
+  tele: Tế lễ
+  thachthan: Thạch thần
+
 teleport-commands:
   - spawn
   - is go
