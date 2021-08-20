@@ -55,6 +55,8 @@ public class ItemListener implements Listener {
 	@EventHandler
 	public void onAnimation(PlayerAnimationEvent e) {
 		Player player = e.getPlayer();
+		// Check bypass
+		if (PlayerListener.ditmemay.getOrDefault(player.getName(), 0L) >= System.currentTimeMillis()) return;
 		if (e.getAnimationType() == PlayerAnimationType.ARM_SWING) {
 			// Check
 			boolean hasDamage = player.hasMetadata(DAMAGE_TAG);

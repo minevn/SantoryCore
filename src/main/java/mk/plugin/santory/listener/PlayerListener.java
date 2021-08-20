@@ -1,37 +1,28 @@
 package mk.plugin.santory.listener;
 
+import com.google.common.collect.Maps;
 import mk.plugin.santory.config.Configs;
-import mk.plugin.santory.damage.Damage;
-import mk.plugin.santory.damage.DamageType;
-import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
 import mk.plugin.santory.item.shield.Shield;
 import mk.plugin.santory.main.SantoryCore;
-import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.slave.master.Masters;
-import mk.plugin.santory.traveler.Traveler;
 import mk.plugin.santory.traveler.TravelerOptions;
 import mk.plugin.santory.traveler.Travelers;
 import mk.plugin.santory.utils.Utils;
 import mk.plugin.santory.wish.*;
+import net.minecraft.server.v1_16_R3.PacketPlayOutAnimation;
 import org.bukkit.Bukkit;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Arrow;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -42,14 +33,15 @@ import java.util.Map;
 
 public class PlayerListener implements Listener {
 
+	public static Map<String, Long> ditmemay = Maps.newHashMap();
+
 	@EventHandler
 	public void onShieldSkill(PlayerInteractEvent e) {
+		var p = e.getPlayer();
 		// Check action
 		if (e.getHand() != EquipmentSlot.OFF_HAND) return;
-		if (!e.getAction().name().startsWith("LEFT_CLICK")) return;
-		var p = e.getPlayer();
+		if (!e.getAction().name().startsWith("RIGHT_CLICK")) return;
 		if (!p.isSneaking()) return;
-
 		// Check item
 		var isShield = e.getItem();
 		var item = Items.read(isShield);
@@ -67,6 +59,14 @@ public class PlayerListener implements Listener {
 
 		// Cast skill
 		Utils.castSkill(p, skill, item);
+
+		// Swing offhand
+		ditmemay.put(p.getName(), System.currentTimeMillis() + 1000);
+		for (Player player : p.getWorld().getNearbyPlayers(p.getLocation(), 50)) {
+			PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) p).getHandle(), 3);
+			((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+		}
+
 	}
 
 	/*
