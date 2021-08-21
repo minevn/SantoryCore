@@ -90,7 +90,7 @@ public class SkillTuThan implements SkillExecutor {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 20);
+                            Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 14);
                         }
                     }.runTask(SantoryCore.get());
                 }
