@@ -301,7 +301,6 @@ public class ItemEnhances {
 		lore.add("");
 		lore.add("§a§lCLICK để cường hóa");
 		ItemStackUtils.setLore(is, lore);
-		ItemStackUtils.addEnchantEffect(is);
 		
 		return is;
 	}

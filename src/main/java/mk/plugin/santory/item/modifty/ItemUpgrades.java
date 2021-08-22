@@ -299,7 +299,6 @@ public class ItemUpgrades {
 		lore.add("§a§lCLICK để nâng bậc");
 
 		ItemStackUtils.setLore(is, lore);
-		ItemStackUtils.addEnchantEffect(is);
 		
 		return is;
 	}

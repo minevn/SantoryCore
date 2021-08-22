@@ -231,7 +231,6 @@ public class ItemTimeds {
         lore.add("§a§lCLICK để ghép vĩnh viễn");
 
         ItemStackUtils.setLore(is, lore);
-        ItemStackUtils.addEnchantEffect(is);
 
         return is;
     }
