@@ -93,10 +93,13 @@ public enum Shooter {
 						l.getWorld().spawnParticle(Particle.CRIT_MAGIC, l, 20, 1f, 1f, 1f, 0f);
 						Bukkit.getScheduler().runTask(SantoryCore.get(), () -> {
 							// Damage
+							int count = 0;
 							for (Entity entity : l.getWorld().getEntities()) {
 								if (!Utils.canAttack(entity)) continue;
 								if (entity != player && entity instanceof LivingEntity && entity.getLocation().distanceSquared(l) < 9) {
 									Damages.damage(player, (LivingEntity) entity, damage, 5);
+									count++;
+									if (count >= 3) break;
 								}
 							}
 						});

@@ -46,7 +46,7 @@ public enum Stat{
 	DEFENSE("Sức thủ", 5, "§f") {
 		@Override
 		public double pointsToValue(int point) {
-			return Utils.round(((double) point / (point + 50))) * 50;
+			return Utils.round(((double) point / (point + 70))) * 90;
 		}
 		
 		@Override
@@ -61,7 +61,7 @@ public enum Stat{
 	DODGE("Né đòn", 5, "§3") {
 		@Override
 		public double pointsToValue(int point) {
-			return Utils.round(((double) point / (point + 50))) * 100;
+			return Utils.round(((double) point / (point + 50))) * 80;
 		}
 		
 		@Override
