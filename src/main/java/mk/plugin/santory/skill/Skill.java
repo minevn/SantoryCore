@@ -31,9 +31,9 @@ public enum Skill {
 	BAO_TEN("Bão tên", new SkillBaoTen(), 5),
 	TRUONG_TRONG_LUC("Trường trọng lực", new SkillTruongTrongLuc(), 10),
 	BOC_PHA_THIEN("Bộc phá thiên", new SkillBocPhaThien(), 12),
-	DAY_LUI("Đẩy lùi", new SkillDayLui(), 7),
-	HOI_PHUC("Hồi phục", new SkillHoiPhuc(), 7),
-	NGUYEN_RUA("Nguyền rủa", new SkillNguyenRua(), 7)
+	DAY_LUI("Đẩy lùi", new SkillDayLui(), 3),
+	HOI_PHUC("Hồi phục", new SkillHoiPhuc(), 3),
+	NGUYEN_RUA("Nguyền rủa", new SkillNguyenRua(), 3)
 
 	;
 	
