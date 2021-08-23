@@ -10,7 +10,9 @@ import manaki.plugin.skybattleclient.rank.player.RankedPlayers;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.item.Item;
+import mk.plugin.santory.item.ItemType;
 import mk.plugin.santory.item.Items;
+import mk.plugin.santory.item.shield.Shield;
 import mk.plugin.santory.skin.Skins;
 import mk.plugin.santory.skin.system.PlayerSkins;
 import mk.plugin.santory.stat.Stat;
@@ -142,6 +144,13 @@ public class Travelers {
 		ItemStack hand = player.getInventory().getItemInMainHand();
 		if (Items.is(hand)) {
 			items.add(Items.read(hand));
+		}
+
+		// Offhand shield
+		var offhand = player.getInventory().getItemInOffHand();
+		if (Items.is(offhand)) {
+			var item = Items.read(offhand);
+			if (item.getModel().getType() == ItemType.SHIELD) items.add(item);
 		}
 
 		// Chestplate

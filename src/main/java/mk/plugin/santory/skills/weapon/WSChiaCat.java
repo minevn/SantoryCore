@@ -31,24 +31,9 @@ public class WSChiaCat implements SkillExecutor {
 		double scale = ((double) components.get("scale")) * 0.01;
 		double damage = Travelers.getStatValue(player, Stat.DAMAGE) * scale;
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_HURT, 1f, 1f);
-		
-		new BukkitRunnable() {
-			int i = 0;
-			@Override
-			public void run() {
-				i++;
-				if (i > 3) {
-					this.cancel();
-					return;
-				}
-//				PacketPlayOutAnimation packet = new PacketPlayOutAnimation(((CraftPlayer) player).getHandle(), (byte) 0);
-//				((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-				double pitch = Utils.random(20, 170);
-				shoot(player, damage, pitch);
-			}
-		}.runTaskTimer(SantoryCore.get(), 0, 20);
-		
 
+		shoot(player, damage, 45);
+		shoot(player, damage, 135);
 	}
 	
 	public static void shoot(Player player, double damage, double pitch) {

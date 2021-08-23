@@ -33,26 +33,14 @@ public class SkillTuThan implements SkillExecutor {
         double scale = ((double) components.get("scale")) * 0.01;
         double damage = Travelers.getStatValue(player, Stat.DAMAGE) * scale;
 
-        new BukkitRunnable() {
-            int i = 0;
-
-            @Override
-            public void run() {
-                i++;
-                if (i > 3) {
-                    this.cancel();
-                    return;
-                }
-                player.swingMainHand();
-                shoot(player, damage);
-            }
-        }.runTaskTimer(SantoryCore.get(), 0, 15);
+        player.swingMainHand();
+        shoot(player, damage, 30);
+        shoot(player, damage, 155);
     }
 
-    public static void shoot(Player player, double damage) {
+    public static void shoot(Player player, double damage, double pitch) {
         Location l = player.getLocation().clone();
         l.add(0, 1, 0);
-        double pitch = Utils.random(20, 170);
         new BukkitRunnable() {
             int c = 0;
 
@@ -90,7 +78,8 @@ public class SkillTuThan implements SkillExecutor {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 14);
+                            Damages.damage(player, (LivingEntity) entity, new Damage(damage, DamageType.SKILL), 25);
+                            entity.setFireTicks(100);
                         }
                     }.runTask(SantoryCore.get());
                 }

@@ -65,6 +65,9 @@ public class StatListener implements Listener {
 
 		var damage = e.getDamage();
 
+		// Counter check
+		counterCheck(player, entity, damage);
+
 		double sucThu = Travelers.getStatValue(player, Stat.DEFENSE);
 		damage = e.getDamage() * (1 - sucThu * 0.01);
 
@@ -184,7 +187,7 @@ public class StatListener implements Listener {
 						
 						// Stat DODGE
 						if (Utils.rate(Travelers.getStatValue(target, Stat.DODGE))) {
-							Location loc = player.getLocation();
+							Location loc = player.getLocation().clone().add(0, 2, 0);
 							loc.add(loc.getDirection().multiply(1.3f));
 							Utils.hologram(Utils.ranLoc(loc, 1), "§2§lNé", 15, target);
 							Utils.hologram(Utils.ranLoc(loc, 1), "§c§lNé", 15, player);
@@ -193,16 +196,7 @@ public class StatListener implements Listener {
 						}
 
 						// Stat COUNTER
-						var counterValue = Travelers.getStatValue(target, Stat.COUNTER);
-						if (Utils.rate(counterValue)) {
-							Location loc = player.getLocation();
-							loc.add(loc.getDirection().multiply(1.3f));
-							Utils.hologram(Utils.ranLoc(loc, 1), "§2§lPhản đòn", 15, target);
-							Utils.hologram(Utils.ranLoc(loc, 1), "§c§lPhản đòn", 15, player);
-
-							double counterDamage = damage * counterValue / 100;
-							Damages.damage(target, player, new Damage(counterDamage, DamageType.SKILL), 1);
-						}
+						counterCheck(target, player, damage);
 					}					
 				}
 				// End attack
@@ -284,6 +278,22 @@ public class StatListener implements Listener {
 			// End event check
 		}
 		
+	}
+
+	public void counterCheck(Player player, LivingEntity damager, double damage) {
+		// Stat COUNTER
+		var counterValue = Travelers.getStatValue(player, Stat.COUNTER);
+		if (Utils.rate(counterValue)) {
+			Location loc = player.getLocation().clone().add(0, 2, 0);
+			loc.add(loc.getDirection().multiply(1.3f));
+			if (damager instanceof Player) Utils.hologram(Utils.ranLoc(loc, 1), "§2§lPhản đòn", 15, (Player) damager);
+			Utils.hologram(Utils.ranLoc(loc, 1), "§c§lPhản đòn", 15, player);
+
+			double counterDamage = damage * counterValue / 100;
+			Damages.damage(player, damager, new Damage(counterDamage, DamageType.SKILL), 1);
+
+			damager.getWorld().spawnParticle(Particle.CRIT_MAGIC, damager.getLocation().clone().add(0, 1, 0), 15, 0.5, 0.5, 0.5, 0.1);
+		}
 	}
 	
 }

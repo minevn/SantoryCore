@@ -33,6 +33,7 @@ public class SantoryCore extends JavaPlugin {
 	private UpgradeHistory upgradeHistory;
 	private AscentHistory ascentHistory;
 	private TimedHistory timedHistory;
+	private ArtifactScrapHistory artifactScrapHistory;
 
 
 	@Override
@@ -127,6 +128,7 @@ public class SantoryCore extends JavaPlugin {
 		this.upgradeHistory = new UpgradeHistory();
 		this.ascentHistory = new AscentHistory();
 		this.timedHistory = new TimedHistory();
+		this.artifactScrapHistory = new ArtifactScrapHistory();
 	}
 
 	public void saveOninePlayers() {
@@ -170,8 +172,16 @@ public class SantoryCore extends JavaPlugin {
 		return timedHistory;
 	}
 
+	public ArtifactScrapHistory getArtifactScrapHistory() {
+		return artifactScrapHistory;
+	}
+
+	public static SantoryCore getPlugin() {
+		return plugin;
+	}
+
 	public static SantoryCore get() {
 		return plugin;
 	}
-	
+
 }

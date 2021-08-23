@@ -18,7 +18,7 @@ public enum Stat{
 
 		@Override
 		public String getSubStat() {
-			return "";
+			return " DMG";
 		}
 	},
 	
@@ -39,7 +39,7 @@ public enum Stat{
 		
 		@Override
 		public String getSubStat() {
-			return "";
+			return " HP";
 		}
 	},
 	
@@ -84,7 +84,7 @@ public enum Stat{
 		
 		@Override
 		public String getSubStat() {
-			return "";
+			return " HP";
 		}
 	},
 	
@@ -99,7 +99,7 @@ public enum Stat{
 		
 		@Override
 		public String getSubStat() {
-			return "";
+			return "%";
 		}
 	},
 	
@@ -129,14 +129,14 @@ public enum Stat{
 		
 		@Override
 		public String getSubStat() {
-			return "%";
+			return " s/hit";
 		}
 	},
 
 	COUNTER("Phản đòn", 5, "§6") {
 		@Override
 		public double pointsToValue(int point) {
-			return Utils.round(((double) point / (point + 50))) * 35;
+			return Utils.round(((double) point / (point + 50))) * 50;
 		}
 
 		@Override

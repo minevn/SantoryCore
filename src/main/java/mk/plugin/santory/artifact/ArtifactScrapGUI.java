@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.eco.EcoType;
 import mk.plugin.santory.gui.*;
+import mk.plugin.santory.history.histories.ArtifactScrapHistory;
 import mk.plugin.santory.item.Item;
 import mk.plugin.santory.item.ItemData;
 import mk.plugin.santory.item.ItemModel;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class ArtifactScrapGUI {
 
@@ -196,8 +198,12 @@ public class ArtifactScrapGUI {
             player.sendMessage("§a§lThành công, nhận " + item.getModel().getTier().getColor() + "§l" + item.getModel().getName());
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
 
-            GUIs.clearItems("material", status);
+            // History
+            List<String> materials = GUIs.getItems("material", status).stream().map(is -> Items.read(is).getModelID()).collect(Collectors.toList());
+            SantoryCore.get().getArtifactScrapHistory().write(player, materials, Items.read(resultIs).getModelID());
 
+            // Clear and reopen
+            GUIs.clearItems("material", status);
             GUIs.open(player, status.getGUI());
         };
     }

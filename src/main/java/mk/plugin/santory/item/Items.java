@@ -70,7 +70,18 @@ public class Items {
 		List<String> descf = Lists.newArrayList();
 		if (model.getDesc() != null) {
 			String desc = ascentCheckDesc(data.getDesc() == null ? model.getDesc() : data.getDesc(), data.getAscent());
+			String dprefix = "";
+			// Weapon
+			if (model.getType() == ItemType.WEAPON) {
+				dprefix = "Shift + c.trái: ";
+			}
+			else if (model.getType() == ItemType.SHIELD) {
+				dprefix = "Shift + c.phải: ";
+			}
+			desc = dprefix + desc;
+
 			descf = Utils.toList(desc, 25, "§f§o");
+			if (!dprefix.equals("")) descf.set(0, descf.get(0).replace("§f§o" + dprefix, "§a" + dprefix + "§f§o"));
 		}
 		List<String> statf = Lists.newArrayList();
 		
