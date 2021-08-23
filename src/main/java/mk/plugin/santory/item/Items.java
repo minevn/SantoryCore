@@ -31,7 +31,16 @@ public class Items {
 	
 	public static boolean is(ItemStack is) {
 		if (is == null) return false;
-		return ItemStackUtils.hasTag(is, DATA_TAG);
+
+		// Check valid model
+		if (ItemStackUtils.hasTag(is, DATA_TAG)) {
+			Map<String, String> tags = ItemStackUtils.getTags(is);
+			String model = tags.get(MODEL_TAG);
+			if (Configs.getModel(model) == null) return false;
+			return true;
+		}
+
+		return false;
 	}	
 
 	public static boolean isType(ItemStack is, ItemType type) {
