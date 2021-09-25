@@ -2,11 +2,15 @@ package mk.plugin.santory.item;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import mk.plugin.santory.artifact.Artifact;
 import mk.plugin.santory.artifact.Artifacts;
 import mk.plugin.santory.ascent.Ascent;
 import mk.plugin.santory.config.Configs;
 import mk.plugin.santory.grade.Grade;
+import mk.plugin.santory.item.shooter.Shooter;
+import mk.plugin.santory.item.weapon.Weapon;
 import mk.plugin.santory.stat.Stat;
 import mk.plugin.santory.utils.ItemStackUtils;
 import mk.plugin.santory.utils.Utils;
@@ -25,6 +29,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Items {
+
+	private static final Map<ItemStack, TempShooterData> tempShooters = Maps.newHashMap();
 
 	private static final String DATA_TAG = "santory.itemdata";
 	private static final String MODEL_TAG = "santory.itemmodel";
@@ -286,5 +292,32 @@ public class Items {
 		List<Integer> l = Items.skillValues(item.getModel().getDesc());
 		return l.get(item.getData().getAscent().getValue() - 1);
 	}
+
+	public static void setTempShooter(ItemStack is, Shooter shooter, long time) {
+		var tsd = new TempShooterData(is, shooter, System.currentTimeMillis() + time);
+		tempShooters.put(is, tsd);
+	}
+
+	public static Shooter getShooter(ItemStack is) {
+		if (tempShooters.containsKey(is)) {
+			var tsd = tempShooters.get(is);
+			if (tempShooters.get(is).getUntil() > System.currentTimeMillis()) {
+				return tsd.getShooter();
+			}
+			else tempShooters.remove(is);
+		}
+
+		return Weapon.parse(Items.read(is).getModel()).getType().getShooter();
+	}
+
+}
+
+@AllArgsConstructor
+@Getter
+class TempShooterData {
+
+	private ItemStack is;
+	private Shooter shooter;
+	private Long until;
 
 }

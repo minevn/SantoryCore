@@ -12,6 +12,7 @@ import org.json.simple.JSONValue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TravelerData {
@@ -31,7 +32,7 @@ public class TravelerData {
 	public TravelerData(Grade grade, long exp, List<Item> artifacts, Map<String, WishData> wishes) {
 		this.grade = grade;
 		this.exp = exp;
-		this.artifacts = artifacts;
+		this.artifacts = artifacts.stream().filter(Objects::nonNull).collect(Collectors.toList());
 		this.wishes = wishes;
 	}
 
@@ -84,7 +85,9 @@ public class TravelerData {
 		
 		// List
 		JSONArray ja = new JSONArray();
-		this.artifacts.forEach(item -> ja.add(item.toString()));
+		this.artifacts.forEach(item -> {
+			if (item != null) ja.add(item.toString());
+		});
 		jo.put("artifacts", ja);
 		
 		return jo.toJSONString();

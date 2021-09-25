@@ -33,7 +33,8 @@ public enum Skill {
 	BOC_PHA_THIEN("Bộc phá thiên", new SkillBocPhaThien(), 12),
 	DAY_LUI("Đẩy lùi", new SkillDayLui(), 3),
 	HOI_PHUC("Hồi phục", new SkillHoiPhuc(), 3),
-	NGUYEN_RUA("Nguyền rủa", new SkillNguyenRua(), 3)
+	NGUYEN_RUA("Nguyền rủa", new SkillNguyenRua(), 3),
+	HOA_TIEN("Hỏa tiễn", new SkillHoaTien(), 7);
 
 	;
 	

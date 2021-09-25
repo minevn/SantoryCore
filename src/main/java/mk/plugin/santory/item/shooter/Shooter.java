@@ -1,8 +1,10 @@
 package mk.plugin.santory.item.shooter;
 
 import mk.plugin.santory.damage.Damage;
+import mk.plugin.santory.damage.DamageType;
 import mk.plugin.santory.damage.Damages;
 import mk.plugin.santory.main.SantoryCore;
+import mk.plugin.santory.utils.Tasks;
 import mk.plugin.santory.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -117,7 +119,65 @@ public enum Shooter {
 		public boolean checkRequirements(Player player) {
 			return true;
 		}
-	};
+	},
+
+	FLAMED_ARROW {
+		@Override
+		public Object shoot(Player player, Damage damage, Vector v, Location location) {
+			Arrow arrow = null;
+
+			if (location == null) arrow = player.launchProjectile(Arrow.class, v);
+			else {
+				arrow = player.getWorld().spawnArrow(location, v, 1, 0);
+			}
+			arrow.setVelocity(v.multiply(1.15));
+			arrow.setShooter(player);
+			arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+
+			Damages.setProjectileDamage(arrow, damage);
+			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+			Bukkit.getScheduler().runTaskLater(SantoryCore.get(), arrow::remove, 20);
+
+			Arrow finalArrow = arrow;
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					var l = finalArrow.getLocation();
+					if (!finalArrow.isValid()) {
+						Tasks.sync(() -> {
+							l.getWorld().spawnParticle(Particle.FLAME, l, 30, 2, 2, 2, 0.1);
+							l.getWorld().spawnParticle(Particle.SMOKE_LARGE, l, 30, 2, 2, 2, 0.3);
+							player.playSound(l, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 10, 1);
+							// Hit
+							for (Entity e : l.getWorld().getEntities()) {
+								if (!(e instanceof LivingEntity)) continue;
+								if (e == player) continue;
+								if (!Utils.canAttack(e)) continue;
+								if (e.getLocation().distance(l) > 3) continue;
+
+								var le = (LivingEntity) e;
+								le.setFireTicks(50);
+								Damages.damage(player, le, new Damage(damage.getValue() * 0.5, DamageType.SKILL), 5);
+							}
+
+						});
+						this.cancel();
+						return;
+					}
+					l.getWorld().spawnParticle(Particle.FLAME, l, 1, 0, 0, 0, 0);
+					l.getWorld().spawnParticle(Particle.SMOKE_NORMAL, l, 1, 0, 0, 0, 0);
+				}
+			}.runTaskTimerAsynchronously(SantoryCore.get(), 0, 1);
+
+			return arrow;
+		}
+
+		@Override
+		public boolean checkRequirements(Player player) {
+			return true;
+		}
+	}
+	;
 	
 	Shooter() {}
 	

@@ -38,9 +38,9 @@ public class SkillHuyDiet implements SkillExecutor {
         Tasks.sync(() -> {
             var rx = Utils.random(-1 * r, r);
             var rz = Utils.random(-1 * r, r);
-            var rl = l.clone().add(rx, 40, rz);
+            var rl = l.clone().add(rx, 35, rz);
             var entity = spawnEntity(rl);
-            entity.setVelocity(new Vector(0, -1.5, 0));
+            entity.setVelocity(new Vector(0, -2, 0));
             liste.add(entity);
 
             // Check ground
